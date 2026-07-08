@@ -63,63 +63,53 @@
           </ul>
           <div class="nav-actions d-flex align-items-center gap-3 mt-3 mt-lg-0">
             <a href="login.php" class="text-link">Iniciar sesión</a>
-            <a href="login.php" class="btn btn-cyan">EMPEZAR GRATIS</a>
+            <a href="login.php" class="btn btn-cyan text-uppercase"
+              >EMPEZAR GRATIS</a
+            >
           </div>
         </div>
       </div>
     </nav>
 
+    <!-- ==========================================
+         SECTION (FASE 1)
+    =========================================== -->
     <main class="hero-section">
+      <!-- El resplandor radial -->
+      <div class="bg-glow"></div>
+
       <div class="container">
+        <!-- La Fila Principal (Row) que sostiene ambas columnas -->
         <div
           class="row align-items-center justify-content-between min-vh-100 pt-5"
         >
+          <!-- COLUMNA IZQUIERDA: Texto y Botones (ocupa 6 de 12 espacios) -->
           <div class="col-lg-6 hero-content">
             <div class="badge-cyan mb-4">
-              <span class="dot-pulse"></span> v2.4.1 - DISPONIBLE AHORA
+              <span class="dot-pulse"></span> Software en desarrollo
             </div>
-            <h1 class="display-3 fw-bold mb-4">
-              Gestión de servidores<br />
-              <span class="text-cyan">sin fricción.</span>
-            </h1>
-            <p class="hero-subtitle mb-4">
-              SysMonitor unifica el monitoreo, despliegue y automatización de tu
-              infraestructura. De 10 a 10,000 servidores, con el mismo
-              dashboard.
-            </p>
 
-            <div class="hero-features d-flex flex-wrap gap-3 mb-5">
-              <span
-                ><i class="bi bi-check-circle text-cyan"></i> Sin downtime</span
-              >
-              <span
-                ><i class="bi bi-check-circle text-cyan"></i> Multi-cloud</span
-              >
-              <span
-                ><i class="bi bi-check-circle text-cyan"></i> Zero-config
-                setup</span
-              >
-            </div>
+            <h1 class="display-3 fw-bold mb-4">
+              Tu infraestructura,<br />
+              <span class="text-cyan">bajo control total.</span>
+            </h1>
+
+            <p class="hero-subtitle mb-5">
+              Deja de preocuparte por fallos inesperados. Monitorea el estado
+              físico de tus servidores desde una plataforma rápida y simple.
+            </p>
 
             <div class="hero-cta d-flex align-items-center gap-4 mb-3">
               <a
                 href="login.php"
                 class="btn btn-cyan btn-lg d-inline-flex align-items-center gap-2"
               >
-                COMENZAR GRATIS <i class="bi bi-arrow-right"></i>
-              </a>
-              <a
-                href="#"
-                class="btn-play d-inline-flex align-items-center gap-2"
-              >
-                <i class="bi bi-play-fill"></i> Ver demo (2 min)
+                REGISTRATE <i class="bi bi-arrow-right"></i>
               </a>
             </div>
-            <p class="small text-muted">
-              Sin tarjeta de crédito - 14 días gratis - Cancela cuando quieras
-            </p>
           </div>
 
+          <!-- COLUMNA DERECHA: Terminal (ocupa 5 de 12 espacios) -->
           <div class="col-lg-5 mt-5 mt-lg-0">
             <div class="cli-window window-glow">
               <div class="cli-header">
@@ -130,58 +120,304 @@
                 </div>
                 <div class="cli-title">sysmonitor ~ bash</div>
               </div>
-              <div class="cli-body">
-                <div class="cli-line">
-                  <span class="prompt">$</span>
-                  <span class="cmd">sysmonitor connect prod-cluster-01</span>
+              <!-- Cuerpo de la terminal donde inyectaremos con JS -->
+              <div class="cli-body" id="terminal-body"></div>
+            </div>
+          </div>
+        </div>
+        <!-- Cierre del Row -->
+      </div>
+      <!-- Cierre del Container -->
+    </main>
+    <section id="caracteristicas" class="features-section py-5 mt-5">
+      <div class="container">
+        <div class="text-center mb-5" data-aos="fade-up">
+          <div class="section-tag mb-3">
+            <span
+              class="text-cyan fw-bold"
+              style="font-family: var(--font-mono); font-size: 0.85rem"
+              >/* CARACTERISTICAS */</span
+            >
+          </div>
+          <h2 class="display-5 fw-bold mb-3">
+            Diseño inteligente,<br />cero complicaciones.
+          </h2>
+          <p class="mx-auto" style="max-width: 600px; font-size: 1.1rem">
+            Todo el control en la palma de tu mano.
+          </p>
+        </div>
+
+        <div class="row g-4 mt-4">
+          <div class="col-md-6" data-aos="fade-up" data-aos-delay="100">
+            <article class="p3r-card h-100 p-4 p-lg-5">
+              <div
+                class="d-flex justify-content-between align-items-start mb-4 card-header-icons"
+              >
+                <div class="icon-wrapper">
+                  <i class="bi bi-thermometer-half"></i>
                 </div>
-                <div class="cli-line">
-                  <span class="success">✓ Conectado a 3 nodos activos</span>
+                <span class="card-badge">CORE</span>
+              </div>
+              <h3 class="h4 fw-bold text-white mb-3">Control Térmico</h3>
+              <p class="mb-0">
+                Protege tus equipos contra el sobrecalentamiento y evita daños
+                críticos por humedad.
+              </p>
+            </article>
+          </div>
+
+          <div class="col-md-6" data-aos="fade-up" data-aos-delay="200">
+            <article class="p3r-card h-100 p-4 p-lg-5">
+              <div
+                class="d-flex justify-content-between align-items-start mb-4 card-header-icons"
+              >
+                <div class="icon-wrapper">
+                  <i class="bi bi-lightning-charge"></i>
                 </div>
-                <div class="cli-line mt-2">
-                  <span class="prompt">$</span>
-                  <span class="cmd">sysmonitor status --all</span>
+                <span class="card-badge">ENERGY</span>
+              </div>
+              <h3 class="h4 fw-bold text-white mb-3">Eficiencia Energética</h3>
+              <p class="mb-0">
+                Optimiza el consumo energético de tus cuartos de servidores con
+                indicadores precisos.
+              </p>
+            </article>
+          </div>
+
+          <div class="col-md-6" data-aos="fade-up" data-aos-delay="300">
+            <article class="p3r-card h-100 p-4 p-lg-5">
+              <div
+                class="d-flex justify-content-between align-items-start mb-4 card-header-icons"
+              >
+                <div class="icon-wrapper">
+                  <i class="bi bi-shield-check"></i>
                 </div>
-                <div class="cli-line">
-                  <span class="dot-green">●</span> nginx-01
-                  <span class="status-up">UP</span> CPU 12% MEM 2.1GB
+                <span class="card-badge">SECURITY</span>
+              </div>
+              <h3 class="h4 fw-bold text-white mb-3">Seguridad Física</h3>
+              <p class="mb-0">
+                Mantén una bitácora automatizada de accesos y recibe alertas
+                inmediatas ante cualquier intrusión.
+              </p>
+            </article>
+          </div>
+
+          <div class="col-md-6" data-aos="fade-up" data-aos-delay="400">
+            <article class="p3r-card h-100 p-4 p-lg-5">
+              <div
+                class="d-flex justify-content-between align-items-start mb-4 card-header-icons"
+              >
+                <div class="icon-wrapper">
+                  <i class="bi bi-diagram-3"></i>
                 </div>
-                <div class="cli-line">
-                  <span class="dot-green">●</span> db-primary
-                  <span class="status-up">UP</span> CPU 34% MEM 8.4GB
+                <span class="card-badge">SCALE</span>
+              </div>
+              <h3 class="h4 fw-bold text-white mb-3">Escalabilidad</h3>
+              <p class="">
+                Arquitectura diseñada para gestionar desde un solo rack hasta
+                una gran cantidad.
+              </p>
+            </article>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section id="arquitectura" class="arch-section py-5 mt-5">
+      <div class="container">
+        <div class="text-center mb-5" data-aos="fade-up">
+          <div class="section-tag mb-3">
+            <span
+              class="text-cyan fw-bold"
+              style="font-family: var(--font-mono); font-size: 0.85rem"
+              >// ARQUITECTURA</span
+            >
+          </div>
+          <h2 class="display-5 fw-bold mb-3 text-white">
+            Tecnología robusta y segura.
+          </h2>
+        </div>
+
+        <div class="row mt-5">
+          <div class="col-lg-4 col-md-5 mb-4 mb-md-0" data-aos="fade-right">
+            <div class="arch-sidebar">
+              <button
+                class="arch-tab-btn active theme-blue"
+                data-target="tab-telemetria"
+                onclick="switchArchTab('tab-telemetria', 'blue')"
+              >
+                <i class="bi bi-broadcast"></i> Telemetría
+              </button>
+
+              <button
+                class="arch-tab-btn theme-purple"
+                data-target="tab-ingenieria"
+                onclick="switchArchTab('tab-ingenieria', 'purple')"
+              >
+                <i class="bi bi-braces"></i> Ingeniería
+              </button>
+
+              <button
+                class="arch-tab-btn theme-red"
+                data-target="tab-seguridad"
+                onclick="switchArchTab('tab-seguridad', 'red')"
+              >
+                <i class="bi bi-shield-lock"></i> Seguridad
+              </button>
+            </div>
+          </div>
+
+          <div class="col-lg-8 col-md-7" data-aos="fade-left">
+            <div
+              id="arch-content-container"
+              class="arch-content-container theme-blue"
+            >
+              <div id="tab-telemetria" class="arch-pane active-pane">
+                <div class="pane-header mb-4">
+                  <div class="pane-icon"><i class="bi bi-broadcast"></i></div>
+                  <h3 class="pane-title">Telemetría</h3>
                 </div>
-                <div class="cli-line">
-                  <span class="dot-green">●</span> cache-01
-                  <span class="status-up">UP</span> CPU 5% MEM 512MB
+                <p class="pane-text">
+                  Captura de datos precisa. Nuestros sensores envían información
+                  clave de forma automática para que siempre sepas qué está
+                  pasando en tu infraestructura.
+                </p>
+                <div class="pane-tags mt-4">
+                  <span class="arch-tag">Sensores IoT</span>
+                  <span class="arch-tag">Tiempo Real</span>
+                  <span class="arch-tag">Métricas Exactas</span>
                 </div>
-                <div class="cli-line mt-2">
-                  <span class="prompt">$</span>
-                  <span class="cmd">sysmonitor deploy --rolling</span>
+              </div>
+
+              <div id="tab-ingenieria" class="arch-pane">
+                <div class="pane-header mb-4">
+                  <div class="pane-icon"><i class="bi bi-braces"></i></div>
+                  <h3 class="pane-title">Ingeniería</h3>
                 </div>
-                <div class="cli-line">
-                  <span class="process">▶ Desplegando v2.4.1... 100%</span>
+                <p class="pane-text">
+                  Desarrollado con una estructura organizada (MVC) que facilita
+                  el mantenimiento y asegura que el sistema siempre esté
+                  disponible.
+                </p>
+                <div class="pane-tags mt-4">
+                  <span class="arch-tag">Arquitectura MVC</span>
+                  <span class="arch-tag">Escalabilidad</span>
+                  <span class="arch-tag">Código Limpio</span>
+                </div>
+              </div>
+
+              <div id="tab-seguridad" class="arch-pane">
+                <div class="pane-header mb-4">
+                  <div class="pane-icon"><i class="bi bi-shield-lock"></i></div>
+                  <h3 class="pane-title">Seguridad</h3>
+                </div>
+                <p class="pane-text">
+                  Tus datos viajan aislados. La red de monitoreo nunca se cruza
+                  con tu tráfico de producción, garantizando un entorno libre de
+                  riesgos externos.
+                </p>
+                <div class="pane-tags mt-4">
+                  <span class="arch-tag">VLAN Aislada</span>
+                  <span class="arch-tag">Control de Acceso</span>
+                  <span class="arch-tag">MariaDB Segura</span>
                 </div>
               </div>
             </div>
           </div>
         </div>
-
-        <div class="trusted-section text-center pb-5">
-          <p class="trusted-title mb-4">USADO POR EQUIPOS EN TODO EL MUNDO</p>
-          <div
-            class="d-flex justify-content-center flex-wrap gap-5 trusted-logos"
-          >
-            <span>Stripe</span>
-            <span>Vercel</span>
-            <span>Shopify</span>
-            <span>Cloudflare</span>
-            <span>Datadog</span>
-            <span>HashiCorp</span>
-          </div>
-        </div>
       </div>
-    </main>
+    </section>
 
     <script src="assets/landing_page/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <!-- Script de Animación de Terminal -->
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const terminalBody = document.getElementById("terminal-body");
+
+        // Secuencia actualizada con tu texto personalizado
+        const lines = [
+          { type: "cmd", text: "Rack ID_server #777", delay: 800 },
+          {
+            type: "out",
+            text: "<span class='status-ok'>[OK]</span> Temperatura: 22.4°C",
+            delay: 400,
+          },
+          {
+            type: "out",
+            text: "<span class='status-ok'>[OK]</span> Humedad: 45%",
+            delay: 300,
+          },
+          {
+            type: "out",
+            text: "<span class='status-ok'>[OK]</span> Voltaje UPS: 120V",
+            delay: 500,
+          },
+          {
+            type: "out",
+            text: "<span class='status-warn'>[WARN]</span> Puerta del Rack 04:<br>Abierta (hace 2 min)",
+            delay: 800,
+          },
+          { type: "prompt", text: "", delay: 200 },
+        ];
+
+        let currentLine = 0;
+
+        function renderLine() {
+          if (currentLine >= lines.length) return;
+
+          const lineData = lines[currentLine];
+          const lineDiv = document.createElement("div");
+          lineDiv.className = "cli-line mb-1";
+
+          if (lineData.type === "cmd") {
+            lineDiv.innerHTML = `<span class="prompt">$</span> <span class="cmd">${lineData.text}</span>`;
+          } else if (lineData.type === "out") {
+            lineDiv.innerHTML = lineData.text;
+          } else if (lineData.type === "prompt") {
+            lineDiv.innerHTML = `<span class="prompt">$</span> <span class="cursor-blink"></span>`;
+          }
+
+          terminalBody.appendChild(lineDiv);
+          currentLine++;
+
+          setTimeout(renderLine, lineData.delay);
+        }
+
+        setTimeout(renderLine, 500);
+      });
+    </script>
+    <script>
+      // Función para cambiar las pestañas de Arquitectura
+      function switchArchTab(targetId, colorTheme) {
+        // 1. Quitar estado activo de todos los botones
+        const buttons = document.querySelectorAll(".arch-tab-btn");
+        buttons.forEach((btn) => btn.classList.remove("active"));
+
+        // 2. Añadir estado activo al botón clickeado
+        const clickedBtn = document.querySelector(
+          `[data-target="${targetId}"]`,
+        );
+        clickedBtn.classList.add("active");
+
+        // 3. Ocultar todos los paneles
+        const panes = document.querySelectorAll(".arch-pane");
+        panes.forEach((pane) => {
+          pane.classList.remove("active-pane");
+          pane.classList.remove("p3r-sweep"); // Resetear animación
+        });
+
+        // 4. Mostrar el panel correspondiente y disparar animación
+        const activePane = document.getElementById(targetId);
+        activePane.classList.add("active-pane");
+
+        // Pequeño truco JS para reiniciar una animación CSS
+        void activePane.offsetWidth;
+        activePane.classList.add("p3r-sweep");
+
+        // 5. Actualizar el color (Tema) del contenedor principal
+        const container = document.getElementById("arch-content-container");
+        // Limpiamos temas anteriores y aplicamos el nuevo
+        container.className = `arch-content-container theme-${colorTheme}`;
+      }
+    </script>
   </body>
 </html>

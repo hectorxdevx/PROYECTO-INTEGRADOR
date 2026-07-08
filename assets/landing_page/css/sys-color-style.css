@@ -24,9 +24,80 @@ body {
   -webkit-font-smoothing: antialiased;
   position: relative;
 }
+/* ==========================================================================
+   AJUSTES GLOBALES DE SECCIONES Y SCROLL (Layout y Espaciado)
+   ========================================================================== */
 
-/* --- BACKGROUND GRID (Cuadrícula del fondo) --- */
-.bg-grid {
+/* Reglas aplicadas a todas las secciones de la página */
+section {
+  /* SOLUCIÓN AL NAVBAR: Deja un margen superior invisible para que los enlaces no queden tapados */
+  scroll-margin-top: 60px;
+
+  /* Cada sección ocupará al menos el 80% de la altura de la pantalla (Viewport Height) */
+  min-height: 80vh;
+
+  /* Flexbox para que, si el contenido es poco, quede perfectamente centrado en vertical */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+/* Espacio masivo extra entre la Sección 2 y la Sección 3 */
+#caracteristicas {
+  margin-bottom: 15vh; /* Empuja la sección de Arquitectura mucho más abajo */
+}
+
+/* Opcional: También le damos margen a la de arquitectura por si añades algo debajo */
+#arquitectura {
+  margin-bottom: 10vh;
+}
+
+/* --- BACKGROUND GLOW (El degradado sutil) --- */
+.bg-glow {
+  position: absolute;
+  top: -15%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80vw;
+  height: 80vh;
+  /* Un degradado elíptico que se desvanece hacia los bordes */
+  background: radial-gradient(
+    ellipse at top,
+    rgba(0, 229, 255, 0.12),
+    transparent 60%
+  );
+  z-index: -1;
+  pointer-events: none; /* Para que no bloquee los clics */
+}
+
+/* --- COLORES SEMÁNTICOS PARA LA TERMINAL --- */
+.status-ok {
+  color: #3fb950;
+  font-weight: 600;
+}
+.status-warn {
+  color: #d29922;
+  font-weight: 600;
+}
+
+/* El cursor parpadeante de consola */
+.cursor-blink {
+  display: inline-block;
+  width: 8px;
+  height: 16px;
+  background-color: var(--text-main);
+  animation: blink 1s step-end infinite;
+  vertical-align: middle;
+  margin-left: 5px;
+}
+
+@keyframes blink {
+  50% {
+    opacity: 0;
+  }
+}
+
+/*bg-grid {
   position: absolute;
   top: 0;
   left: 0;
@@ -39,7 +110,7 @@ body {
     linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
   mask-image: linear-gradient(to bottom, black 40%, transparent 100%);
   -webkit-mask-image: linear-gradient(to bottom, black 40%, transparent 100%);
-}
+}*/
 
 /* --- NAVBAR --- */
 .custom-navbar {
@@ -81,21 +152,56 @@ body {
   color: var(--text-main);
 }
 
-/* --- BOTONES --- */
+/* --- BOTONES (Estilo P3R Override - V2) --- */
 .btn-cyan {
-  background-color: var(--cyan-primary);
+  position: relative;
+  background-color: var(--cyan-primary); /* El cian base: #00e5ff */
   color: #000 !important;
-  font-weight: 600;
+  font-weight: 700;
+  letter-spacing: 0.5px;
   border: none;
-  border-radius: 6px;
-  padding: 10px 24px;
-  font-size: 0.9rem;
-  transition: all 0.3s ease;
+  border-radius: 4px;
+  padding: 12px 28px;
+  font-size: 0.95rem;
+  overflow: hidden;
+  z-index: 1;
+  /* Suavizamos la transición del texto para que no parpadee brusco */
+  transition:
+    color 0.2s ease-in-out,
+    transform 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+    box-shadow 0.2s ease;
 }
+
+/* La capa de color que atraviesa el botón */
+.btn-cyan::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -10%;
+  width: 120%; /* Extra ancho para que el grado de inclinación no deje huecos */
+  height: 100%;
+
+  /* NUEVO COLOR: Azul Eléctrico vibrante */
+  background-color: #050a13;
+
+  /* TRUCO DE VACIADO: Cuando quitas el cursor, el punto de fuga es la DERECHA */
+  transform-origin: right;
+  transform: skewX(-15deg) scaleX(0);
+  transition: transform 0.4s cubic-bezier(0.19, 1, 0.22, 1);
+  z-index: -1;
+}
+
+/* Estado Hover general */
 .btn-cyan:hover {
-  background-color: var(--cyan-hover);
-  transform: translateY(-2px);
-  box-shadow: 0 10px 20px rgba(0, 229, 255, 0.2);
+  color: #fff !important;
+  transform: scale(1.03);
+  /* Actualizamos el brillo de la sombra para que coincida con el azul eléctrico */
+}
+
+/* TRUCO DE LLENADO: Cuando pones el cursor, el punto de inicio es la IZQUIERDA */
+.btn-cyan:hover::before {
+  transform-origin: left;
+  transform: skewX(-15deg) scaleX(1);
 }
 .btn-play {
   color: var(--text-muted);
@@ -274,4 +380,258 @@ body {
 }
 .trusted-logos span:hover {
   color: rgba(255, 255, 255, 0.6);
+}
+/* ==========================================================================
+   SECCIÓN 2: CARACTERÍSTICAS Y TARJETAS (P3R Card Animation)
+   ========================================================================== */
+
+/* Etiquetas pequeñas de la interfaz (como el // FUNCIONALIDADES) */
+.section-tag {
+  display: inline-block;
+  letter-spacing: 1px;
+}
+
+/* La tarjeta principal */
+.p3r-card {
+  position: relative;
+  background-color: var(--bg-surface); /* #0a0f1a */
+  border: 1px solid var(--border-color); /* #1e293b */
+  border-radius: 8px;
+  overflow: hidden; /* Vital para que el barrido no se salga de la tarjeta */
+  z-index: 1;
+  transition:
+    transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+    border-color 0.3s ease,
+    box-shadow 0.3s ease;
+}
+.p3r-card p {
+  color: #cbd5e1d5; /* <--- AQUÍ está el color actual */
+  margin-bottom: 0;
+  transition: color 0.3s ease; /* Para que el cambio sea suave */
+}
+
+/* --- LA CAPA OCULTA DEL BARRIDO (Estilo P3R pero sutil) --- */
+.p3r-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -10%;
+  width: 120%; /* Ancho extra para la inclinación */
+  height: 100%;
+
+  /* El baño de luz: Usamos nuestro color cian pero con MUY baja opacidad (4%) */
+  background-color: rgba(0, 242, 255, 0.04);
+
+  /* Estado de reposo: Anclado a la derecha, escala 0 */
+  transform-origin: right;
+  transform: skewX(-15deg) scaleX(0);
+  transition: transform 0.4s cubic-bezier(0.19, 1, 0.22, 1);
+  z-index: -1; /* Para que quede detrás del texto */
+}
+
+/* --- ESTADO HOVER DE LA TARJETA --- */
+.p3r-card:hover {
+  transform: translateY(-5px); /* Se eleva un poco */
+  border-color: var(--cyan-primary); /* El borde se ilumina */
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5); /* Sombra oscura profunda */
+}
+
+/* Disparamos el barrido al hacer hover */
+.p3r-card:hover::before {
+  transform-origin: left;
+  transform: skewX(-15deg) scaleX(1);
+}
+
+/* --- ESTILOS INTERNOS DE LA TARJETA --- */
+.card-header-icons {
+  /* Mantiene el icono y el badge alineados arriba */
+  width: 100%;
+}
+
+.icon-wrapper {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 45px;
+  height: 45px;
+  background: rgba(0, 242, 255, 0.1);
+  color: var(--cyan-primary);
+  border-radius: 8px;
+  font-size: 1.2rem;
+  border: 1px solid rgba(0, 242, 255, 0.2);
+}
+
+.card-badge {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  color: var(--text-muted);
+  border: 1px solid var(--border-color);
+  padding: 3px 8px;
+  border-radius: 4px;
+  letter-spacing: 1px;
+}
+/* ==========================================================================
+   SECCIÓN 3: ARQUITECTURA TÉCNICA (Tabs interactivas P3R)
+   ========================================================================== */
+
+/* --- PALETA DE COLORES DINÁMICA --- */
+.theme-blue {
+  --active-color: #58a6ff;
+  --active-bg: rgba(88, 166, 255, 0.05);
+}
+.theme-purple {
+  --active-color: #a855f7;
+  --active-bg: rgba(168, 85, 247, 0.05);
+}
+.theme-red {
+  --active-color: #f85149;
+  --active-bg: rgba(248, 81, 73, 0.05);
+}
+
+/* --- SIDEBAR DE PESTAÑAS --- */
+.arch-sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  border-right: 1px solid var(--border-color);
+  padding-right: 15px;
+}
+
+.arch-tab-btn {
+  background: transparent;
+  color: #8b949e; /* Sustituto limpio de text-muted */
+  border: none;
+  text-align: left;
+  padding: 12px 20px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  border-radius: 6px;
+  position: relative;
+  overflow: hidden;
+  transition: color 0.2s ease;
+  cursor: pointer;
+}
+
+.arch-tab-btn i {
+  margin-right: 10px;
+  font-size: 1.1rem;
+}
+
+/* Hover de la pestaña (Efecto P3R sutil) */
+.arch-tab-btn::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -10%;
+  width: 120%;
+  height: 100%;
+  background-color: var(--active-bg);
+  transform-origin: right;
+  transform: skewX(-15deg) scaleX(0);
+  transition: transform 0.3s cubic-bezier(0.19, 1, 0.22, 1);
+  z-index: -1;
+}
+
+.arch-tab-btn:hover {
+  color: #ffffff;
+}
+.arch-tab-btn:hover::before {
+  transform-origin: left;
+  transform: skewX(-15deg) scaleX(1);
+}
+
+/* Estado activo de la pestaña */
+.arch-tab-btn.active {
+  color: var(--active-color);
+  background-color: var(--active-bg);
+  border-left: 3px solid var(--active-color);
+  border-radius: 0 6px 6px 0;
+}
+
+/* --- PANEL DE CONTENIDO --- */
+.arch-content-container {
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 40px;
+  min-height: 280px;
+  position: relative;
+  overflow: hidden;
+  transition:
+    border-color 0.4s ease,
+    box-shadow 0.4s ease;
+}
+
+/* Reflejo del color activo en el contenedor */
+.arch-content-container:hover {
+  border-color: var(--active-color);
+  box-shadow: 0 10px 30px var(--active-bg);
+}
+
+/* Ocultar pestañas inactivas */
+.arch-pane {
+  display: none;
+}
+.arch-pane.active-pane {
+  display: block;
+}
+
+/* Tipografía de control estricto (Sin text-muted) */
+.pane-header {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+.pane-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  background-color: var(--active-bg);
+  color: var(--active-color);
+  border: 1px solid var(--active-color);
+  border-radius: 8px;
+  font-size: 1.2rem;
+}
+.pane-title {
+  color: #ffffff;
+  font-weight: 700;
+  margin: 0;
+  font-size: 1.3rem;
+}
+.pane-text {
+  color: #a0aec0; /* Gris técnico legible */
+  font-size: 1.05rem;
+  line-height: 1.7;
+}
+
+/* Etiquetas inferiores (Tags) */
+.arch-tag {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--active-color);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background-color: rgba(0, 0, 0, 0.3);
+  padding: 6px 12px;
+  border-radius: 4px;
+  margin-right: 8px;
+  margin-bottom: 8px;
+}
+
+/* --- ANIMACIÓN DE CORTE (P3R) AL CAMBIAR PESTAÑA --- */
+.p3r-sweep {
+  animation: p3rSlideIn 0.4s cubic-bezier(0.19, 1, 0.22, 1) forwards;
+}
+
+@keyframes p3rSlideIn {
+  0% {
+    opacity: 0;
+    transform: translateX(20px) skewX(-5deg);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0) skewX(0);
+  }
 }
