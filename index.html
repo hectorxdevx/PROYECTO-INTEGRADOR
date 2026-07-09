@@ -21,7 +21,7 @@
       rel="stylesheet"
     />
 
-    <link href="assets/landing_page/css/sys-color-style.css" rel="stylesheet" />
+    <link href="assets/landing_page/css/color-style.css" rel="stylesheet" />
   </head>
 
   <body>
@@ -57,15 +57,16 @@
               <a class="nav-link" href="#arquitectura">Arquitectura</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#metricas">Métricas</a>
+              <a class="nav-link" href="#galeria">Interfaz</a>
             </li>
-            <li class="nav-item"><a class="nav-link" href="#docs">Docs</a></li>
+            <li class="nav-item">
+              <a class="nav-link" href="#contacto">Contacto</a>
+            </li>
           </ul>
           <div class="nav-actions d-flex align-items-center gap-3 mt-3 mt-lg-0">
-            <a href="login.php" class="text-link">Iniciar sesión</a>
-            <a href="login.php" class="btn btn-cyan text-uppercase"
-              >EMPEZAR GRATIS</a
-            >
+            <a href="/vista_usuario/panel.html" class="text-link">Iniciar sesión</a>
+            <a href="login.html" class="btn btn-cyan text-uppercase"
+              >EMPEZAR GRATIS</a>
           </div>
         </div>
       </div>
@@ -101,7 +102,7 @@
 
             <div class="hero-cta d-flex align-items-center gap-4 mb-3">
               <a
-                href="login.php"
+                href="login.html"
                 class="btn btn-cyan btn-lg d-inline-flex align-items-center gap-2"
               >
                 REGISTRATE <i class="bi bi-arrow-right"></i>
@@ -136,8 +137,8 @@
             <span
               class="text-cyan fw-bold"
               style="font-family: var(--font-mono); font-size: 0.85rem"
-              >/* CARACTERISTICAS */</span
-            >
+              >// CARACTERISTICAS
+            </span>
           </div>
           <h2 class="display-5 fw-bold mb-3">
             Diseño inteligente,<br />cero complicaciones.
@@ -326,6 +327,155 @@
         </div>
       </div>
     </section>
+    <section id="galeria" class="gallery-section py-5 mt-5">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-xl-10">
+                
+                <div class="text-center mb-5" data-aos="fade-up">
+                    <div class="section-tag mb-3">
+                        <span class="text-cyan fw-bold" style="font-family: var(--font-mono); font-size: 0.85rem;">// INTERFAZ</span>
+                    </div>
+                    <h2 class="display-5 fw-bold mb-3 text-white">
+                        Visibilidad absoluta.
+                    </h2>
+                </div>
+
+                <div class="row g-0 align-items-stretch arch-content-container p-0 overflow-hidden">
+                    
+                    <div class="col-md-3 border-end border-secondary p-4 bg-dark-surface">
+                        <div class="gallery-sidebar d-flex flex-column gap-2">
+                            
+                            <button class="gallery-tab-btn active" onclick="cambiarImagenGaleria(this, 'Vista General', 'assets/landing_page/img/gallery/fotos-dashboard/img2.png')">
+                                <i class="bi bi-grid-1x2"></i> Vista General
+                            </button>
+                            
+                            <button class="gallery-tab-btn" onclick="cambiarImagenGaleria(this, 'Métricas de Sensores', 'assets/landing_page/img/gallery/fotos-dashboard/img1.png')">
+                                <i class="bi bi-graph-up"></i> Métricas
+                            </button>
+                            
+                            <button class="gallery-tab-btn" onclick="cambiarImagenGaleria(this, 'Control de Accesos', 'assets/landing_page/img/gallery/fotos-dashboard/img2.png')">
+                                <i class="bi bi-shield-lock"></i> Accesos
+                            </button>
+                            
+                            <button class="gallery-tab-btn" onclick="cambiarImagenGaleria(this, 'Topología de Red', 'assets/landing_page/img/gallery/fotos-dashboard/img1.png')">
+                                <i class="bi bi-diagram-3"></i> Topología
+                            </button>
+
+                        </div>
+                    </div>
+
+                    <div class="col-md-9 bg-black d-flex flex-column align-items-center justify-content-center p-4">
+                        
+                        <h4 id="gallery-title" class="text-cyan font-mono fw-bold mb-3">Vista_General.render</h4>
+                        
+                        <img id="gallery-img" src="assets/landing_page/img/gallery/fotos-dashboard/img2.png" alt="Dashboard Preview" class="gallery-img-fit">
+                    
+                    </div>
+
+                </div> </div>
+        </div>
+    </div>
+</section>
+
+    <section id="contacto" class="contact-section py-5 mt-5 mb-5">
+      <div class="container">
+        <div class="row justify-content-center">
+          <div class="col-lg-6 col-md-8">
+            <div class="p3r-card p-4 p-lg-5" data-aos="fade-up">
+              <div class="mb-4">
+                <h2 class="h3 fw-bold text-white mb-2">¿Tienes dudas?</h2>
+              </div>
+
+              <form
+                action="procesarIndex.php"
+                method="POST"
+                class="custom-form"
+              >
+                <div class="mb-4">
+                  <label class="form-label lbl-color font-mono small"
+                    >NOMBRE COMPLETO</label
+                  >
+                  <input
+                    type="text"
+                    class="form-control p3r-input"
+                    name="nombre"
+                    required
+                  />
+                </div>
+                <div class="mb-4">
+                  <label class="form-label lbl-color font-mono small"
+                    >CORREO</label
+                  >
+                  <input
+                    type="email"
+                    class="form-control p3r-input"
+                    name="correo"
+                    required
+                  />
+                </div>
+                <div class="mb-4">
+                  <label class="form-label lbl-color font-mono small"
+                    >ASUNTO</label
+                  >
+                  <input
+                    type="text"
+                    class="form-control p3r-input"
+                    name="asunto"
+                    required
+                  />
+                </div>
+                <div class="mb-4">
+                  <label class="form-label lbl-color font-mono small"
+                    >MENSAJE</label
+                  >
+                  <textarea
+                    class="form-control p3r-input"
+                    name="mensaje"
+                    rows="4"
+                    required
+                  ></textarea>
+                </div>
+
+                <button
+                  type="submit"
+                  class="btn btn-cyan w-100 text-uppercase mt-2"
+                >
+                  Enviar <i class="bi bi-terminal ms-2"></i>
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <footer class="site-footer border-top border-secondary py-4 mt-auto">
+      <div class="container">
+        <div class="row align-items-center">
+          <div class="col-md-6 text-center text-md-start mb-3 mb-md-0">
+            <p class="mb-0 copyright small font-mono">
+              &copy; Todos los derechos reservados.
+            </p>
+          </div>
+          <div class="col-md-6 text-center text-md-end">
+            <div
+              class="footer-icons d-flex justify-content-center justify-content-md-end gap-4"
+            >
+              <a href="#" class="footer-link" aria-label="GitHub"
+                ><i class="bi bi-github"></i
+              ></a>
+              <a href="#" class="footer-link" aria-label="Email"
+                ><i class="bi bi-envelope"></i
+              ></a>
+              <a href="#" class="footer-link" aria-label="Teléfono"
+                ><i class="bi bi-telephone"></i
+              ></a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </footer>
 
     <script src="assets/landing_page/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
     <!-- Script de Animación de Terminal -->
@@ -388,35 +538,49 @@
     <script>
       // Función para cambiar las pestañas de Arquitectura
       function switchArchTab(targetId, colorTheme) {
-        // 1. Quitar estado activo de todos los botones
-        const buttons = document.querySelectorAll(".arch-tab-btn");
-        buttons.forEach((btn) => btn.classList.remove("active"));
+      // 1. Quitar estado activo de todos los botones
+      const buttons = document.querySelectorAll('.arch-tab-btn');
+      buttons.forEach(btn => btn.classList.remove('active'));
 
-        // 2. Añadir estado activo al botón clickeado
-        const clickedBtn = document.querySelector(
-          `[data-target="${targetId}"]`,
-        );
-        clickedBtn.classList.add("active");
+      // 2. Añadir estado activo al botón clickeado
+      const clickedBtn = document.querySelector(`[data-target="${targetId}"]`);
+      clickedBtn.classList.add('active');
 
-        // 3. Ocultar todos los paneles
-        const panes = document.querySelectorAll(".arch-pane");
-        panes.forEach((pane) => {
-          pane.classList.remove("active-pane");
-          pane.classList.remove("p3r-sweep"); // Resetear animación
-        });
+      // 3. Ocultar todos los paneles
+      const panes = document.querySelectorAll('.arch-pane');
+      panes.forEach(pane => {
+          pane.classList.remove('active-pane');
+          pane.classList.remove('p3r-sweep'); 
+      });
 
-        // 4. Mostrar el panel correspondiente y disparar animación
-        const activePane = document.getElementById(targetId);
-        activePane.classList.add("active-pane");
+      // 4. Mostrar el panel y disparar animación
+      const activePane = document.getElementById(targetId);
+      activePane.classList.add('active-pane');
+      void activePane.offsetWidth; 
+      activePane.classList.add('p3r-sweep');
 
-        // Pequeño truco JS para reiniciar una animación CSS
-        void activePane.offsetWidth;
-        activePane.classList.add("p3r-sweep");
+      // 5. CORRECCIÓN VITAL: Cambiar el tema del contenedor limpiamente
+      const container = document.getElementById('arch-content-container');
+      container.classList.remove('theme-blue', 'theme-purple', 'theme-red');
+      container.classList.add(`theme-${colorTheme}`);
+      }
+    </script>
+    <script>
+      // Lógica Simple del Visor de Galería
+      function cambiarImagenGaleria(botonClickeado, nuevoTitulo, rutaImagen) {
+        // 1. Quitar la clase 'active' de todos los botones
+        const botones = document.querySelectorAll(".gallery-tab-btn");
+        botones.forEach((btn) => btn.classList.remove("active"));
 
-        // 5. Actualizar el color (Tema) del contenedor principal
-        const container = document.getElementById("arch-content-container");
-        // Limpiamos temas anteriores y aplicamos el nuevo
-        container.className = `arch-content-container theme-${colorTheme}`;
+        // 2. Poner la clase 'active' al botón que se le hizo clic
+        botonClickeado.classList.add("active");
+
+        // 3. Cambiar el texto del título superior
+        document.getElementById("gallery-title").innerText =
+          nuevoTitulo.replace(/ /g, "_") + ".render";
+
+        // 4. Cambiar la imagen mostrada
+        document.getElementById("gallery-img").src = rutaImagen;
       }
     </script>
   </body>

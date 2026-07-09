@@ -82,6 +82,10 @@ span {
   color: var(--text-light);
   margin-bottom: 20px;
 }
+.bold-white{
+  color: #fff;
+  font-weight: bold;
+}
 
 .forgot-password {
   color: var(--text-light);
