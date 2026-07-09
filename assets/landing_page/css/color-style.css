@@ -1,13 +1,10 @@
-/* ==========================================================================
-   SYSMONITOR - CORE ENGINE
-   ========================================================================== */
-
 /* --- VARIABLES GLOBALES --- */
 :root {
   --bg-main: #050810;
   --bg-surface: #0a0f1a;
-  --cyan-primary: #00e5ff;
-  --cyan-hover: #00b8cc;
+  --cyan-primary: #8b5cf6;
+  --btn-hover-color: #6d28d9;
+  --cyan-hover: #6d28d9;
   --text-main: #f8fafc;
   --text-muted: #64748b;
   --border-color: #1e293b;
@@ -97,21 +94,6 @@ section {
   }
 }
 
-/*bg-grid {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  z-index: -1;
-  background-size: 50px 50px;
-  background-image:
-    linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
-  mask-image: linear-gradient(to bottom, black 40%, transparent 100%);
-  -webkit-mask-image: linear-gradient(to bottom, black 40%, transparent 100%);
-}*/
-
 /* --- NAVBAR --- */
 .custom-navbar {
   background: rgba(5, 8, 16, 0.8);
@@ -182,12 +164,12 @@ section {
   height: 100%;
 
   /* NUEVO COLOR: Azul Eléctrico vibrante */
-  background-color: #050a13;
+  background-color: #3f005c;
 
   /* TRUCO DE VACIADO: Cuando quitas el cursor, el punto de fuga es la DERECHA */
-  transform-origin: right;
+  transform-origin: left;
   transform: skewX(-15deg) scaleX(0);
-  transition: transform 0.4s cubic-bezier(0.19, 1, 0.22, 1);
+  transition: transform 0.9s cubic-bezier(0.19, 1, 0.22, 1);
   z-index: -1;
 }
 
@@ -240,7 +222,7 @@ section {
   align-items: center;
   gap: 8px;
   background: rgba(0, 229, 255, 0.1);
-  color: var(--cyan-primary);
+  color: #fff;
   border: 1px solid rgba(0, 229, 255, 0.2);
   padding: 6px 14px;
   border-radius: 50px;
@@ -253,14 +235,14 @@ section {
   height: 6px;
   background-color: var(--cyan-primary);
   border-radius: 50%;
-  box-shadow: 0 0 0 0 rgba(0, 229, 255, 0.7);
+  box-shadow: 0 0 0 0 var(--cyan-primary);
   animation: pulse 2s infinite;
 }
 
 @keyframes pulse {
   0% {
     transform: scale(0.95);
-    box-shadow: 0 0 0 0 rgba(0, 229, 255, 0.7);
+    box-shadow: 0 0 0 0 var(--cyan-hover);
   }
   70% {
     transform: scale(1);
@@ -634,4 +616,179 @@ section {
     opacity: 1;
     transform: translateX(0) skewX(0);
   }
+}
+/* ==========================================================================
+   GALERÍA 
+   ========================================================================== */
+
+.bg-dark-surface {
+  background-color: rgba(10, 15, 26, 0.6);
+}
+
+.gallery-tab-btn {
+  background: transparent;
+  color: #a0aec0;
+  border: 1px solid transparent;
+  text-align: left;
+  padding: 12px 20px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.gallery-tab-btn:hover {
+  color: #ffffff;
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+.gallery-tab-btn.active {
+  color: var(--cyan-primary);
+  background-color: rgba(0, 242, 255, 0.08);
+  border-color: rgba(0, 242, 255, 0.2);
+}
+
+/* --- LA CAPA DE BARRIDO FÍSICO (LA MAGIA P3R) --- */
+#gallery-viewport {
+  overflow: hidden; /* Vital para que el barrido no se salga */
+  min-height: 400px;
+}
+/* ==========================================================================
+   GALERÍA Y VISOR SIMPLE
+   ========================================================================== */
+
+.bg-dark-surface {
+  background-color: rgba(10, 15, 26, 0.6);
+}
+
+.gallery-tab-btn {
+  background: transparent;
+  color: #a0aec0;
+  border: 1px solid transparent;
+  text-align: left;
+  padding: 12px 20px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.gallery-tab-btn:hover {
+  color: #ffffff;
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+/* Estado activo del botón */
+.gallery-tab-btn.active {
+  color: var(--cyan-primary);
+  background-color: rgba(0, 242, 255, 0.08);
+  border-color: rgba(0, 242, 255, 0.2);
+}
+
+/* El ajuste estricto de la imagen */
+.gallery-img-fit {
+  width: 100%;
+  max-height: 450px; /* Previene que la imagen expanda el contenedor al infinito */
+  object-fit: contain; /* Encaja el 100% de la imagen sin recortes */
+  border: 1px solid #1e293b;
+  border-radius: 8px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  /* Una transición ultra rápida y sutil solo para que el cambio no sea violento */
+  transition: opacity 0.15s ease;
+}
+
+/* --- LA CAPA DE BARRIDO FÍSICO (VERSIÓN DARK-TECH) --- */
+
+.gallery-image-container {
+  width: 100%;
+  max-width: 600px; /* Limita el ancho para que no toque los bordes */
+  height: 300px; /* Fija una altura uniforme para todas las fotos */
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid #334155;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+.gallery-img-fit {
+  width: 100%;
+  height: 100%;
+  /* 'cover' llena el espacio cortando los bordes sobrantes. 
+       Si prefieres que se vea toda la imagen aunque queden huecos, cambia a 'contain' */
+  object-fit: cover;
+  transition: opacity 0.3s ease;
+}
+
+/* ==========================================================================
+   FORMULARIO Y FOOTER
+   ========================================================================== */
+
+/* Estilos de inputs técnicos */
+.p3r-input {
+  background-color: rgba(0, 0, 0, 0.3);
+  border: 1px solid #334155;
+  color: #ffffff;
+  border-radius: 4px;
+  padding: 12px 15px;
+  transition:
+    border-color 0.3s ease,
+    box-shadow 0.3s ease,
+    background-color 0.3s;
+}
+
+.p3r-input:focus {
+  background-color: rgba(0, 242, 255, 0.05);
+  border-color: var(--cyan-primary);
+  box-shadow: 0 0 15px rgba(0, 242, 255, 0.15);
+  color: #ffffff;
+  outline: none;
+}
+
+.p3r-input::placeholder {
+  color: #475569;
+}
+.lbl-color {
+  color: #a0aec0;
+}
+
+/* Footer Links */
+.footer-link {
+  color: #64748b;
+  font-size: 1.4rem;
+  transition:
+    color 0.2s ease,
+    transform 0.2s ease;
+}
+.copyright{
+  color: #7d7d7d;
+}
+
+.footer-link:hover {
+  color: var(--cyan-primary);
+  transform: translateY(-3px);
+}
+/* Bloqueo estricto del redimensionamiento del layout */
+textarea.p3r-input {
+  resize: none;
+}
+/* ==========================================================================
+   HACK PARA EL AUTOCOMPLETADO (WebKit Autofill Fix)
+   ========================================================================== */
+
+.p3r-input:-webkit-autofill,
+.p3r-input:-webkit-autofill:hover, 
+.p3r-input:-webkit-autofill:focus, 
+.p3r-input:-webkit-autofill:active {
+    
+    /* TRUCO 1: Mantiene el texto en color blanco a la fuerza */
+    -webkit-text-fill-color: #ffffff !important;
+    
+    /* TRUCO 2: Como el fondo autofill no se puede hacer transparente, 
+       engañamos al navegador pidiéndole que tarde 5000 segundos en cambiar el color a blanco. 
+       Esto mantiene intacto tu fondo oscuro actual de forma infinita. */
+    transition: background-color 5000s ease-in-out 0s;
+    
+    /* Mantiene el color del cursor parpadeante en blanco */
+    caret-color: white;
 }
