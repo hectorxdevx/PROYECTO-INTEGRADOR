@@ -1,16 +1,16 @@
 /* --- VARIABLES GLOBALES --- */
 :root {
-  --bg-main: #050810;
-  --bg-surface: #0a0f1a;
-  --cyan-primary: #8b5cf6;
-  --btn-hover-color: #6d28d9;
-  --cyan-hover: #6d28d9;
-  --text-main: #f8fafc;
-  --text-muted: #64748b;
-  --border-color: #1e293b;
+  --bg-main: #0B0F12;
+  --bg-surface: #171E24;
+  --cyan-primary: #39FF14;
+  --btn-hover-color: #2ECC71;
+  --cyan-hover: #2ECC71;
+  --text-main: #F5F7FA;
+  --text-muted: #7F8C8D;
+  --border-color: #2C3E50;
 
-  --font-sans: "Inter", sans-serif;
-  --font-mono: "Fira Code", monospace;
+  --font-sans: "Plus Jakarta Sans", "Inter", sans-serif;
+  --font-mono: "JetBrains Mono", monospace;
 }
 
 /* --- REINICIO GENERAL --- */
@@ -164,7 +164,7 @@ section {
   height: 100%;
 
   /* NUEVO COLOR: Azul Eléctrico vibrante */
-  background-color: #3f005c;
+  background-color: #047857;
 
   /* TRUCO DE VACIADO: Cuando quitas el cursor, el punto de fuga es la DERECHA */
   transform-origin: left;
