@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Dashboard - Mazer Admin Dashboard</title>
+    <title>Dashboard - Admin Dashboard</title>
 
     <link
       rel="shortcut icon"
@@ -745,7 +745,7 @@
         </header>
 
         <div class="page-heading">
-          <h3>Profile Statistics</h3>
+          <h3>Métricas en Tiempo Real</h3>
         </div>
         <div class="page-content">
           <section class="row">
@@ -764,9 +764,9 @@
                         </div>
                         <div class="col-md-8 col-lg-12 col-xl-12 col-xxl-7">
                           <h6 class="text-muted font-semibold">
-                            Profile Views
+                            Temperatura Promedio
                           </h6>
-                          <h6 class="font-extrabold mb-0">112.000</h6>
+                          <h6 class="font-extrabold mb-0">22.5 °C</h6>
                         </div>
                       </div>
                     </div>
@@ -784,8 +784,8 @@
                           </div>
                         </div>
                         <div class="col-md-8 col-lg-12 col-xl-12 col-xxl-7">
-                          <h6 class="text-muted font-semibold">Followers</h6>
-                          <h6 class="font-extrabold mb-0">183.000</h6>
+                          <h6 class="text-muted font-semibold">Humedad Relativa</h6>
+                          <h6 class="font-extrabold mb-0">45 %</h6>
                         </div>
                       </div>
                     </div>
@@ -803,8 +803,8 @@
                           </div>
                         </div>
                         <div class="col-md-8 col-lg-12 col-xl-12 col-xxl-7">
-                          <h6 class="text-muted font-semibold">Following</h6>
-                          <h6 class="font-extrabold mb-0">80.000</h6>
+                          <h6 class="text-muted font-semibold">Consumo Energético</h6>
+                          <h6 class="font-extrabold mb-0">Estable</h6>
                         </div>
                       </div>
                     </div>
@@ -822,8 +822,8 @@
                           </div>
                         </div>
                         <div class="col-md-8 col-lg-12 col-xl-12 col-xxl-7">
-                          <h6 class="text-muted font-semibold">Saved Post</h6>
-                          <h6 class="font-extrabold mb-0">112</h6>
+                          <h6 class="text-muted font-semibold">Alertas Activas</h6>
+                          <h6 class="font-extrabold mb-0">0</h6>
                         </div>
                       </div>
                     </div>
@@ -834,7 +834,7 @@
                 <div class="col-12">
                   <div class="card">
                     <div class="card-header">
-                      <h4>Profile Visit</h4>
+                      <h4>Tendencias Ambientales</h4>
                     </div>
                     <div class="card-body">
                       <div id="chart-profile-visit"></div>
@@ -846,7 +846,7 @@
                 <div class="col-12 col-xl-4">
                   <div class="card">
                     <div class="card-header">
-                      <h4>Profile Visit</h4>
+                      <h4>Estado por Zonas / Racks</h4>
                     </div>
                     <div class="card-body">
                       <div class="row">
@@ -863,11 +863,11 @@
                                 xlink:href="../assets/dashboard/static/images/bootstrap-icons.svg#circle-fill"
                               />
                             </svg>
-                            <h5 class="mb-0 ms-3">Europe</h5>
+                            <h5 class="mb-0 ms-3">Rack Principal (MDF-01)</h5>
                           </div>
                         </div>
                         <div class="col-5">
-                          <h5 class="mb-0 text-end">862</h5>
+                          <h5 class="mb-0 text-end">98%</h5>
                         </div>
                         <div class="col-12">
                           <div id="chart-europe"></div>
@@ -887,11 +887,11 @@
                                 xlink:href="../assets/dashboard/static/images/bootstrap-icons.svg#circle-fill"
                               />
                             </svg>
-                            <h5 class="mb-0 ms-3">America</h5>
+                            <h5 class="mb-0 ms-3">Rack de Distribución (IDF-01)</h5>
                           </div>
                         </div>
                         <div class="col-5">
-                          <h5 class="mb-0 text-end">375</h5>
+                          <h5 class="mb-0 text-end">94%</h5>
                         </div>
                         <div class="col-12">
                           <div id="chart-america"></div>
@@ -911,11 +911,11 @@
                                 xlink:href="../assets/dashboard/static/images/bootstrap-icons.svg#circle-fill"
                               />
                             </svg>
-                            <h5 class="mb-0 ms-3">India</h5>
+                            <h5 class="mb-0 ms-3">Banco de Baterías / UPS</h5>
                           </div>
                         </div>
                         <div class="col-5">
-                          <h5 class="mb-0 text-end">625</h5>
+                          <h5 class="mb-0 text-end">100%</h5>
                         </div>
                         <div class="col-12">
                           <div id="chart-india"></div>
@@ -935,11 +935,11 @@
                                 xlink:href="../assets/dashboard/static/images/bootstrap-icons.svg#circle-fill"
                               />
                             </svg>
-                            <h5 class="mb-0 ms-3">Indonesia</h5>
+                            <h5 class="mb-0 ms-3">Zona de Climatización (AC)</h5>
                           </div>
                         </div>
                         <div class="col-5">
-                          <h5 class="mb-0 text-end">1025</h5>
+                          <h5 class="mb-0 text-end">85%</h5>
                         </div>
                         <div class="col-12">
                           <div id="chart-indonesia"></div>
@@ -951,15 +951,15 @@
                 <div class="col-12 col-xl-8">
                   <div class="card">
                     <div class="card-header">
-                      <h4>Latest Comments</h4>
+                      <h4>Bitácora de Telemetría (Últimas Lecturas)</h4>
                     </div>
                     <div class="card-body">
                       <div class="table-responsive">
                         <table class="table table-hover table-lg">
                           <thead>
                             <tr>
-                              <th>Name</th>
-                              <th>Comment</th>
+                              <th>Sensor ID </th>
+                              <th>Métrica Registrada</th>
                             </tr>
                           </thead>
                           <tbody>
@@ -971,12 +971,12 @@
                                       src="../assets/dashboard/compiled/jpg/5.jpg"
                                     />
                                   </div>
-                                  <p class="font-bold ms-3 mb-0">Si Cantik</p>
+                                  <p class="font-bold ms-3 mb-0">SNS-TEMP-01</p>
                                 </div>
                               </td>
                               <td class="col-auto">
                                 <p class="mb-0">
-                                  Congratulations on your graduation!
+                                  Lectura registrada: 22.4 °C en Rack Central
                                 </p>
                               </td>
                             </tr>
@@ -988,13 +988,12 @@
                                       src="../assets/dashboard/compiled/jpg/2.jpg"
                                     />
                                   </div>
-                                  <p class="font-bold ms-3 mb-0">Si Ganteng</p>
+                                  <p class="font-bold ms-3 mb-0">SNS-HUM-02</p>
                                 </div>
                               </td>
                               <td class="col-auto">
                                 <p class="mb-0">
-                                  Wow amazing design! Can you make another
-                                  tutorial for this design?
+                                  Lectura registrada: 48% HR en IDF-01
                                 </p>
                               </td>
                             </tr>
@@ -1007,32 +1006,13 @@
                                     />
                                   </div>
                                   <p class="font-bold ms-3 mb-0">
-                                    Singh Eknoor
+                                    SNS-PWR-01
                                   </p>
                                 </div>
                               </td>
                               <td class="col-auto">
                                 <p class="mb-0">
-                                  What a stunning design! You are so talented
-                                  and creative!
-                                </p>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td class="col-3">
-                                <div class="d-flex align-items-center">
-                                  <div class="avatar avatar-md">
-                                    <img
-                                      src="../assets/dashboard/compiled/jpg/3.jpg"
-                                    />
-                                  </div>
-                                  <p class="font-bold ms-3 mb-0">Rani Jhadav</p>
-                                </div>
-                              </td>
-                              <td class="col-auto">
-                                <p class="mb-0">
-                                  I love your design! It’s so beautiful and
-                                  unique! How did you learn to do this?
+                                  Consumo estable: 1.15 kW detectado en PDU principal
                                 </p>
                               </td>
                             </tr>
@@ -1050,61 +1030,61 @@
                   <div class="d-flex align-items-center">
                     <div class="avatar avatar-xl">
                       <img
-                        src="../assets/dashboard/compiled/jpg/1.jpg"
+                        src="../assets/dashboard/compiled/png/6.png"
                         alt="Face 1"
                       />
                     </div>
                     <div class="ms-3 name">
-                      <h5 class="font-bold">John Duck</h5>
-                      <h6 class="text-muted mb-0">@johnducky</h6>
+                      <h5 class="font-bold">Nodo Central: MDF-01</h5>
+                      <h6 class="text-muted mb-0">IP: 192.168.10.250</h6>
                     </div>
                   </div>
                 </div>
               </div>
               <div class="card">
                 <div class="card-header">
-                  <h4>Recent Messages</h4>
+                  <h4>Alertas</h4>
                 </div>
                 <div class="card-content pb-4">
                   <div class="recent-message d-flex px-4 py-3">
                     <div class="avatar avatar-lg">
-                      <img src="../assets/dashboard/compiled/jpg/4.jpg" />
+                      <img src="../assets/dashboard/compiled/png/7.png" />
                     </div>
                     <div class="name ms-4">
-                      <h5 class="mb-1">Hank Schrader</h5>
-                      <h6 class="text-muted mb-0">@johnducky</h6>
+                      <h5 class="mb-1">Alerta de Temperatura</h5>
+                      <h6 class="text-muted mb-0">Rack 2 superó los 26°C - Hace 5 min</h6>
                     </div>
                   </div>
                   <div class="recent-message d-flex px-4 py-3">
                     <div class="avatar avatar-lg">
-                      <img src="../assets/dashboard/compiled/jpg/5.jpg" />
+                      <img src="../assets/dashboard/compiled/png/8.png" />
                     </div>
                     <div class="name ms-4">
-                      <h5 class="mb-1">Dean Winchester</h5>
-                      <h6 class="text-muted mb-0">@imdean</h6>
+                      <h5 class="mb-1">Fallo de Energía Alterna</h5>
+                      <h6 class="text-muted mb-0">Cambio a modo UPS de respaldo - Hace 2 horas</h6>
                     </div>
                   </div>
                   <div class="recent-message d-flex px-4 py-3">
                     <div class="avatar avatar-lg">
-                      <img src="../assets/dashboard/compiled/jpg/1.jpg" />
+                      <img src="../assets/dashboard/compiled/png/9.png" />
                     </div>
                     <div class="name ms-4">
-                      <h5 class="mb-1">John Dodol</h5>
-                      <h6 class="text-muted mb-0">@dodoljohn</h6>
+                      <h5 class="mb-1">Restablecimiento de Humedad</h5>
+                      <h6 class="text-muted mb-0">Nivel normalizado al 45% - Hace 4 horas</h6>
                     </div>
                   </div>
                   <div class="px-4">
                     <button
                       class="btn btn-block btn-xl btn-outline-primary font-bold mt-3"
                     >
-                      Start Conversation
+                      Ir a Base de Datos
                     </button>
                   </div>
                 </div>
               </div>
               <div class="card">
                 <div class="card-header">
-                  <h4>Visitors Profile</h4>
+                  <h4>Disponibilidad de Sensores IoT</h4>
                 </div>
                 <div class="card-body">
                   <div id="chart-visitors-profile"></div>
@@ -1117,15 +1097,15 @@
         <footer>
           <div class="footer clearfix mb-0 text-muted">
             <div class="float-start">
-              <p>2023 &copy; Mazer</p>
+              <p> </p>
             </div>
             <div class="float-end">
               <p>
-                Crafted with
+                
                 <span class="text-danger"
-                  ><i class="bi bi-heart-fill icon-mid"></i
+                
                 ></span>
-                by <a href="https://saugi.me">Saugi</a>
+              
               </p>
             </div>
           </div>
