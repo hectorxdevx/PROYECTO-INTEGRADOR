@@ -64,7 +64,7 @@
             </li>
           </ul>
           <div class="nav-actions d-flex align-items-center gap-3 mt-3 mt-lg-0">
-            <a href="/vista_usuario/panel.html" class="text-link">Iniciar sesión</a>
+            <a href="panel.html" class="text-link">Iniciar sesión</a>
             <a href="login.html" class="btn btn-cyan text-uppercase"
               >EMPEZAR GRATIS</a>
           </div>
@@ -73,7 +73,7 @@
     </nav>
 
     <!-- ==========================================
-         SECTION (FASE 1)
+         SECCION (FASE 1)
     =========================================== -->
     <main class="hero-section">
       <!-- El resplandor radial -->
@@ -81,9 +81,7 @@
 
       <div class="container">
         <!-- La Fila Principal (Row) que sostiene ambas columnas -->
-        <div
-          class="row align-items-center justify-content-between min-vh-100 pt-5"
-        >
+        <div class="row align-items-center justify-content-between min-vh-100 pt-5">
           <!-- COLUMNA IZQUIERDA: Texto y Botones (ocupa 6 de 12 espacios) -->
           <div class="col-lg-6 hero-content">
             <div class="badge-cyan mb-4">
@@ -101,51 +99,73 @@
             </p>
 
             <div class="hero-cta d-flex align-items-center gap-4 mb-3">
-              <a
-                href="login.html"
-                class="btn btn-cyan btn-lg d-inline-flex align-items-center gap-2"
-              >
+            <a href="login.html" class="btn btn-cyan btn-lg d-inline-flex align-items-center gap-2">
                 REGISTRATE <i class="bi bi-arrow-right"></i>
-              </a>
-            </div>
-          </div>
-
-          <!-- COLUMNA DERECHA: Terminal (ocupa 5 de 12 espacios) -->
-          <div class="col-lg-5 mt-5 mt-lg-0">
-            <div class="cli-window window-glow">
-              <div class="cli-header">
-                <div class="cli-dots">
-                  <span class="cli-dot red"></span>
-                  <span class="cli-dot yellow"></span>
-                  <span class="cli-dot green"></span>
-                </div>
-                <div class="cli-title">sysmonitor ~ bash</div>
-              </div>
-              <!-- Cuerpo de la terminal donde inyectaremos con JS -->
-              <div class="cli-body" id="terminal-body"></div>
-            </div>
-          </div>
+            </a>
         </div>
-        <!-- Cierre del Row -->
+    </div> 
+    <!-- container del miniboard -->
+    <div class="col-lg-5 offset-lg-1">
+        <div class="friendly-dashboard-card p-4" data-aos="fade-up">
+            <div class="d-flex justify-content-between align-items-center mb-4 border-bottom pb-3">
+                <h5 class="mb-0 fw-bold text-dark" style="font-family: 'Inter', sans-serif;">
+                    <i class="bi bi-hdd-network text-primary me-2"></i>Rack Principal 04
+                </h5>
+                <span class="badge bg-success-soft text-success rounded-pill px-3 py-2 fw-bold">
+                    <span class="pulsing-dot"></span> En línea
+                </span>
+            </div>
+            
+            <div class="row g-3">
+                <div class="col-6">
+                    <div class="metric-box">
+                        <div class="metric-icon bg-blue-soft text-primary"><i class="bi bi-thermometer-half"></i></div>
+                        <div class="metric-info">
+                            <span class="metric-label">Temperatura</span>
+                            <span class="metric-value" id="live-temp">22.4°C</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="metric-box">
+                        <div class="metric-icon bg-info-soft text-info"><i class="bi bi-droplet"></i></div>
+                        <div class="metric-info">
+                            <span class="metric-label">Humedad</span>
+                            <span class="metric-value" id="live-hum">45%</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="metric-box">
+                        <div class="metric-icon bg-warning-soft text-warning"><i class="bi bi-lightning-charge"></i></div>
+                        <div class="metric-info">
+                            <span class="metric-label">Consumo</span>
+                            <span class="metric-value" id="live-power">1.2 kW</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="metric-box alert-state">
+                        <div class="metric-icon bg-danger-soft text-danger"><i class="bi bi-door-open"></i></div>
+                        <div class="metric-info">
+                            <span class="metric-label">Puerta Rack</span>
+                            <span class="metric-value text-danger">Abierta</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
       </div>
+    </div>
+    </div>
       <!-- Cierre del Container -->
     </main>
     <section id="caracteristicas" class="features-section py-5 mt-5">
       <div class="container">
         <div class="text-center mb-5" data-aos="fade-up">
-          <div class="section-tag mb-3">
-            <span
-              class="text-cyan fw-bold"
-              style="font-family: var(--font-mono); font-size: 0.85rem"
-              >// CARACTERISTICAS
-            </span>
-          </div>
           <h2 class="display-5 fw-bold mb-3">
-            Diseño inteligente,<br />cero complicaciones.
+            CARACTERÍSTICAS
           </h2>
-          <p class="mx-auto" style="max-width: 600px; font-size: 1.1rem">
-            Todo el control en la palma de tu mano.
-          </p>
         </div>
 
         <div class="row g-4 mt-4">
@@ -226,15 +246,8 @@
     <section id="arquitectura" class="arch-section py-5 mt-5">
       <div class="container">
         <div class="text-center mb-5" data-aos="fade-up">
-          <div class="section-tag mb-3">
-            <span
-              class="text-cyan fw-bold"
-              style="font-family: var(--font-mono); font-size: 0.85rem"
-              >// ARQUITECTURA</span
-            >
-          </div>
           <h2 class="display-5 fw-bold mb-3 text-white">
-            Tecnología robusta y segura.
+            ARQUITECTURA
           </h2>
         </div>
 
@@ -333,11 +346,8 @@
             <div class="col-xl-10">
                 
                 <div class="text-center mb-5" data-aos="fade-up">
-                    <div class="section-tag mb-3">
-                        <span class="text-cyan fw-bold" style="font-family: var(--font-mono); font-size: 0.85rem;">// INTERFAZ</span>
-                    </div>
                     <h2 class="display-5 fw-bold mb-3 text-white">
-                        Visibilidad absoluta.
+                        INTERFAZ
                     </h2>
                 </div>
 
@@ -379,6 +389,11 @@
 </section>
 
     <section id="contacto" class="contact-section py-5 mt-5 mb-5">
+              <div class="text-center mb-5" data-aos="fade-up">
+          <h2 class="display-5 fw-bold mb-3 text-white">
+            CONTACTO
+          </h2>
+        </div>
       <div class="container">
         <div class="row justify-content-center">
           <div class="col-lg-6 col-md-8">
@@ -462,7 +477,7 @@
             <div
               class="footer-icons d-flex justify-content-center justify-content-md-end gap-4"
             >
-              <a href="#" class="footer-link" aria-label="GitHub"
+              <a href="https://github.com/hectorxdevx/PROYECTO-INTEGRADOR.git" target="_blank" class="footer-link" aria-label="GitHub"
                 ><i class="bi bi-github"></i
               ></a>
               <a href="#" class="footer-link" aria-label="Email"
@@ -478,63 +493,55 @@
     </footer>
 
     <script src="assets/landing_page/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <!-- Script de Animación de Terminal -->
-    <script>
-      document.addEventListener("DOMContentLoaded", () => {
-        const terminalBody = document.getElementById("terminal-body");
+   <script>
+    // ==========================================
+    // SIMULADOR DE TELEMETRÍA EN VIVO (Widget)
+    // ==========================================
+    document.addEventListener('DOMContentLoaded', () => {
+        
+        // Atrapamos los elementos del HTML
+        const tempEl = document.getElementById('live-temp');
+        const humEl = document.getElementById('live-hum');
+        const powerEl = document.getElementById('live-power');
 
-        // Secuencia actualizada con tu texto personalizado
-        const lines = [
-          { type: "cmd", text: "Rack ID_server #777", delay: 800 },
-          {
-            type: "out",
-            text: "<span class='status-ok'>[OK]</span> Temperatura: 22.4°C",
-            delay: 400,
-          },
-          {
-            type: "out",
-            text: "<span class='status-ok'>[OK]</span> Humedad: 45%",
-            delay: 300,
-          },
-          {
-            type: "out",
-            text: "<span class='status-ok'>[OK]</span> Voltaje UPS: 120V",
-            delay: 500,
-          },
-          {
-            type: "out",
-            text: "<span class='status-warn'>[WARN]</span> Puerta del Rack 04:<br>Abierta (hace 2 min)",
-            delay: 800,
-          },
-          { type: "prompt", text: "", delay: 200 },
-        ];
+        // Validamos que existan para no romper otras páginas
+        if (!tempEl || !humEl || !powerEl) return;
 
-        let currentLine = 0;
+        // Añadimos una transición CSS directamente desde JS para que el parpadeo sea suave
+        [tempEl, humEl, powerEl].forEach(el => {
+            el.style.transition = "color 0.3s ease";
+        });
 
-        function renderLine() {
-          if (currentLine >= lines.length) return;
+        // Ejecutar cada 3.5 segundos (3500 milisegundos)
+        setInterval(() => {
+            // Generamos datos aleatorios con lógica de servidores reales
+            // Temperatura: entre 21.0 y 24.5 °C
+            const newTemp = (Math.random() * (24.5 - 21.0) + 21.0).toFixed(1);
+            
+            // Humedad: entre 42% y 48%
+            const newHum = Math.floor(Math.random() * (48 - 42 + 1)) + 42;
+            
+            // Consumo: entre 1.10 y 1.35 kW
+            const newPower = (Math.random() * (1.35 - 1.10) + 1.10).toFixed(2);
 
-          const lineData = lines[currentLine];
-          const lineDiv = document.createElement("div");
-          lineDiv.className = "cli-line mb-1";
+            // Inyectamos los nuevos valores
+            tempEl.innerText = newTemp + '°C';
+            humEl.innerText = newHum + '%';
+            powerEl.innerText = newPower + ' kW';
 
-          if (lineData.type === "cmd") {
-            lineDiv.innerHTML = `<span class="prompt">$</span> <span class="cmd">${lineData.text}</span>`;
-          } else if (lineData.type === "out") {
-            lineDiv.innerHTML = lineData.text;
-          } else if (lineData.type === "prompt") {
-            lineDiv.innerHTML = `<span class="prompt">$</span> <span class="cursor-blink"></span>`;
-          }
+            // Efecto UX: Parpadeo verde de actualización
+            [tempEl, humEl, powerEl].forEach(el => {
+                el.style.color = '#10b981'; // Cambia a verde success
+                
+                // Vuelve al color oscuro original después de 400ms
+                setTimeout(() => {
+                    el.style.color = '#0f172a';
+                }, 400);
+            });
 
-          terminalBody.appendChild(lineDiv);
-          currentLine++;
-
-          setTimeout(renderLine, lineData.delay);
-        }
-
-        setTimeout(renderLine, 500);
-      });
-    </script>
+        }, 3500); // Tiempo del ciclo
+    });
+</script>
     <script>
       // Función para cambiar las pestañas de Arquitectura
       function switchArchTab(targetId, colorTheme) {
