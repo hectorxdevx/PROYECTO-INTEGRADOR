@@ -1,0 +1,450 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>SysMonitor | Gestión de Infraestructura</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+
+    <link href="<?php echo BASE_URL; ?>/assets/landing_page/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="<?php echo BASE_URL; ?>/assets/landing_page/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet" />
+    <link href="<?php echo BASE_URL; ?>/assets/landing_page/css/color-style.css" rel="stylesheet" />
+  </head>
+
+  <body>
+    <div class="bg-grid"></div>
+
+    <nav class="navbar navbar-expand-lg fixed-top custom-navbar">
+      <div class="container-fluid container-xl">
+        <a class="navbar-brand d-flex align-items-center gap-2" href="<?php echo BASE_URL; ?>/">
+          
+          <!-- ========================================== -->
+          <!-- AQUI VA EL LOGO -->
+          <!-- Puedes reemplazar esto por una etiqueta <img> cuando tengas tu logo listo -->
+          <div class="logo-icon">&gt;_</div>
+          <span class="logo-text">Sys<span class="text-white">Monitor</span></span>
+          <!-- ========================================== -->
+
+        </a>
+
+        <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navmenu">
+          <i class="bi bi-list text-white fs-2"></i>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navmenu">
+          <ul class="navbar-nav mx-auto gap-4">
+            <li class="nav-item"><a class="nav-link" href="#caracteristicas">Características</a></li>
+            <li class="nav-item"><a class="nav-link" href="#arquitectura">Arquitectura</a></li>
+            <li class="nav-item"><a class="nav-link" href="#galeria">Interfaz</a></li>
+            <li class="nav-item"><a class="nav-link" href="#contacto">Contacto</a></li>
+          </ul>
+          <div class="nav-actions d-flex align-items-center gap-3 mt-3 mt-lg-0">
+            <a href="<?php echo BASE_URL; ?>/index.php?page=login" class="text-link">Iniciar sesión</a>
+            <a href="<?php echo BASE_URL; ?>/index.php?page=login" class="btn btn-cyan text-uppercase">EMPEZAR GRATIS</a>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <main class="hero-section">
+      <div class="bg-glow"></div>
+
+      <div class="container">
+        <div class="row align-items-center justify-content-between min-vh-100 pt-5">
+          <div class="col-lg-6 hero-content">
+            <div class="badge-cyan mb-4"><span class="dot-pulse"></span> Software en desarrollo</div>
+            <h1 class="display-3 fw-bold mb-4">Tu infraestructura,<br /><span class="text-cyan">bajo control total.</span></h1>
+            <p class="hero-subtitle mb-5">Deja de preocuparte por fallos inesperados. Monitorea el estado físico de tus servidores desde una plataforma rápida y simple.</p>
+            <div class="hero-cta d-flex align-items-center gap-4 mb-3">
+            <a href="<?php echo BASE_URL; ?>/index.php?page=login" class="btn btn-cyan btn-lg d-inline-flex align-items-center gap-2">
+                REGISTRATE <i class="bi bi-arrow-right"></i>
+            </a>
+            </div>
+          </div> 
+          
+          <div class="col-lg-5 offset-lg-1">
+            <div class="friendly-dashboard-card p-4" data-aos="fade-up">
+              <div class="d-flex justify-content-between align-items-center mb-4 border-bottom pb-3">
+                  <h5 class="mb-0 fw-bold text-dark" style="font-family: 'Inter', sans-serif;">
+                      <i class="bi bi-hdd-network text-primary me-2"></i>Rack Principal 04
+                  </h5>
+                  <span class="badge bg-success-soft text-success rounded-pill px-3 py-2 fw-bold">
+                      <span class="pulsing-dot"></span> En línea
+                  </span>
+              </div>
+              
+              <div class="row g-3">
+                  <div class="col-6">
+                      <div class="metric-box">
+                          <div class="metric-icon bg-blue-soft text-primary"><i class="bi bi-thermometer-half"></i></div>
+                          <div class="metric-info">
+                              <span class="metric-label">Temperatura</span>
+                              <span class="metric-value" id="live-temp">22.4°C</span>
+                          </div>
+                      </div>
+                  </div>
+                  <div class="col-6">
+                      <div class="metric-box">
+                          <div class="metric-icon bg-info-soft text-info"><i class="bi bi-droplet"></i></div>
+                          <div class="metric-info">
+                              <span class="metric-label">Humedad</span>
+                              <span class="metric-value" id="live-hum">45%</span>
+                          </div>
+                      </div>
+                  </div>
+                  <div class="col-6">
+                      <div class="metric-box">
+                          <div class="metric-icon bg-warning-soft text-warning"><i class="bi bi-lightning-charge"></i></div>
+                          <div class="metric-info">
+                              <span class="metric-label">Consumo</span>
+                              <span class="metric-value" id="live-power">1.2 kW</span>
+                          </div>
+                      </div>
+                  </div>
+                  <div class="col-6">
+                      <div class="metric-box alert-state">
+                          <div class="metric-icon bg-danger-soft text-danger"><i class="bi bi-door-open"></i></div>
+                          <div class="metric-info">
+                              <span class="metric-label">Puerta Rack</span>
+                              <span class="metric-value text-danger">Abierta</span>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <section id="caracteristicas" class="features-section py-5 mt-5">
+      <div class="container">
+        <div class="text-center mb-5" data-aos="fade-up">
+          <h2 class="display-5 fw-bold mb-3">CARACTERÍSTICAS</h2>
+        </div>
+        <div class="row g-4 mt-4">
+          <div class="col-md-6" data-aos="fade-up" data-aos-delay="100">
+            <article class="p3r-card h-100 p-4 p-lg-5">
+              <div class="d-flex justify-content-between align-items-start mb-4 card-header-icons">
+                <div class="icon-wrapper"><i class="bi bi-thermometer-half"></i></div>
+                <span class="card-badge">CORE</span>
+              </div>
+              <h3 class="h4 fw-bold text-white mb-3">Control Térmico</h3>
+              <p class="mb-0">Protege tus equipos contra el sobrecalentamiento y evita daños críticos por humedad.</p>
+            </article>
+          </div>
+          <div class="col-md-6" data-aos="fade-up" data-aos-delay="200">
+            <article class="p3r-card h-100 p-4 p-lg-5">
+              <div class="d-flex justify-content-between align-items-start mb-4 card-header-icons">
+                <div class="icon-wrapper"><i class="bi bi-lightning-charge"></i></div>
+                <span class="card-badge">ENERGY</span>
+              </div>
+              <h3 class="h4 fw-bold text-white mb-3">Eficiencia Energética</h3>
+              <p class="mb-0">Optimiza el consumo energético de tus cuartos de servidores con indicadores precisos.</p>
+            </article>
+          </div>
+          <div class="col-md-6" data-aos="fade-up" data-aos-delay="300">
+            <article class="p3r-card h-100 p-4 p-lg-5">
+              <div class="d-flex justify-content-between align-items-start mb-4 card-header-icons">
+                <div class="icon-wrapper"><i class="bi bi-shield-check"></i></div>
+                <span class="card-badge">SECURITY</span>
+              </div>
+              <h3 class="h4 fw-bold text-white mb-3">Seguridad Física</h3>
+              <p class="mb-0">Mantén una bitácora automatizada de accesos y recibe alertas inmediatas ante cualquier intrusión.</p>
+            </article>
+          </div>
+          <div class="col-md-6" data-aos="fade-up" data-aos-delay="400">
+            <article class="p3r-card h-100 p-4 p-lg-5">
+              <div class="d-flex justify-content-between align-items-start mb-4 card-header-icons">
+                <div class="icon-wrapper"><i class="bi bi-diagram-3"></i></div>
+                <span class="card-badge">SCALE</span>
+              </div>
+              <h3 class="h4 fw-bold text-white mb-3">Escalabilidad</h3>
+              <p class="">Arquitectura diseñada para gestionar desde un solo rack hasta una gran cantidad.</p>
+            </article>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="arquitectura" class="arch-section py-5 mt-5">
+      <div class="container">
+        <div class="text-center mb-5" data-aos="fade-up">
+          <h2 class="display-5 fw-bold mb-3 text-white">ARQUITECTURA</h2>
+        </div>
+        <div class="row mt-5">
+          <div class="col-lg-4 col-md-5 mb-4 mb-md-0" data-aos="fade-right">
+            <div class="arch-sidebar">
+              <button class="arch-tab-btn active theme-blue" data-target="tab-telemetria" onclick="switchArchTab('tab-telemetria', 'blue')">
+                <i class="bi bi-broadcast"></i> Telemetría
+              </button>
+              <button class="arch-tab-btn theme-purple" data-target="tab-ingenieria" onclick="switchArchTab('tab-ingenieria', 'purple')">
+                <i class="bi bi-braces"></i> Ingeniería
+              </button>
+              <button class="arch-tab-btn theme-red" data-target="tab-seguridad" onclick="switchArchTab('tab-seguridad', 'red')">
+                <i class="bi bi-shield-lock"></i> Seguridad
+              </button>
+            </div>
+          </div>
+          <div class="col-lg-8 col-md-7" data-aos="fade-left">
+            <div id="arch-content-container" class="arch-content-container theme-blue">
+              <div id="tab-telemetria" class="arch-pane active-pane">
+                <div class="pane-header mb-4">
+                  <div class="pane-icon"><i class="bi bi-broadcast"></i></div>
+                  <h3 class="pane-title">Telemetría</h3>
+                </div>
+                <p class="pane-text">Captura de datos precisa. Nuestros sensores envían información clave de forma automática para que siempre sepas qué está pasando en tu infraestructura.</p>
+                <div class="pane-tags mt-4">
+                  <span class="arch-tag">Sensores IoT</span>
+                  <span class="arch-tag">Tiempo Real</span>
+                  <span class="arch-tag">Métricas Exactas</span>
+                </div>
+              </div>
+              <div id="tab-ingenieria" class="arch-pane">
+                <div class="pane-header mb-4">
+                  <div class="pane-icon"><i class="bi bi-braces"></i></div>
+                  <h3 class="pane-title">Ingeniería</h3>
+                </div>
+                <p class="pane-text">Desarrollado con una estructura organizada (MVC) que facilita el mantenimiento y asegura que el sistema siempre esté disponible.</p>
+                <div class="pane-tags mt-4">
+                  <span class="arch-tag">Arquitectura MVC</span>
+                  <span class="arch-tag">Escalabilidad</span>
+                  <span class="arch-tag">Código Limpio</span>
+                </div>
+              </div>
+              <div id="tab-seguridad" class="arch-pane">
+                <div class="pane-header mb-4">
+                  <div class="pane-icon"><i class="bi bi-shield-lock"></i></div>
+                  <h3 class="pane-title">Seguridad</h3>
+                </div>
+                <p class="pane-text">Tus datos viajan aislados. La red de monitoreo nunca se cruza con tu tráfico de producción, garantizando un entorno libre de riesgos externos.</p>
+                <div class="pane-tags mt-4">
+                  <span class="arch-tag">VLAN Aislada</span>
+                  <span class="arch-tag">Control de Acceso</span>
+                  <span class="arch-tag">MariaDB Segura</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="galeria" class="gallery-section py-5 mt-5">
+      <div class="container">
+          <div class="row justify-content-center">
+              <div class="col-xl-10">
+                  <div class="text-center mb-5" data-aos="fade-up">
+                      <h2 class="display-5 fw-bold mb-3 text-white">INTERFAZ</h2>
+                  </div>
+                  <div class="row g-0 align-items-stretch arch-content-container p-0 overflow-hidden">
+                      <div class="col-md-3 border-end border-secondary p-4 bg-dark-surface">
+                          <div class="gallery-sidebar d-flex flex-column gap-2">
+                              <button class="gallery-tab-btn active" onclick="cambiarImagenGaleria(this, 'Vista General', '<?php echo BASE_URL; ?>/assets/landing_page/img/gallery/fotos-dashboard/img2.png')">
+                                  <i class="bi bi-grid-1x2"></i> Vista General
+                              </button>
+                              <button class="gallery-tab-btn" onclick="cambiarImagenGaleria(this, 'Métricas de Sensores', '<?php echo BASE_URL; ?>/assets/landing_page/img/gallery/fotos-dashboard/img1.png')">
+                                  <i class="bi bi-graph-up"></i> Métricas
+                              </button>
+                              <button class="gallery-tab-btn" onclick="cambiarImagenGaleria(this, 'Control de Accesos', '<?php echo BASE_URL; ?>/assets/landing_page/img/gallery/fotos-dashboard/img2.png')">
+                                  <i class="bi bi-shield-lock"></i> Accesos
+                              </button>
+                              <button class="gallery-tab-btn" onclick="cambiarImagenGaleria(this, 'Topología de Red', '<?php echo BASE_URL; ?>/assets/landing_page/img/gallery/fotos-dashboard/img1.png')">
+                                  <i class="bi bi-diagram-3"></i> Topología
+                              </button>
+                          </div>
+                      </div>
+                      <div class="col-md-9 bg-black d-flex flex-column align-items-center justify-content-center p-4">
+                          <h4 id="gallery-title" class="text-cyan font-mono fw-bold mb-3">Vista_General.render</h4>
+                          <img id="gallery-img" src="<?php echo BASE_URL; ?>/assets/landing_page/img/gallery/fotos-dashboard/img2.png" alt="Dashboard Preview" class="gallery-img-fit">
+                      </div>
+                  </div> 
+              </div>
+          </div>
+      </div>
+    </section>
+
+    <section id="contacto" class="contact-section py-5 mt-5 mb-5">
+      <div class="text-center mb-5" data-aos="fade-up">
+          <h2 class="display-5 fw-bold mb-3 text-white">CONTACTO</h2>
+      </div>
+      <div class="container">
+        <div class="row justify-content-center">
+          <div class="col-lg-6 col-md-8">
+            <div class="p3r-card p-4 p-lg-5" data-aos="fade-up">
+              <div class="mb-4">
+                <h2 class="h3 fw-bold text-white mb-2">¿Tienes dudas?</h2>
+              </div>
+              <form action="procesarIndex.php" method="POST" class="custom-form">
+                <div class="mb-4">
+                  <label class="form-label lbl-color font-mono small">NOMBRE COMPLETO</label>
+                  <input type="text" class="form-control p3r-input" name="nombre" required />
+                </div>
+                <div class="mb-4">
+                  <label class="form-label lbl-color font-mono small">CORREO</label>
+                  <input type="email" class="form-control p3r-input" name="correo" required />
+                </div>
+                <div class="mb-4">
+                  <label class="form-label lbl-color font-mono small">ASUNTO</label>
+                  <input type="text" class="form-control p3r-input" name="asunto" required />
+                </div>
+                <div class="mb-4">
+                  <label class="form-label lbl-color font-mono small">MENSAJE</label>
+                  <textarea class="form-control p3r-input" name="mensaje" rows="4" required></textarea>
+                </div>
+                <button type="submit" class="btn btn-cyan w-100 text-uppercase mt-2">
+                  Enviar <i class="bi bi-terminal ms-2"></i>
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <footer class="site-footer border-top border-secondary py-4 mt-auto">
+      <div class="container">
+        <div class="row align-items-center">
+          <div class="col-md-6 text-center text-md-start mb-3 mb-md-0">
+            <p class="mb-0 copyright small font-mono">&copy; Todos los derechos reservados.</p>
+          </div>
+          <div class="col-md-6 text-center text-md-end">
+            <div class="footer-icons d-flex justify-content-center justify-content-md-end gap-4">
+              <a href="https://github.com/hectorxdevx/PROYECTO-INTEGRADOR.git" target="_blank" class="footer-link" aria-label="GitHub"><i class="bi bi-github"></i></a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <script src="<?php echo BASE_URL; ?>/assets/landing_page/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script>
+    // ==========================================
+    // SIMULADOR DE TELEMETRÍA EN VIVO (Widget)
+    // ==========================================
+    document.addEventListener('DOMContentLoaded', () => {
+        const tempEl = document.getElementById('live-temp');
+        const humEl = document.getElementById('live-hum');
+        const powerEl = document.getElementById('live-power');
+
+        if (!tempEl || !humEl || !powerEl) return;
+
+        [tempEl, humEl, powerEl].forEach(el => {
+            el.style.transition = "color 0.3s ease";
+        });
+
+        setInterval(() => {
+            const newTemp = (Math.random() * (24.5 - 21.0) + 21.0).toFixed(1);
+            const newHum = Math.floor(Math.random() * (48 - 42 + 1)) + 42;
+            const newPower = (Math.random() * (1.35 - 1.10) + 1.10).toFixed(2);
+
+            tempEl.innerText = newTemp + '°C';
+            humEl.innerText = newHum + '%';
+            powerEl.innerText = newPower + ' kW';
+
+            [tempEl, humEl, powerEl].forEach(el => {
+                el.style.color = '#10b981'; 
+                setTimeout(() => {
+                    el.style.color = '#0f172a';
+                }, 400);
+            });
+        }, 3500); 
+    });
+    </script>
+    <script>
+      function switchArchTab(targetId, colorTheme) {
+          const buttons = document.querySelectorAll('.arch-tab-btn');
+          buttons.forEach(btn => btn.classList.remove('active'));
+
+          const clickedBtn = document.querySelector(`[data-target="${targetId}"]`);
+          clickedBtn.classList.add('active');
+
+          const panes = document.querySelectorAll('.arch-pane');
+          panes.forEach(pane => {
+              pane.classList.remove('active-pane');
+              pane.classList.remove('p3r-sweep'); 
+          });
+
+          const activePane = document.getElementById(targetId);
+          activePane.classList.add('active-pane');
+          void activePane.offsetWidth; 
+          activePane.classList.add('p3r-sweep');
+
+          const container = document.getElementById('arch-content-container');
+          container.classList.remove('theme-blue', 'theme-purple', 'theme-red');
+          container.classList.add(`theme-${colorTheme}`);
+      }
+    </script>
+    <script>
+      function cambiarImagenGaleria(botonClickeado, nuevoTitulo, rutaImagen) {
+        const botones = document.querySelectorAll(".gallery-tab-btn");
+        botones.forEach((btn) => btn.classList.remove("active"));
+        botonClickeado.classList.add("active");
+        document.getElementById("gallery-title").innerText = nuevoTitulo.replace(/ /g, "_") + ".render";
+        document.getElementById("gallery-img").src = rutaImagen;
+      }
+    </script>
+
+    <!-- Botón Scroll to Top -->
+    <button id="scrollToTopBtn" class="scroll-top-btn" onclick="scrollToTop()">
+      <i class="bi bi-arrow-up"></i>
+    </button>
+
+    <style>
+      .scroll-top-btn {
+        position: fixed;
+        bottom: 30px;
+        right: 30px;
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        background-color: #1d355c;
+        color: white;
+        border: none;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 24px;
+        cursor: pointer;
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.3s ease, visibility 0.3s ease, transform 0.2s ease;
+        z-index: 1000;
+      }
+      .scroll-top-btn.show {
+        opacity: 1;
+        visibility: visible;
+      }
+      .scroll-top-btn:hover {
+        transform: translateY(-5px);
+        background-color: #26467a;
+      }
+    </style>
+
+    <script>
+      // Scroll to Top Logic
+      const scrollToTopBtn = document.getElementById("scrollToTopBtn");
+      
+      window.addEventListener("scroll", () => {
+        const scrollableArea = document.documentElement.scrollHeight - window.innerHeight;
+        // Muestra el botón al bajar más de la mitad de la página
+        if (window.scrollY > scrollableArea / 2) {
+            scrollToTopBtn.classList.add("show");
+        } else {
+            scrollToTopBtn.classList.remove("show");
+        }
+      });
+
+      function scrollToTop() {
+        window.scrollTo({
+          top: 0,
+          behavior: "smooth"
+        });
+      }
+    </script>
+  </body>
+</html>

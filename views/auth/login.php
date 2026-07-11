@@ -1,98 +1,97 @@
 <!doctype html>
-<html>
+<html lang="es">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Login - Autenticación</title>
+    <title>Login - Autenticación | SysMonitor</title>
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
     />
-    <link rel="stylesheet" href="assets/login/login_style.css" />
+    <link rel="stylesheet" href="<?php echo BASE_URL; ?>/assets/login/login_style.css" />
   </head>
   <body>
     <main class="auth-container" id="auth-container">
       <div class="form-container sign-up-container">
-        <form action="#">
+        <!-- El formulario apuntará a la validación en el futuro -->
+        <form action="<?php echo BASE_URL; ?>/index.php?page=user" method="POST">
           <h2>CREAR CUENTA</h2>
           <div class="social-container">
             <a href="#" class="social"><i class="fab fa-facebook-f"></i></a>
             <a href="#" class="social"><i class="fab fa-twitter"></i></a>
             <a href="#" class="social"><i class="fab fa-linkedin-in"></i></a>
           </div>
-          <span>or use your email for registration</span>
+          <span>o usa tu correo electrónico</span>
           <div class="input-group">
             <i class="fas fa-user"></i>
-            <input type="text" placeholder="Full name" />
+            <input type="text" placeholder="Nombre completo" />
           </div>
           <div class="input-group">
             <i class="fas fa-envelope"></i>
-            <input type="email" placeholder="Email" />
+            <input type="email" placeholder="Correo" />
           </div>
           <div class="input-group">
             <i class="fas fa-lock"></i>
-            <input type="password" placeholder="Password" />
+            <input type="password" placeholder="Contraseña" />
           </div>
-          <button type="submit" class="btn">SIGN UP</button>
+          <button type="submit" class="btn">REGISTRARSE</button>
         </form>
       </div>
 
       <div class="form-container sign-in-container">
-        <form action="#">
-          <h2>INICIAR SESION</h2>
+        <!-- Simulación temporal de inicio de sesión hacia el dashboard del usuario -->
+        <form action="<?php echo BASE_URL; ?>/index.php?page=user" method="POST">
+          <h2>INICIAR SESIÓN</h2>
           <div class="social-container">
             <a href="#" class="social"><i class="fab fa-facebook-f"></i></a>
             <a href="#" class="social"><i class="fab fa-twitter"></i></a>
             <a href="#" class="social"><i class="fab fa-linkedin-in"></i></a>
           </div>
-          <span>or use your email account</span>
+          <span>o usa tu cuenta de correo</span>
           <div class="input-group">
             <i class="fas fa-envelope"></i>
-            <input type="email" placeholder="Email" />
+            <input type="email" placeholder="Correo" />
           </div>
           <div class="input-group">
             <i class="fas fa-lock"></i>
-            <input type="password" placeholder="Password" />
+            <input type="password" placeholder="Contraseña" />
           </div>
-          <a href="#" class="forgot-password">¿Olvidaste tu contraseña cara de verga?</a>
-          <button type="submit" class="btn">SIGN IN</button>
+          <a href="#" class="forgot-password">¿Olvidaste tu contraseña?</a>
+          <button type="submit" class="btn">ENTRAR</button>
         </form>
       </div>
 
       <div class="overlay-container">
         <div class="overlay">
           <div class="overlay-panel overlay-left">
-            <h2 class="h2_white">Welcome Back!</h2>
+            <h2 class="h2_white">¡Bienvenido de nuevo!</h2>
             <p>
               Gracias por formar parte de nuestro equipo.
             </p>
-            <button class="btn btn-ghost" id="signIn">SIGN IN</button>
+            <button class="btn btn-ghost" id="signIn">ENTRAR</button>
           </div>
 
           <div class="overlay-panel overlay-right">
-            <h2 class="h2_white">Hello, Friend!</h2>
+            <h2 class="h2_white">¡Hola, Amigo!</h2>
             <p class="bold-white">¿Eres nuevo?</p>
             <p class="bold-white">
               Empieza tu viaje con nosotros hoy mismo.
             </p>
-            <button class="btn btn-ghost" id="signUp">SIGN UP</button>
+            <button class="btn btn-ghost" id="signUp">REGISTRARSE</button>
           </div>
         </div>
       </div>
     </main>
 
     <script>
-      // Seleccionamos los botones y el contenedor principal
       const signUpButton = document.getElementById("signUp");
       const signInButton = document.getElementById("signIn");
       const container = document.getElementById("auth-container");
 
-      // Cuando hacen clic en "SIGN UP", agregamos la clase
       signUpButton.addEventListener("click", () => {
         container.classList.add("right-panel-active");
       });
 
-      // Cuando hacen clic en "SIGN IN", quitamos la clase
       signInButton.addEventListener("click", () => {
         container.classList.remove("right-panel-active");
       });
