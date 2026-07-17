@@ -21,6 +21,7 @@ body {
   -webkit-font-smoothing: antialiased;
   position: relative;
 }
+
 /* ==========================================================================
    AJUSTES GLOBALES DE SECCIONES Y SCROLL (Layout y Espaciado)
    ========================================================================== */
@@ -41,17 +42,20 @@ section {
 
 /* Espacio masivo extra entre la Sección 2 y la Sección 3 */
 #caracteristicas {
-  margin-bottom: 15vh; /* Empuja la sección de Arquitectura mucho más abajo */
+  margin-bottom: 15vh;
+  /* Empuja la sección de Arquitectura mucho más abajo */
 }
 
 /* Opcional: También le damos margen a la de arquitectura por si añades algo debajo */
 #arquitectura {
   margin-bottom: 10vh;
 }
-#galeria{
+
+#galeria {
   margin-bottom: 10vh;
 }
-#contacto{
+
+#contacto {
   margin-bottom: 10vh;
 }
 
@@ -64,49 +68,52 @@ section {
   width: 80vw;
   height: 80vh;
   /* Un degradado elíptico que se desvanece hacia los bordes */
-  background: radial-gradient(
-    ellipse at top,
-    rgba(135, 206, 235, 0.15),
-    transparent 60%
-  );
+  background: radial-gradient(ellipse at top,
+      rgba(135, 206, 235, 0.15),
+      transparent 60%);
   z-index: -1;
-  pointer-events: none; /* Para que no bloquee los clics */
+  pointer-events: none;
+  /* Para que no bloquee los clics */
 }
+
 /* ==========================================================================
    RESPLANDOR RADIAL DEL HERO (Sinergia Azul/Cian)
    ========================================================================== */
 
 /* 1. Aseguramos que la sección principal contenga el brillo sin desbordarse */
 .hero-section {
-    position: relative;
-    overflow: hidden; /* Vital: evita barras de scroll horizontales si el brillo es muy ancho */
+  position: relative;
+  overflow: hidden;
+  /* Vital: evita barras de scroll horizontales si el brillo es muy ancho */
 }
 
 /* 2. El Resplandor */
 .bg-glow {
-    position: absolute;
-    top: -250px; /* Lo subimos para que "caiga" desde el techo */
-    left: 50%;
-    transform: translateX(-50%);
-    width: 1200px;
-    height: 800px;
-    
-    /* EL SECRETO: Un gradiente radial que va de tu color celeste (con 25% de opacidad) hacia totalmente transparente */
-    background: radial-gradient(circle at 50% 30%, rgba(162, 218, 237, 0.25) 0%, rgba(162, 218, 237, 0) 70%);
-    
-    /* Difuminamos los bordes matemáticamente para que no parezca un círculo perfecto */
-    filter: blur(80px);
-    
-    /* Lo mandamos al fondo y evitamos que bloquee los clics del usuario */
-    z-index: 0;
-    pointer-events: none;
+  position: absolute;
+  top: -250px;
+  /* Lo subimos para que "caiga" desde el techo */
+  left: 50%;
+  transform: translateX(-50%);
+  width: 1200px;
+  height: 800px;
+
+  /* EL SECRETO: Un gradiente radial que va de tu color celeste (con 25% de opacidad) hacia totalmente transparente */
+  background: radial-gradient(circle at 50% 30%, rgba(162, 218, 237, 0.25) 0%, rgba(162, 218, 237, 0) 70%);
+
+  /* Difuminamos los bordes matemáticamente para que no parezca un círculo perfecto */
+  filter: blur(80px);
+
+  /* Lo mandamos al fondo y evitamos que bloquee los clics del usuario */
+  z-index: 0;
+  pointer-events: none;
 }
 
 /* 3. Protegemos el contenido (Texto y Widget) para que queden por encima del brillo */
 .hero-section .container {
-    position: relative;
-    z-index: 2;
+  position: relative;
+  z-index: 2;
 }
+
 /* --- NAVBAR --- */
 .custom-navbar {
   background: #0f213bcc;
@@ -115,6 +122,7 @@ section {
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   padding: 17px 0;
 }
+
 .logo-icon {
   background: rgba(135, 206, 235, 0.15);
   color: var(--cyan-primary);
@@ -124,25 +132,30 @@ section {
   font-weight: bold;
   font-size: 0.9rem;
 }
+
 .logo-text {
   font-weight: 600;
   font-size: 1.2rem;
   color: var(--cyan-primary);
 }
+
 .nav-link {
   color: var(--text-muted) !important;
   font-size: 0.9rem;
   transition: color 0.2s;
 }
+
 .nav-link:hover {
   color: var(--text-main) !important;
 }
+
 .text-link {
   color: var(--text-muted);
   text-decoration: none;
   font-size: 0.9rem;
   transition: color 0.2s;
 }
+
 .text-link:hover {
   color: var(--text-main);
 }
@@ -150,7 +163,8 @@ section {
 /* --- BOTONES (Estilo P3R Override - V2) --- */
 .btn-cyan {
   position: relative;
-  background-color: var(--cyan-primary); /* Azul cielo pastel */
+  background-color: var(--cyan-primary);
+  /* Azul cielo pastel */
   color: #000 !important;
   font-weight: 700;
   letter-spacing: 0.5px;
@@ -173,7 +187,8 @@ section {
   position: absolute;
   top: 0;
   left: -10%;
-  width: 120%; /* Extra ancho para que el grado de inclinación no deje huecos */
+  width: 120%;
+  /* Extra ancho para que el grado de inclinación no deje huecos */
   height: 100%;
 
   /* NUEVO COLOR: Azul oscuro vibrante */
@@ -198,15 +213,18 @@ section {
   transform-origin: left;
   transform: skewX(-15deg) scaleX(1);
 }
+
 .btn-play {
   color: var(--text-muted);
   text-decoration: none;
   font-size: 1rem;
   transition: color 0.2s;
 }
+
 .btn-play:hover {
   color: var(--text-main);
 }
+
 .btn-play i {
   color: var(--text-main);
   font-size: 1.2rem;
@@ -217,19 +235,23 @@ section {
   position: relative;
   padding-top: 80px;
 }
+
 .text-cyan {
   color: var(--cyan-primary);
 }
+
 .hero-subtitle {
   color: var(--text-muted);
   font-size: 1.15rem;
   line-height: 1.6;
   max-width: 90%;
 }
+
 .hero-features span {
   font-size: 0.9rem;
   color: var(--text-muted);
 }
+
 .badge-cyan {
   display: inline-flex;
   align-items: center;
@@ -243,6 +265,7 @@ section {
   font-weight: 600;
   letter-spacing: 1px;
 }
+
 .dot-pulse {
   width: 6px;
   height: 6px;
@@ -257,10 +280,12 @@ section {
     transform: scale(0.95);
     box-shadow: 0 0 0 0 var(--cyan-hover);
   }
+
   70% {
     transform: scale(1);
     box-shadow: 0 0 0 6px rgba(135, 206, 235, 0);
   }
+
   100% {
     transform: scale(0.95);
     box-shadow: 0 0 0 0 rgba(135, 206, 235, 0);
@@ -274,113 +299,152 @@ section {
 
 /* Tarjeta principal con efecto Glassmorphism suave */
 .friendly-dashboard-card {
-    background: #ffffffee;
-    border-radius: 20px;
-    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
-    border: 1px solid rgba(255, 255, 255, 0.4);
-    color: #334155;
-    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  background: #ffffffee;
+  border-radius: 20px;
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  color: #334155;
+  transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
 }
 
 .friendly-dashboard-card:hover {
-    transform: translateY(-8px);
+  transform: translateY(-8px);
 }
 
 /* Cajas individuales de información */
 .metric-box {
-    display: flex;
-    align-items: center;
-    padding: 14px;
-    background: #f8fafc;
-    border-radius: 14px;
-    border: 1px solid #f1f5f9;
-    transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  padding: 14px;
+  background: #f8fafc;
+  border-radius: 14px;
+  border: 1px solid #f1f5f9;
+  transition: all 0.3s ease;
 }
 
 .metric-box:hover {
-    background: #ffffff;
-    box-shadow: 0 8px 20px rgba(0,0,0,0.06);
-    border-color: #e2e8f0;
+  background: #ffffff;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
+  border-color: #e2e8f0;
 }
 
 /* Estado de alerta para la puerta */
 .metric-box.alert-state {
-    background: #fff1f2;
-    border-color: #fecdd3;
-    animation: slight-shake 3s infinite ease-in-out;
+  background: #fff1f2;
+  border-color: #fecdd3;
+  animation: slight-shake 3s infinite ease-in-out;
 }
 
 .metric-box.alert-state:hover {
-    background: #ffe4e6;
+  background: #ffe4e6;
 }
 
 /* Diseño de los iconos */
 .metric-icon {
-    width: 44px;
-    height: 44px;
-    min-width: 44px;
-    border-radius: 12px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.4rem;
-    margin-right: 14px;
+  width: 44px;
+  height: 44px;
+  min-width: 44px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.4rem;
+  margin-right: 14px;
 }
 
 /* Colores pastel para los fondos de los iconos */
-.bg-blue-soft { background: #e0f2fe; }
-.bg-info-soft { background: #cffafe; }
-.bg-warning-soft { background: #fef3c7; }
-.bg-danger-soft { background: #ffe4e6; }
-.bg-success-soft { background: #dcfce7; }
+.bg-blue-soft {
+  background: #e0f2fe;
+}
+
+.bg-info-soft {
+  background: #cffafe;
+}
+
+.bg-warning-soft {
+  background: #fef3c7;
+}
+
+.bg-danger-soft {
+  background: #ffe4e6;
+}
+
+.bg-success-soft {
+  background: #dcfce7;
+}
 
 /* Textos de las métricas */
 .metric-info {
-    display: flex;
-    flex-direction: column;
+  display: flex;
+  flex-direction: column;
 }
 
 .metric-label {
-    font-size: 0.7rem;
-    color: #64748b;
-    text-transform: uppercase;
-    letter-spacing: 0.8px;
-    font-weight: 700;
+  font-size: 0.7rem;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  font-weight: 700;
 }
 
 .metric-value {
-    font-size: 1.15rem;
-    font-weight: 800;
-    color: #0f172a;
-    line-height: 1.2;
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: #0f172a;
+  line-height: 1.2;
 }
 
 /* El punto verde que late indicando que está online */
 .pulsing-dot {
-    display: inline-block;
-    width: 8px;
-    height: 8px;
-    background-color: #10b981;
-    border-radius: 50%;
-    margin-right: 8px;
-    box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
-    animation: pulse-green 2s infinite;
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  background-color: #10b981;
+  border-radius: 50%;
+  margin-right: 8px;
+  box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
+  animation: pulse-green 2s infinite;
 }
 
 @keyframes pulse-green {
-    0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
-    70% { box-shadow: 0 0 0 8px rgba(16, 185, 129, 0); }
-    100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+  0% {
+    box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
+  }
+
+  70% {
+    box-shadow: 0 0 0 8px rgba(16, 185, 129, 0);
+  }
+
+  100% {
+    box-shadow: 0 0 0 0 rgba(16, 185, 129, 0);
+  }
 }
 
 @keyframes slight-shake {
-    0%, 100% { transform: translateX(0); }
-    2% { transform: translateX(-2px); }
-    4% { transform: translateX(2px); }
-    6% { transform: translateX(-2px); }
-    8% { transform: translateX(0); }
+
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+
+  2% {
+    transform: translateX(-2px);
+  }
+
+  4% {
+    transform: translateX(2px);
+  }
+
+  6% {
+    transform: translateX(-2px);
+  }
+
+  8% {
+    transform: translateX(0);
+  }
 }
+
 /* ==========================================================================
    SECCIÓN 2: CARACTERÍSTICAS Y TARJETAS (P3R Card Animation)
    ========================================================================== */
@@ -394,20 +458,26 @@ section {
 /* La tarjeta principal */
 .p3r-card {
   position: relative;
-  background-color: var(--bg-surface); /* #0a0f1a */
-  border: 1px solid var(--border-color); /* #1e293b */
+  background-color: var(--bg-surface);
+  /* #0a0f1a */
+  border: 1px solid var(--border-color);
+  /* #1e293b */
   border-radius: 8px;
-  overflow: hidden; /* Vital para que el barrido no se salga de la tarjeta */
+  overflow: hidden;
+  /* Vital para que el barrido no se salga de la tarjeta */
   z-index: 1;
   transition:
     transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94),
     border-color 0.3s ease,
     box-shadow 0.3s ease;
 }
+
 .p3r-card p {
-  color: #cbd5e1d5; /* <--- AQUÍ está el color actual */
+  color: #cbd5e1d5;
+  /* <--- AQUÍ está el color actual */
   margin-bottom: 0;
-  transition: color 0.3s ease; /* Para que el cambio sea suave */
+  transition: color 0.3s ease;
+  /* Para que el cambio sea suave */
 }
 
 /* --- LA CAPA OCULTA DEL BARRIDO (Estilo P3R pero sutil) --- */
@@ -416,7 +486,8 @@ section {
   position: absolute;
   top: 0;
   left: -10%;
-  width: 120%; /* Ancho extra para la inclinación */
+  width: 120%;
+  /* Ancho extra para la inclinación */
   height: 100%;
 
   /* El baño de luz: Usamos nuestro azul cielo pastel pero con MUY baja opacidad (4%) */
@@ -426,14 +497,18 @@ section {
   transform-origin: right;
   transform: skewX(-15deg) scaleX(0);
   transition: transform 0.4s cubic-bezier(0.19, 1, 0.22, 1);
-  z-index: -1; /* Para que quede detrás del texto */
+  z-index: -1;
+  /* Para que quede detrás del texto */
 }
 
 /* --- ESTADO HOVER DE LA TARJETA --- */
 .p3r-card:hover {
-  transform: translateY(-5px); /* Se eleva un poco */
-  border-color: var(--cyan-primary); /* El borde se ilumina */
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5); /* Sombra oscura profunda */
+  transform: translateY(-5px);
+  /* Se eleva un poco */
+  border-color: var(--cyan-primary);
+  /* El borde se ilumina */
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  /* Sombra oscura profunda */
 }
 
 /* Disparamos el barrido al hacer hover */
@@ -470,6 +545,7 @@ section {
   border-radius: 4px;
   letter-spacing: 1px;
 }
+
 /* ==========================================================================
    SECCIÓN 3: ARQUITECTURA TÉCNICA (Tabs interactivas P3R)
    ========================================================================== */
@@ -479,13 +555,20 @@ section {
   --active-color: #87CEEB;
   --active-bg: rgba(135, 206, 235, 0.1);
 }
+
 .theme-purple {
-  --active-color: #5FB3D8;
+  --active-color: #87CEEB;
   --active-bg: rgba(95, 179, 216, 0.1);
 }
+
 .theme-red {
-  --active-color: #4A90C2;
+  --active-color: #87CEEB;
   --active-bg: rgba(74, 144, 194, 0.1);
+}
+
+.theme-green {
+  --active-color: #87CEEB;
+  --active-bg: rgba(59, 126, 166, 0.1);
 }
 
 /* --- SIDEBAR DE PESTAÑAS --- */
@@ -535,6 +618,7 @@ section {
 .arch-tab-btn:hover {
   color: #ffffff;
 }
+
 .arch-tab-btn:hover::before {
   transform-origin: left;
   transform: skewX(-15deg) scaleX(1);
@@ -572,6 +656,7 @@ section {
 .arch-pane {
   display: none;
 }
+
 .arch-pane.active-pane {
   display: block;
 }
@@ -582,6 +667,7 @@ section {
   align-items: center;
   gap: 15px;
 }
+
 .pane-icon {
   display: flex;
   align-items: center;
@@ -594,12 +680,14 @@ section {
   border-radius: 8px;
   font-size: 1.2rem;
 }
+
 .pane-title {
   color: #ffffff;
   font-weight: 700;
   margin: 0;
   font-size: 1.3rem;
 }
+
 .pane-text {
   color: #B0C4DE;
   font-size: 1.05rem;
@@ -630,11 +718,13 @@ section {
     opacity: 0;
     transform: translateX(20px) skewX(-5deg);
   }
+
   100% {
     opacity: 1;
     transform: translateX(0) skewX(0);
   }
 }
+
 /* ==========================================================================
    GALERÍA 
    ========================================================================== */
@@ -657,7 +747,7 @@ section {
 }
 
 .gallery-tab-btn:hover {
-  color: #ffffff;
+  color: var(--cyan-primary);
   background-color: rgba(255, 255, 255, 0.05);
 }
 
@@ -669,47 +759,19 @@ section {
 
 /* --- LA CAPA DE BARRIDO FÍSICO (LA MAGIA P3R) --- */
 #gallery-viewport {
-  overflow: hidden; /* Vital para que el barrido no se salga */
+  overflow: hidden;
+  /* Vital para que el barrido no se salga */
   min-height: 400px;
 }
-/* ==========================================================================
-   GALERÍA Y VISOR SIMPLE
-   ========================================================================== */
 
-.bg-dark-surface {
-  background-color: rgba(20, 40, 80, 0.6);
-}
-
-.gallery-tab-btn {
-  background: transparent;
-  color: #B0C4DE;
-  border: 1px solid transparent;
-  text-align: left;
-  padding: 12px 20px;
-  font-size: 0.95rem;
-  font-weight: 600;
-  border-radius: 6px;
-  transition: all 0.2s ease;
-  cursor: pointer;
-}
-
-.gallery-tab-btn:hover {
-  color: #ffffff;
-  background-color: rgba(255, 255, 255, 0.05);
-}
-
-/* Estado activo del botón */
-.gallery-tab-btn.active {
-  color: var(--cyan-primary);
-  background-color: rgba(135, 206, 235, 0.15);
-  border-color: rgba(135, 206, 235, 0.3);
-}
 
 /* El ajuste estricto de la imagen */
 .gallery-img-fit {
   width: 100%;
-  max-height: 450px; /* Previene que la imagen expanda el contenedor al infinito */
-  object-fit: contain; /* Encaja el 100% de la imagen sin recortes */
+  max-height: 450px;
+  /* Previene que la imagen expanda el contenedor al infinito */
+  object-fit: contain;
+  /* Encaja el 100% de la imagen sin recortes */
   border: 1px solid var(--border-color);
   border-radius: 8px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
@@ -721,8 +783,10 @@ section {
 
 .gallery-image-container {
   width: 100%;
-  max-width: 600px; /* Limita el ancho para que no toque los bordes */
-  height: 300px; /* Fija una altura uniforme para todas las fotos */
+  max-width: 600px;
+  /* Limita el ancho para que no toque los bordes */
+  height: 300px;
+  /* Fija una altura uniforme para todas las fotos */
   border-radius: 8px;
   overflow: hidden;
   border: 1px solid #334155;
@@ -766,6 +830,7 @@ section {
 .p3r-input::placeholder {
   color: #5A7A9B;
 }
+
 .lbl-color {
   color: #B0C4DE;
 }
@@ -778,7 +843,8 @@ section {
     color 0.2s ease,
     transform 0.2s ease;
 }
-.copyright{
+
+.copyright {
   color: #7d7d7d;
 }
 
@@ -786,27 +852,29 @@ section {
   color: var(--cyan-primary);
   transform: translateY(-3px);
 }
+
 /* Bloqueo estricto del redimensionamiento del layout */
 textarea.p3r-input {
   resize: none;
 }
+
 /* ==========================================================================
    HACK PARA EL AUTOCOMPLETADO (WebKit Autofill Fix)
    ========================================================================== */
 
 .p3r-input:-webkit-autofill,
-.p3r-input:-webkit-autofill:hover, 
-.p3r-input:-webkit-autofill:focus, 
+.p3r-input:-webkit-autofill:hover,
+.p3r-input:-webkit-autofill:focus,
 .p3r-input:-webkit-autofill:active {
-    
-    /* TRUCO 1: Mantiene el texto en color blanco a la fuerza */
-    -webkit-text-fill-color: #ffffff !important;
-    
-    /* TRUCO 2: Como el fondo autofill no se puede hacer transparente, 
+
+  /* TRUCO 1: Mantiene el texto en color blanco a la fuerza */
+  -webkit-text-fill-color: #ffffff !important;
+
+  /* TRUCO 2: Como el fondo autofill no se puede hacer transparente, 
        engañamos al navegador pidiéndole que tarde 5000 segundos en cambiar el color a blanco. 
        Esto mantiene intacto tu fondo oscuro actual de forma infinita. */
-    transition: background-color 5000s ease-in-out 0s;
-    
-    /* Mantiene el color del cursor parpadeante en blanco */
-    caret-color: white;
+  transition: background-color 5000s ease-in-out 0s;
+
+  /* Mantiene el color del cursor parpadeante en blanco */
+  caret-color: white;
 }
