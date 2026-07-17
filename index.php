@@ -11,6 +11,11 @@ switch ($page) {
         $controller = new AuthController();
         $controller->index();
         break;
+    case 'registrar':
+        require_once 'controllers/AuthController.php';
+        $controller = new AuthController();
+        $controller->registrar(); 
+        break;
         
     case 'admin':
         require_once 'controllers/AdminController.php';

@@ -14,7 +14,7 @@
     <main class="auth-container" id="auth-container">
       <div class="form-container sign-up-container">
         <!-- El formulario apuntará a la validación en el futuro -->
-        <form action="<?php echo BASE_URL; ?>/index.php?page=user" method="POST">
+        <form action="<?php echo BASE_URL; ?>/index.php?page=registrar" method="POST"> method="POST">
           <h2>CREAR CUENTA</h2>
           <div class="social-container">
             <a href="#" class="social"><i class="fab fa-facebook-f"></i></a>
@@ -24,15 +24,19 @@
           <span>o usa tu correo electrónico</span>
           <div class="input-group">
             <i class="fas fa-user"></i>
-            <input type="text" placeholder="Nombre completo" />
+            <input type="text" name="nombre_usuario" placeholder="Nombre(s)" required />
+          </div>
+          <div class="input-group">
+            <i class="fas fa-user"></i>
+            <input type="text" name="apellidos" placeholder="Apellido(s)" required />
           </div>
           <div class="input-group">
             <i class="fas fa-envelope"></i>
-            <input type="email" placeholder="Correo" />
+            <input type="email" name="correo" placeholder="Correo electrónico" required />
           </div>
           <div class="input-group">
             <i class="fas fa-lock"></i>
-            <input type="password" placeholder="Contraseña" />
+            <input type="password" name="contrasena" placeholder="Contraseña" required />
           </div>
           <button type="submit" class="btn">REGISTRARSE</button>
         </form>
@@ -50,11 +54,11 @@
           <span>o usa tu cuenta de correo</span>
           <div class="input-group">
             <i class="fas fa-envelope"></i>
-            <input type="email" placeholder="Correo" />
+            <input type="email" name="correo_electronico" placeholder="Correo electrónico" required />
           </div>
           <div class="input-group">
             <i class="fas fa-lock"></i>
-            <input type="password" placeholder="Contraseña" />
+            <input type="password" name="contrasena" placeholder="Contraseña" required />
           </div>
           <a href="#" class="forgot-password">¿Olvidaste tu contraseña?</a>
           <button type="submit" class="btn">ENTRAR</button>

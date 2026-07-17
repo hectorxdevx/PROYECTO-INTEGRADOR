@@ -23,19 +23,8 @@
           
           <!-- ========================================== -->
           <!-- AQUI VA EL LOGO -->
-          <!-- LOGO CREADO A MEDIDA (SVG Minimalista y Brillante) -->
-          <div class="me-2 d-flex align-items-center">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="36" height="36">
-              <!-- Caja del servidor (Limpio y claro) -->
-              <rect x="1" y="2" width="22" height="20" rx="4" fill="rgba(135,206,235,0.15)" stroke="#87CEEB" stroke-width="2" />
-              
-              <!-- LEDs indicadores -->
-              <circle cx="18.5" cy="6" r="1.5" fill="#87CEEB" />
-              
-              <!-- Línea de pulso (Telemetría), gruesa y brillante -->
-              <path d="M 1 15 L 6 15 L 8.5 8 L 12 19 L 15 11 L 17 15 L 23 15" fill="none" stroke="#ffffff" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" filter="drop-shadow(0px 0px 4px rgba(255,255,255,0.8))" />
-            </svg>
-          </div>
+          <!-- Puedes reemplazar esto por una etiqueta <img> cuando tengas tu logo listo -->
+          <div class="logo-icon">&gt;_</div>
           <span class="logo-text">Sys<span class="text-white">Monitor</span></span>
           <!-- ========================================== -->
 
@@ -54,7 +43,7 @@
           </ul>
           <div class="nav-actions d-flex align-items-center gap-3 mt-3 mt-lg-0">
             <a href="<?php echo BASE_URL; ?>/index.php?page=login" class="text-link">Iniciar sesión</a>
-            <a href="<?php echo BASE_URL; ?>/index.php?page=login" class="btn btn-cyan text-uppercase">REGISTRATE</a>
+            <a href="<?php echo BASE_URL; ?>/index.php?page=login" class="btn btn-cyan text-uppercase">EMPEZAR GRATIS</a>
           </div>
         </div>
       </div>
@@ -198,9 +187,6 @@
               <button class="arch-tab-btn theme-red" data-target="tab-seguridad" onclick="switchArchTab('tab-seguridad', 'red')">
                 <i class="bi bi-shield-lock"></i> Seguridad
               </button>
-              <button class="arch-tab-btn theme-green" data-target="tab-respaldo" onclick="switchArchTab('tab-respaldo', 'green')">
-                <i class="bi bi-database"></i> Respaldo
-              </button>
             </div>
           </div>
           <div class="col-lg-8 col-md-7" data-aos="fade-left">
@@ -222,9 +208,9 @@
                   <div class="pane-icon"><i class="bi bi-braces"></i></div>
                   <h3 class="pane-title">Ingeniería</h3>
                 </div>
-                <p class="pane-text">Desarrollado con una estructura organizada que facilita el mantenimiento y asegura que el sistema siempre esté disponible.</p>
+                <p class="pane-text">Desarrollado con una estructura organizada (MVC) que facilita el mantenimiento y asegura que el sistema siempre esté disponible.</p>
                 <div class="pane-tags mt-4">
-                  <span class="arch-tag">Arquitectura segura</span>
+                  <span class="arch-tag">Arquitectura MVC</span>
                   <span class="arch-tag">Escalabilidad</span>
                   <span class="arch-tag">Código Limpio</span>
                 </div>
@@ -241,18 +227,6 @@
                   <span class="arch-tag">MariaDB Segura</span>
                 </div>
               </div>
-              <div id="tab-respaldo" class="arch-pane">
-                <div class="pane-header mb-4">
-                  <div class="pane-icon"><i class="bi bi-database"></i></div>
-                  <h3 class="pane-title">Respaldo</h3>
-                </div>
-                <p class="pane-text">Se hace un resumen de las telemetrías del día, así como un respaldo cada 6 y 12 meses para guardar el historial de monitoreo.</p>
-                <div class="pane-tags mt-4">
-                  <span class="arch-tag">Resumen Diario</span>
-                  <span class="arch-tag">Respaldo Semestral</span>
-                  <span class="arch-tag">Historial Seguro</span>
-                </div>
-              </div>
             </div>
           </div>
         </div>
@@ -266,25 +240,26 @@
                   <div class="text-center mb-5" data-aos="fade-up">
                       <h2 class="display-5 fw-bold mb-3 text-white">INTERFAZ</h2>
                   </div>
-                  <div class="row g-0 align-items-stretch arch-content-container theme-blue p-0 overflow-hidden">
+                  <div class="row g-0 align-items-stretch arch-content-container p-0 overflow-hidden">
                       <div class="col-md-3 border-end border-secondary p-4 bg-dark-surface">
                           <div class="gallery-sidebar d-flex flex-column gap-2">
-                              <button class="gallery-tab-btn active" onclick="cambiarImagenGaleria(this, 'Panel General', '<?php echo BASE_URL; ?>/assets/landing_page/img/gallery/imgPanel.png')">
-                                  <i class="bi bi-shield-lock"></i> Panel general
+                              <button class="gallery-tab-btn active" onclick="cambiarImagenGaleria(this, 'Vista General', '<?php echo BASE_URL; ?>/assets/landing_page/img/gallery/fotos-dashboard/img2.png')">
+                                  <i class="bi bi-grid-1x2"></i> Vista General
                               </button>
-                              <button class="gallery-tab-btn" onclick="cambiarImagenGaleria(this, 'Perfil de Usuario', '<?php echo BASE_URL; ?>/assets/landing_page/img/gallery/imgPerfilUsuario.png')">
-                                  <i class="bi bi-person-badge"></i> Perfil de Usuario
-                              </button>
-                              <button class="gallery-tab-btn" onclick="cambiarImagenGaleria(this, 'Métricas', '<?php echo BASE_URL; ?>/assets/landing_page/img/gallery/imgMetricas.png')">
+                              <button class="gallery-tab-btn" onclick="cambiarImagenGaleria(this, 'Métricas de Sensores', '<?php echo BASE_URL; ?>/assets/landing_page/img/gallery/fotos-dashboard/img1.png')">
                                   <i class="bi bi-graph-up"></i> Métricas
                               </button>
-                              <button class="gallery-tab-btn" onclick="cambiarImagenGaleria(this, 'Administración de Usuarios', '<?php echo BASE_URL; ?>/assets/landing_page/img/gallery/imgAdminUsuarios.png')">
-                                  <i class="bi bi-people"></i> Administración de Usuarios
+                              <button class="gallery-tab-btn" onclick="cambiarImagenGaleria(this, 'Control de Accesos', '<?php echo BASE_URL; ?>/assets/landing_page/img/gallery/fotos-dashboard/img2.png')">
+                                  <i class="bi bi-shield-lock"></i> Accesos
+                              </button>
+                              <button class="gallery-tab-btn" onclick="cambiarImagenGaleria(this, 'Topología de Red', '<?php echo BASE_URL; ?>/assets/landing_page/img/gallery/fotos-dashboard/img1.png')">
+                                  <i class="bi bi-diagram-3"></i> Topología
                               </button>
                           </div>
                       </div>
-                      <div class="col-md-9 bg-black d-flex p-0">
-                          <img id="gallery-img" src="<?php echo BASE_URL; ?>/assets/landing_page/img/gallery/imgPanel.png" alt="Dashboard Preview" class="gallery-img-fit w-100 h-100" style="object-fit: cover; border-radius: 0; border: none; box-shadow: none; max-height: 100%;">
+                      <div class="col-md-9 bg-black d-flex flex-column align-items-center justify-content-center p-4">
+                          <h4 id="gallery-title" class="text-cyan font-mono fw-bold mb-3">Vista_General.render</h4>
+                          <img id="gallery-img" src="<?php echo BASE_URL; ?>/assets/landing_page/img/gallery/fotos-dashboard/img2.png" alt="Dashboard Preview" class="gallery-img-fit">
                       </div>
                   </div> 
               </div>
@@ -303,7 +278,7 @@
               <div class="mb-4">
                 <h2 class="h3 fw-bold text-white mb-2">¿Tienes dudas?</h2>
               </div>
-              <form action="procesarIndex.php" method="POST" class="custom-form" autocomplete="off">
+              <form action="procesarIndex.php" method="POST" class="custom-form">
                 <div class="mb-4">
                   <label class="form-label lbl-color font-mono small">NOMBRE COMPLETO</label>
                   <input type="text" class="form-control p3r-input" name="nombre" required />
@@ -399,7 +374,7 @@
           activePane.classList.add('p3r-sweep');
 
           const container = document.getElementById('arch-content-container');
-          container.classList.remove('theme-blue', 'theme-purple', 'theme-red', 'theme-green');
+          container.classList.remove('theme-blue', 'theme-purple', 'theme-red');
           container.classList.add(`theme-${colorTheme}`);
       }
     </script>
@@ -408,6 +383,7 @@
         const botones = document.querySelectorAll(".gallery-tab-btn");
         botones.forEach((btn) => btn.classList.remove("active"));
         botonClickeado.classList.add("active");
+        document.getElementById("gallery-title").innerText = nuevoTitulo.replace(/ /g, "_") + ".render";
         document.getElementById("gallery-img").src = rutaImagen;
       }
     </script>
