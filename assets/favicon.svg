@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="36" height="36">
+  <!-- Caja del servidor (Limpio y claro) -->
+  <rect x="1" y="2" width="22" height="20" rx="4" fill="rgba(135,206,235,0.15)" stroke="#87CEEB" stroke-width="2" />
+  
+  <!-- LEDs indicadores -->
+  <circle cx="18.5" cy="6" r="1.5" fill="#87CEEB" />
+  
+  <!-- Línea de pulso (Telemetría), gruesa y brillante -->
+  <path d="M 1 15 L 6 15 L 8.5 8 L 12 19 L 15 11 L 17 15 L 23 15" fill="none" stroke="#ffffff" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" filter="drop-shadow(0px 0px 4px rgba(255,255,255,0.8))" />
+</svg>

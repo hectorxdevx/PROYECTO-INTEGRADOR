@@ -1,0 +1,39 @@
+/* assets/dashboard/custom-theme.css */
+
+/* Modo Claro: Dos tonos pastel, sin blanco */
+html:not([data-bs-theme="dark"]) body {
+    background-color: #b8cef0 !important;
+    /* Fondo un poco más oscuro */
+    color: #334155 !important;
+}
+
+/* Tarjetas y cajas de contenido (mismo tono que la barra lateral) */
+html:not([data-bs-theme="dark"]) .card,
+html:not([data-bs-theme="dark"]) .card-header,
+html:not([data-bs-theme="dark"]) .card-body,
+html:not([data-bs-theme="dark"]) .card-footer {
+    background-color: #c9d9f7 !important;
+    /* Azul pastel claro */
+    border: 1px solid #cdddf4 !important;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05) !important;
+}
+
+/* El menú lateral (sidebar) y paneles (mismo tono que las tarjetas) */
+html:not([data-bs-theme="dark"]) #sidebar,
+html:not([data-bs-theme="dark"]) .sidebar-wrapper,
+html:not([data-bs-theme="dark"]) .sidebar-header {
+    background-color: #c9d9f7 !important;
+    box-shadow: 2px 0 8px rgba(0, 0, 0, 0.03) !important;
+    border-right: 1px solid #cdddf4 !important;
+}
+
+/* Hacemos los títulos un poquito más elegantes */
+html:not([data-bs-theme="dark"]) h1,
+html:not([data-bs-theme="dark"]) h2,
+html:not([data-bs-theme="dark"]) h3,
+html:not([data-bs-theme="dark"]) h4,
+html:not([data-bs-theme="dark"]) h5,
+html:not([data-bs-theme="dark"]) h6,
+html:not([data-bs-theme="dark"]) .card-title {
+    color: #1e293b !important;
+}

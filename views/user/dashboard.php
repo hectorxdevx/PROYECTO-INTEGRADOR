@@ -5,11 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard Usuario | SysMonitor</title>
 
-    <link rel="shortcut icon" href="<?php echo BASE_URL; ?>/assets/dashboard/compiled/svg/favicon.svg" type="image/x-icon">
+    <link rel="icon" type="image/svg+xml" href="<?php echo BASE_URL; ?>/assets/favicon.svg">
     
     <link rel="stylesheet" crossorigin href="<?php echo BASE_URL; ?>/assets/dashboard/compiled/css/app.css">
     <link rel="stylesheet" crossorigin href="<?php echo BASE_URL; ?>/assets/dashboard/compiled/css/app-dark.css">
     <link rel="stylesheet" crossorigin href="<?php echo BASE_URL; ?>/assets/dashboard/compiled/css/iconly.css">
+    
+    <!-- Nuestro estilo de colores pastel (para el modo claro) -->
+    <link rel="stylesheet" href="<?php echo BASE_URL; ?>/assets/dashboard/custom-theme.css?v=3">
 </head>
 <body>
     <script src="<?php echo BASE_URL; ?>/assets/dashboard/static/js/initTheme.js"></script>

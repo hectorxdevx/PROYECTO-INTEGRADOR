@@ -5,10 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mi Perfil | SysMonitor</title>
 
-    <link rel="shortcut icon" href="<?php echo BASE_URL; ?>/assets/dashboard/compiled/svg/favicon.svg" type="image/x-icon">
+    <link rel="icon" type="image/svg+xml" href="<?php echo BASE_URL; ?>/assets/favicon.svg">
     
     <link rel="stylesheet" crossorigin href="<?php echo BASE_URL; ?>/assets/dashboard/compiled/css/app.css">
     <link rel="stylesheet" crossorigin href="<?php echo BASE_URL; ?>/assets/dashboard/compiled/css/app-dark.css">
+    <link rel="stylesheet" crossorigin href="<?php echo BASE_URL; ?>/assets/dashboard/compiled/css/iconly.css">
+    
+    <!-- Nuestro estilo de colores pastel (para el modo claro) -->
+    <link rel="stylesheet" href="<?php echo BASE_URL; ?>/assets/dashboard/custom-theme.css?v=3">
 </head>
 <body>
     <script src="<?php echo BASE_URL; ?>/assets/dashboard/static/js/initTheme.js"></script>
@@ -87,13 +91,22 @@
                     <div class="col-12 col-lg-4">
                         <div class="card">
                             <div class="card-body">
-                                <div class="d-flex justify-content-center align-items-center flex-column">
-                                    <div class="avatar avatar-2xl">
-                                        <img src="<?php echo BASE_URL; ?>/assets/dashboard/compiled/jpg/1.jpg" alt="Avatar">
+                                <form action="<?php echo BASE_URL; ?>/index.php?page=upload_photo" method="POST" enctype="multipart/form-data" class="d-flex justify-content-center align-items-center flex-column">
+                                    <div class="avatar avatar-2xl mb-2">
+                                        <!-- Mostramos la foto del usuario o la de por defecto -->
+                                        <?php 
+                                            $foto = isset($_SESSION['foto_perfil']) && $_SESSION['foto_perfil'] != '' ? $_SESSION['foto_perfil'] : 'default.png'; 
+                                        ?>
+                                        <img src="<?php echo BASE_URL; ?>/assets/uploads/<?php echo htmlspecialchars($foto); ?>" alt="Avatar">
                                     </div>
-                                    <h3 class="mt-3">Héctor</h3>
-                                    <p class="text-small">Estudiante UTM</p>
-                                    <button class="btn btn-outline-primary btn-sm mt-2">Cambiar Foto</button>
+                                    <h3 class="mt-3"><?php echo htmlspecialchars($_SESSION['nombre_usuario'] ?? 'Usuario'); ?></h3>
+                                    
+                                    <!-- Botón oculto real y etiqueta que actúa como botón visual -->
+                                    <label class="btn btn-outline-primary btn-sm mt-2" for="profile-upload" style="cursor: pointer;">
+                                        Cambiar Foto
+                                    </label>
+                                    <input type="file" name="foto" id="profile-upload" accept="image/png, image/jpeg, image/jpg" style="display: none;" onchange="this.form.submit()">
+                                </form>
                                 </div>
                             </div>
                         </div>

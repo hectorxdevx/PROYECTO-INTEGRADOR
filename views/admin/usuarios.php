@@ -5,11 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gestión de Usuarios | SysMonitor</title>
 
-    <link rel="shortcut icon" href="<?php echo BASE_URL; ?>/assets/dashboard/compiled/svg/favicon.svg" type="image/x-icon">
+    <link rel="icon" type="image/svg+xml" href="<?php echo BASE_URL; ?>/assets/favicon.svg">
     
     <link rel="stylesheet" crossorigin href="<?php echo BASE_URL; ?>/assets/dashboard/compiled/css/app.css">
     <link rel="stylesheet" crossorigin href="<?php echo BASE_URL; ?>/assets/dashboard/compiled/css/app-dark.css">
     <link rel="stylesheet" crossorigin href="<?php echo BASE_URL; ?>/assets/dashboard/compiled/css/iconly.css">
+    
+    <!-- Nuestro estilo de colores pastel (para el modo claro) -->
+    <link rel="stylesheet" href="<?php echo BASE_URL; ?>/assets/dashboard/custom-theme.css?v=3">
 </head>
 <body>
     <script src="<?php echo BASE_URL; ?>/assets/dashboard/static/js/initTheme.js"></script>
@@ -92,7 +95,7 @@
                     <div class="card">
                         <div class="card-header d-flex justify-content-between align-items-center">
                             <h4 class="card-title">Usuarios Registrados</h4>
-                            <button class="btn btn-primary btn-sm"><i class="bi bi-person-plus-fill"></i> Nuevo Usuario</button>
+                            <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modalCrearUsuario"><i class="bi bi-person-plus-fill"></i> Nuevo Usuario</button>
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">
@@ -100,63 +103,126 @@
                                     <thead>
                                         <tr>
                                             <th>ID</th>
-                                            <th>Nombre Completo</th>
+                                            <th>Nombre</th>
+                                            <th>Apellidos</th>
                                             <th>Correo Electrónico</th>
                                             <th>Rol</th>
-                                            <th>Estado</th>
                                             <th>Acciones</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            <td class="text-bold-500">1</td>
-                                            <td>Héctor González</td>
-                                            <td>hector@sysmonitor.com</td>
-                                            <td>Administrador</td>
-                                            <td><span class="badge bg-success">Activo</span></td>
-                                            <td>
-                                                <button class="btn btn-sm btn-outline-primary"><i class="bi bi-pencil-square"></i></button>
-                                                <button class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></button>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td class="text-bold-500">2</td>
-                                            <td>Juan Pérez</td>
-                                            <td>juan.perez@estudiante.utm.mx</td>
-                                            <td>Usuario</td>
-                                            <td><span class="badge bg-success">Activo</span></td>
-                                            <td>
-                                                <button class="btn btn-sm btn-outline-primary"><i class="bi bi-pencil-square"></i></button>
-                                                <button class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></button>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td class="text-bold-500">3</td>
-                                            <td>María López</td>
-                                            <td>maria.lopez@estudiante.utm.mx</td>
-                                            <td>Usuario</td>
-                                            <td><span class="badge bg-secondary">Inactivo</span></td>
-                                            <td>
-                                                <button class="btn btn-sm btn-outline-primary"><i class="bi bi-pencil-square"></i></button>
-                                                <button class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></button>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td class="text-bold-500">4</td>
-                                            <td>Carlos Ramírez</td>
-                                            <td>carlos.ramirez@docente.utm.mx</td>
-                                            <td>Invitado</td>
-                                            <td><span class="badge bg-success">Activo</span></td>
-                                            <td>
-                                                <button class="btn btn-sm btn-outline-primary"><i class="bi bi-pencil-square"></i></button>
-                                                <button class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></button>
-                                            </td>
-                                        </tr>
+                                        <?php if (isset($usuarios) && count($usuarios) > 0): ?>
+                                            <?php foreach ($usuarios as $u): ?>
+                                            <tr>
+                                                <td class="text-bold-500"><?php echo htmlspecialchars($u['id_usuario']); ?></td>
+                                                <td><?php echo htmlspecialchars($u['nombre_usuario']); ?></td>
+                                                <td><?php echo htmlspecialchars($u['apellidos']); ?></td>
+                                                <td><?php echo htmlspecialchars($u['correo_electronico']); ?></td>
+                                                <td><?php echo htmlspecialchars($u['nombre_rol'] ?? 'Sin Rol'); ?></td>
+                                                <td>
+                                                    <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#modalEditarUsuario<?php echo $u['id_usuario']; ?>"><i class="bi bi-pencil-square"></i></button>
+                                                    <a href="<?php echo BASE_URL; ?>/index.php?page=admin_users_eliminar&id=<?php echo $u['id_usuario']; ?>" class="btn btn-sm btn-outline-danger" onclick="return confirm('¿Estás seguro de que deseas eliminar este usuario?');"><i class="bi bi-trash"></i></a>
+                                                </td>
+                                            </tr>
+                                            <?php endforeach; ?>
+                                        <?php else: ?>
+                                            <tr>
+                                                <td colspan="6" class="text-center">No hay usuarios registrados en la base de datos.</td>
+                                            </tr>
+                                        <?php endif; ?>
                                     </tbody>
                                 </table>
                             </div>
                         </div>
                     </div>
+
+                    <!-- MODAL CREAR USUARIO -->
+                    <div class="modal fade" id="modalCrearUsuario" tabindex="-1" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title">Nuevo Usuario</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <form action="<?php echo BASE_URL; ?>/index.php?page=admin_users_crear" method="POST">
+                                    <div class="modal-body">
+                                        <div class="mb-3">
+                                            <label class="form-label">Nombre</label>
+                                            <input type="text" class="form-control" name="nombre" required>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label">Apellidos</label>
+                                            <input type="text" class="form-control" name="apellidos" required>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label">Correo Electrónico</label>
+                                            <input type="email" class="form-control" name="correo" required>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label">Contraseña</label>
+                                            <input type="password" class="form-control" name="password" required>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label">Rol</label>
+                                            <select class="form-select" name="rol" required>
+                                                <option value="1">Usuario (Estudiante/Personal)</option>
+                                                <option value="2">Administrador</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                        <button type="submit" class="btn btn-primary">Guardar Usuario</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- MODALES EDITAR USUARIO (UNO POR CADA USUARIO) -->
+                    <?php if (isset($usuarios)): ?>
+                        <?php foreach ($usuarios as $u): ?>
+                        <div class="modal fade" id="modalEditarUsuario<?php echo $u['id_usuario']; ?>" tabindex="-1" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title">Editar Usuario</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <form action="<?php echo BASE_URL; ?>/index.php?page=admin_users_editar" method="POST">
+                                        <input type="hidden" name="id_usuario" value="<?php echo htmlspecialchars($u['id_usuario']); ?>">
+                                        <div class="modal-body">
+                                            <div class="mb-3">
+                                                <label class="form-label">Nombre</label>
+                                                <input type="text" class="form-control" name="nombre" value="<?php echo htmlspecialchars($u['nombre_usuario']); ?>" required>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label class="form-label">Apellidos</label>
+                                                <input type="text" class="form-control" name="apellidos" value="<?php echo htmlspecialchars($u['apellidos']); ?>" required>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label class="form-label">Correo Electrónico</label>
+                                                <input type="email" class="form-control" name="correo" value="<?php echo htmlspecialchars($u['correo_electronico']); ?>" required>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label class="form-label">Rol</label>
+                                                <select class="form-select" name="rol" required>
+                                                    <option value="1" <?php echo ($u['id_rol'] == 1) ? 'selected' : ''; ?>>Usuario</option>
+                                                    <option value="2" <?php echo ($u['id_rol'] == 2) ? 'selected' : ''; ?>>Administrador</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                            <button type="submit" class="btn btn-primary">Actualizar Cambios</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <?php endforeach; ?>
+                    <?php endif; ?>
+
                 </section>
             </div>
             

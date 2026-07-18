@@ -9,13 +9,26 @@
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
     />
     <link rel="stylesheet" href="<?php echo BASE_URL; ?>/assets/login/login_style.css" />
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="<?php echo BASE_URL; ?>/assets/favicon.svg">
   </head>
   <body>
     <main class="auth-container" id="auth-container">
       <div class="form-container sign-up-container">
         <!-- El formulario apuntará a la validación en el futuro -->
-        <form action="<?php echo BASE_URL; ?>/index.php?page=registrar" method="POST"> method="POST">
+        <form action="<?php echo BASE_URL; ?>/index.php?page=registrar" method="POST">
           <h2>CREAR CUENTA</h2>
+          <!-- Aquí mostraremos los mensajes de error o éxito -->
+          <?php if (isset($_GET['error'])): ?>
+              <div style="background-color: #ffebee; color: #c62828; padding: 10px; border-radius: 5px; margin-bottom: 10px; width: 100%; text-align: center; font-size: 14px;">
+                  <?php echo htmlspecialchars($_GET['error']); ?>
+              </div>
+          <?php endif; ?>
+          <?php if (isset($_GET['registro']) && $_GET['registro'] == 'exitoso'): ?>
+              <div style="background-color: #e8f5e9; color: #2e7d32; padding: 10px; border-radius: 5px; margin-bottom: 10px; width: 100%; text-align: center; font-size: 14px;">
+                  Registro exitoso. ¡Ahora puedes iniciar sesión!
+              </div>
+          <?php endif; ?>
           <div class="social-container">
             <a href="#" class="social"><i class="fab fa-facebook-f"></i></a>
             <a href="#" class="social"><i class="fab fa-twitter"></i></a>
@@ -32,11 +45,11 @@
           </div>
           <div class="input-group">
             <i class="fas fa-envelope"></i>
-            <input type="email" name="correo" placeholder="Correo electrónico" required />
+            <input type="email" name="correo" placeholder="Correo electrónico" required pattern="^[a-zA-Z0-9._%+\-]+@(gmail\.com|hotmail\.com)$" title="Solo se permiten correos de @gmail.com o @hotmail.com" />
           </div>
           <div class="input-group">
             <i class="fas fa-lock"></i>
-            <input type="password" name="contrasena" placeholder="Contraseña" required />
+            <input type="password" name="contrasena" placeholder="Contraseña" required minlength="8" title="La contraseña debe tener al menos 8 caracteres" />
           </div>
           <button type="submit" class="btn">REGISTRARSE</button>
         </form>
@@ -44,8 +57,13 @@
 
       <div class="form-container sign-in-container">
         <!-- Simulación temporal de inicio de sesión hacia el dashboard del usuario -->
-        <form action="<?php echo BASE_URL; ?>/index.php?page=user" method="POST">
+        <form action="<?php echo BASE_URL; ?>/index.php?page=autenticar" method="POST">
           <h2>INICIAR SESIÓN</h2>
+          <?php if (isset($_GET['error'])): ?>
+              <div style="background-color: #ffebee; color: #c62828; padding: 10px; border-radius: 5px; margin-bottom: 10px; width: 100%; text-align: center; font-size: 14px;">
+                  <?php echo htmlspecialchars($_GET['error']); ?>
+              </div>
+          <?php endif; ?>
           <div class="social-container">
             <a href="#" class="social"><i class="fab fa-facebook-f"></i></a>
             <a href="#" class="social"><i class="fab fa-twitter"></i></a>

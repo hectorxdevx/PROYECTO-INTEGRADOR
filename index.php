@@ -17,6 +17,12 @@ switch ($page) {
         $controller->registrar(); 
         break;
         
+    case 'autenticar':
+        require_once 'controllers/AuthController.php';
+        $controller = new AuthController();
+        $controller->login();
+        break;
+        
     case 'admin':
         require_once 'controllers/AdminController.php';
         $controller = new AdminController();
@@ -28,6 +34,25 @@ switch ($page) {
         $controller = new AdminController();
         $controller->usuarios();
         break;
+        
+    case 'admin_users_crear':
+        require_once 'controllers/AdminController.php';
+        $controller = new AdminController();
+        $controller->crearUsuario();
+        break;
+
+    case 'admin_users_editar':
+        require_once 'controllers/AdminController.php';
+        $controller = new AdminController();
+        $controller->actualizarUsuario();
+        break;
+
+    case 'admin_users_eliminar':
+        require_once 'controllers/AdminController.php';
+        $controller = new AdminController();
+        $controller->eliminarUsuario();
+        break;
+
         
     case 'user':
         require_once 'controllers/UserController.php';
