@@ -1,7 +1,22 @@
 <?php
 class AdminController {
     public function dashboard() {
+        require_once 'models/Contacto.php';
+        $contactoModel = new Contacto();
+        $mensajesNoLeidos = $contactoModel->obtenerMensajesNoLeidos();
+        $totalNoLeidos = $contactoModel->contarNoLeidos();
+
         require_once 'views/admin/dashboard.php';
+    }
+
+    public function marcarMensajeLeido() {
+        if (isset($_GET['id'])) {
+            require_once 'models/Contacto.php';
+            $contactoModel = new Contacto();
+            $contactoModel->marcarComoLeido($_GET['id']);
+        }
+        header("Location: " . BASE_URL . "/index.php?page=admin");
+        exit();
     }
 
     public function usuarios() {

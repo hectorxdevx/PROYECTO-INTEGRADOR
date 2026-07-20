@@ -34,6 +34,12 @@ switch ($page) {
         $controller = new AdminController();
         $controller->usuarios();
         break;
+
+    case 'admin_mensaje_leido':
+        require_once 'controllers/AdminController.php';
+        $controller = new AdminController();
+        $controller->marcarMensajeLeido();
+        break;
         
     case 'admin_users_crear':
         require_once 'controllers/AdminController.php';
@@ -66,6 +72,12 @@ switch ($page) {
         $controller->perfil();
         break;
         
+    case 'procesar_contacto':
+        require_once 'controllers/HomeController.php';
+        $controller = new HomeController();
+        $controller->procesarContacto();
+        break;
+
     case 'home':
     default:
         require_once 'controllers/HomeController.php';

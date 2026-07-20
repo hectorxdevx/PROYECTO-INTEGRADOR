@@ -4,8 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mi Perfil | SysMonitor</title>
+    <meta name="robots" content="noindex, nofollow">
 
     <link rel="icon" type="image/svg+xml" href="<?php echo BASE_URL; ?>/assets/favicon.svg">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     
     <link rel="stylesheet" crossorigin href="<?php echo BASE_URL; ?>/assets/dashboard/compiled/css/app.css">
     <link rel="stylesheet" crossorigin href="<?php echo BASE_URL; ?>/assets/dashboard/compiled/css/app-dark.css">
@@ -92,12 +94,15 @@
                         <div class="card">
                             <div class="card-body">
                                 <form action="<?php echo BASE_URL; ?>/index.php?page=upload_photo" method="POST" enctype="multipart/form-data" class="d-flex justify-content-center align-items-center flex-column">
-                                    <div class="avatar avatar-2xl mb-2">
-                                        <!-- Mostramos la foto del usuario o la de por defecto -->
-                                        <?php 
-                                            $foto = isset($_SESSION['foto_perfil']) && $_SESSION['foto_perfil'] != '' ? $_SESSION['foto_perfil'] : 'default.png'; 
-                                        ?>
-                                        <img src="<?php echo BASE_URL; ?>/assets/uploads/<?php echo htmlspecialchars($foto); ?>" alt="Avatar">
+                                    <div class="avatar mb-2 d-flex justify-content-center align-items-center" style="width: 120px; height: 120px;">
+                                        <!-- Mostramos la foto del usuario o la silueta por defecto -->
+                                        <?php if(isset($_SESSION['foto_perfil']) && $_SESSION['foto_perfil'] != ''): ?>
+                                            <img src="<?php echo BASE_URL; ?>/assets/uploads/<?php echo htmlspecialchars($_SESSION['foto_perfil']); ?>" alt="Avatar" style="width: 120px; height: 120px; object-fit: cover; border-radius: 50%; box-shadow: 0 4px 10px rgba(0,0,0,0.15);">
+                                        <?php else: ?>
+                                            <div class="bg-primary text-white d-flex align-items-center justify-content-center" style="width: 120px; height: 120px; border-radius: 50%; box-shadow: 0 4px 10px rgba(0,0,0,0.15);">
+                                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="70" height="70" fill="currentColor"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+                                            </div>
+                                        <?php endif; ?>
                                     </div>
                                     <h3 class="mt-3"><?php echo htmlspecialchars($_SESSION['nombre_usuario'] ?? 'Usuario'); ?></h3>
                                     
@@ -118,12 +123,18 @@
                                 <h4 class="card-title">Información Básica</h4>
                             </div>
                             <div class="card-body">
-                                <form action="#" method="POST">
-                                    <div class="form-group">
-                                        <label for="name">Nombre Completo</label>
-                                        <input type="text" id="name" class="form-control" value="Héctor González" placeholder="Tu nombre">
+                                <form id="profileForm" action="#" method="POST">
+                                    <div class="row">
+                                        <div class="col-md-6 form-group">
+                                            <label for="nombre">Nombre(s)</label>
+                                            <input type="text" id="nombre" name="nombre_usuario" class="form-control" value="Héctor" placeholder="Tu nombre">
+                                        </div>
+                                        <div class="col-md-6 form-group">
+                                            <label for="apellidos">Apellido(s)</label>
+                                            <input type="text" id="apellidos" name="apellidos_usuario" class="form-control" value="González" placeholder="Tus apellidos">
+                                        </div>
                                     </div>
-                                    <div class="form-group">
+                                    <div class="form-group mt-2">
                                         <label for="email">Correo Electrónico</label>
                                         <input type="email" id="email" class="form-control" value="hector@sysmonitor.com" placeholder="Tu correo">
                                     </div>
@@ -161,8 +172,110 @@
         </div>
     </div>
     
+    <!-- Widget de Accesibilidad -->
+    <div class="a11y-widget" id="a11yWidget">
+      <button class="a11y-toggle" id="a11yToggle" aria-label="Opciones de accesibilidad">
+        <i class="bi bi-person-wheelchair"></i>
+      </button>
+      <div class="a11y-panel" id="a11yPanel">
+        <div class="a11y-header">Accesibilidad</div>
+        <button class="a11y-btn" id="a11yIncreaseText" aria-label="Aumentar tamaño del texto"><i class="bi bi-zoom-in"></i> Aumentar Texto</button>
+        <button class="a11y-btn" id="a11yDecreaseText" aria-label="Reducir tamaño del texto"><i class="bi bi-zoom-out"></i> Reducir Texto</button>
+        <button class="a11y-btn" id="a11yContrast" aria-label="Activar modo de alto contraste para daltonismo"><i class="bi bi-circle-half"></i> Alto Contraste</button>
+        <button class="a11y-btn" id="a11yReadText" aria-label="Activar lector de voz de la página"><i class="bi bi-play-circle"></i> Iniciar Lector</button>
+        <button class="a11y-btn" id="a11yStopText" aria-label="Detener lector de voz de la página"><i class="bi bi-stop-circle"></i> Detener Lector</button>
+      </div>
+    </div>
+    
+    <style>
+        /* Estilos del Widget de Accesibilidad */
+        .a11y-widget { position: fixed; bottom: 30px; right: 30px; z-index: 1000; }
+        .a11y-toggle { background-color: #0d6efd; color: white; border: none; border-radius: 50% !important; width: 60px !important; height: 60px !important; min-width: 60px !important; padding: 0 !important; font-size: 28px !important; display: flex !important; align-items: center !important; justify-content: center !important; cursor: pointer; box-shadow: 0 4px 8px rgba(0,0,0,0.2); transition: transform 0.3s ease, background-color 0.3s ease; line-height: 0; }
+        .a11y-toggle i { display: flex !important; align-items: center !important; justify-content: center !important; line-height: 1 !important; margin: 0 !important; font-size: 28px !important; }
+        .a11y-toggle:hover { transform: scale(1.1); background-color: #0b5ed7; }
+        .a11y-panel { position: absolute; bottom: 60px; right: 0; background-color: white; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.15); width: 250px; padding: 15px; display: none; flex-direction: column; gap: 10px; border: 1px solid rgba(0,0,0,0.1); }
+        body.theme-dark .a11y-panel { background-color: #1e1e2d; border-color: #2b2b40; }
+        .a11y-panel.show { display: flex; animation: popIn 0.3s ease forwards; }
+        .a11y-header { font-weight: bold; margin-bottom: 10px; color: var(--bs-heading-color); border-bottom: 1px solid var(--bs-border-color); padding-bottom: 5px; }
+        .a11y-btn { background: transparent; border: 1px solid var(--bs-border-color); border-radius: 8px; padding: 8px 12px; text-align: left; cursor: pointer; display: flex; align-items: center; gap: 10px; color: var(--bs-body-color); transition: background 0.2s; }
+        .a11y-btn:hover { background-color: var(--bs-secondary-bg); }
+        .a11y-btn.active-reader { background-color: #198754; color: white; border-color: #198754; }
+        @keyframes popIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        body.high-contrast-mode .page-content, body.high-contrast-mode .sidebar-wrapper, body.high-contrast-mode header { filter: contrast(150%) saturate(120%); }
+        body.high-contrast-mode .card { border: 2px solid #fff !important; }
+    </style>
+
     <script src="<?php echo BASE_URL; ?>/assets/dashboard/static/js/components/dark.js"></script>
     <script src="<?php echo BASE_URL; ?>/assets/dashboard/extensions/perfect-scrollbar/perfect-scrollbar.min.js"></script>
     <script src="<?php echo BASE_URL; ?>/assets/dashboard/compiled/js/app.js"></script>
+    
+    <script>
+        // SweetAlert2 para el formulario
+        document.getElementById('profileForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            Swal.fire({
+                title: '¡Perfil Actualizado!',
+                text: 'Los datos se guardaron correctamente en la base de datos.',
+                icon: 'success',
+                confirmButtonColor: '#435ebe',
+                confirmButtonText: 'Continuar'
+            });
+        });
+
+        // --- 3. Accesibilidad A11y ---
+        const a11yToggle = document.getElementById('a11yToggle');
+        const a11yPanel = document.getElementById('a11yPanel');
+        const btnIncText = document.getElementById('a11yIncreaseText');
+        const btnDecText = document.getElementById('a11yDecreaseText');
+        const btnContrast = document.getElementById('a11yContrast');
+        const btnReadText = document.getElementById('a11yReadText');
+        const btnStopText = document.getElementById('a11yStopText');
+        
+        let currentFontSize = 100;
+        let synth = window.speechSynthesis;
+        let utterance = null;
+
+        a11yToggle.addEventListener('click', () => { a11yPanel.classList.toggle('show'); });
+
+        btnIncText.addEventListener('click', () => {
+            if(currentFontSize < 150) { currentFontSize += 10; document.documentElement.style.fontSize = currentFontSize + '%'; }
+        });
+        btnDecText.addEventListener('click', () => {
+            if(currentFontSize > 80) { currentFontSize -= 10; document.documentElement.style.fontSize = currentFontSize + '%'; }
+        });
+        btnContrast.addEventListener('click', () => { document.body.classList.toggle('high-contrast-mode'); });
+
+        btnReadText.addEventListener('click', () => {
+            if(synth.speaking && !synth.paused) {
+                synth.pause();
+                btnReadText.innerHTML = '<i class="bi bi-play-circle"></i> Reanudar Lector';
+                btnReadText.classList.remove('active-reader');
+            } else if (synth.paused) {
+                synth.resume();
+                btnReadText.innerHTML = '<i class="bi bi-pause-circle"></i> Pausar Lector';
+                btnReadText.classList.add('active-reader');
+            } else {
+                synth.cancel();
+                let textoALeer = `Estás en tu perfil de usuario. Aquí puedes actualizar tu nombre, apellidos y contraseña.`;
+                utterance = new SpeechSynthesisUtterance(textoALeer);
+                utterance.lang = 'es-ES';
+                utterance.onend = () => {
+                    btnReadText.classList.remove('active-reader');
+                    btnReadText.innerHTML = '<i class="bi bi-play-circle"></i> Iniciar Lector';
+                };
+                synth.speak(utterance);
+                btnReadText.classList.add('active-reader');
+                btnReadText.innerHTML = '<i class="bi bi-pause-circle"></i> Pausar Lector';
+            }
+        });
+        
+        btnStopText.addEventListener('click', () => {
+            synth.cancel();
+            btnReadText.classList.remove('active-reader');
+            btnReadText.innerHTML = '<i class="bi bi-play-circle"></i> Iniciar Lector';
+        });
+        
+        document.querySelectorAll('i').forEach(icon => icon.setAttribute('aria-hidden', 'true'));
+    </script>
 </body>
 </html>

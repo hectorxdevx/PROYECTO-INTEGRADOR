@@ -4,6 +4,13 @@
     <meta charset="utf-8" />
     <meta content="width=device-width, initial-scale=1.0" name="viewport" />
     <title>SysMonitor | Gestión de Infraestructura</title>
+    
+    <!-- SEO y Accesibilidad -->
+    <meta name="description" content="SysMonitor - Plataforma avanzada para el monitoreo físico de servidores IoT. Control de temperatura, humedad, consumo y seguridad física en tiempo real." />
+    <meta name="keywords" content="monitoreo servidores, IoT, temperatura rack, seguridad servidores, telemetria, datacenter" />
+    <meta property="og:title" content="SysMonitor | Gestión de Infraestructura" />
+    <meta property="og:description" content="Control total de la infraestructura física de tus servidores con telemetría en tiempo real." />
+    <meta property="og:type" content="website" />
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -13,6 +20,22 @@
     <link href="<?php echo BASE_URL; ?>/assets/landing_page/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet" />
     <link href="<?php echo BASE_URL; ?>/assets/landing_page/css/color-style.css" rel="stylesheet" />
     
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    
+    <style>
+      html {
+        scroll-behavior: smooth;
+      }
+      .p3r-card {
+        transition: transform 0.3s ease, box-shadow 0.3s ease !important;
+      }
+      .p3r-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 12px 24px rgba(135, 206, 235, 0.15) !important;
+      }
+    </style>
+
     <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="<?php echo BASE_URL; ?>/assets/favicon.svg">
   </head>
@@ -44,7 +67,7 @@
 
         </a>
 
-        <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navmenu">
+        <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navmenu" aria-label="Abrir menú de navegación" aria-expanded="false">
           <i class="bi bi-list text-white fs-2"></i>
         </button>
 
@@ -286,8 +309,8 @@
                               </button>
                           </div>
                       </div>
-                      <div class="col-md-9 bg-black d-flex p-0">
-                          <img id="gallery-img" src="<?php echo BASE_URL; ?>/assets/landing_page/img/gallery/imgPanel.png" alt="Dashboard Preview" class="gallery-img-fit w-100 h-100" style="object-fit: cover; border-radius: 0; border: none; box-shadow: none; max-height: 100%;">
+                      <div class="col-md-9 bg-black d-flex p-3 rounded-end">
+                          <img id="gallery-img" src="<?php echo BASE_URL; ?>/assets/landing_page/img/gallery/imgPanel.png" alt="Dashboard Preview" class="gallery-img-fit w-100 h-100" style="object-fit: cover; border-radius: 8px; border: none; box-shadow: none; max-height: 100%;">
                       </div>
                   </div> 
               </div>
@@ -306,7 +329,7 @@
               <div class="mb-4">
                 <h2 class="h3 fw-bold text-white mb-2">¿Tienes dudas?</h2>
               </div>
-              <form action="procesarIndex.php" method="POST" class="custom-form" autocomplete="off">
+              <form action="<?php echo BASE_URL; ?>/index.php?page=procesar_contacto" method="POST" class="custom-form" autocomplete="off">
                 <div class="mb-4">
                   <label class="form-label lbl-color font-mono small">NOMBRE COMPLETO</label>
                   <input type="text" class="form-control p3r-input" name="nombre" required />
@@ -349,6 +372,20 @@
     </footer>
 
     <script src="<?php echo BASE_URL; ?>/assets/landing_page/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script>
+      <?php if(isset($_GET['success']) && $_GET['success'] == 'contacto'): ?>
+        Swal.fire({
+            title: '¡Mensaje Enviado!',
+            text: 'Nos pondremos en contacto contigo lo más pronto posible.',
+            icon: 'success',
+            confirmButtonColor: '#0dcaf0',
+            background: '#1d355c',
+            color: '#ffffff'
+        });
+        // Limpiar la URL sin recargar
+        window.history.replaceState(null, null, window.location.pathname);
+      <?php endif; ?>
+    </script>
     <script>
     // ==========================================
     // SIMULADOR DE TELEMETRÍA EN VIVO (Widget)
@@ -416,14 +453,14 @@
     </script>
 
     <!-- Botón Scroll to Top -->
-    <button id="scrollToTopBtn" class="scroll-top-btn" onclick="scrollToTop()">
+    <button id="scrollToTopBtn" class="scroll-top-btn" onclick="scrollToTop()" title="Volver al inicio" aria-label="Botón para subir al inicio">
       <i class="bi bi-arrow-up"></i>
     </button>
 
     <style>
       .scroll-top-btn {
         position: fixed;
-        bottom: 30px;
+        bottom: 40px;
         right: 30px;
         width: 50px;
         height: 50px;
@@ -472,6 +509,225 @@
           behavior: "smooth"
         });
       }
+    </script>
+    
+    <!-- AOS JS y Configuración -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+    <script>
+      AOS.init({
+        duration: 800,
+        easing: 'ease-in-out',
+        once: true,
+        offset: 100
+      });
+    </script>
+
+    <!-- Menú de Accesibilidad -->
+    <div class="a11y-widget" id="a11yWidget">
+      <button class="a11y-toggle" id="a11yToggle" aria-label="Opciones de accesibilidad">
+        <i class="bi bi-person-wheelchair"></i>
+      </button>
+      <div class="a11y-panel" id="a11yPanel">
+        <div class="a11y-header">Accesibilidad</div>
+        <button class="a11y-btn" id="a11yIncreaseText" aria-label="Aumentar tamaño del texto"><i class="bi bi-zoom-in"></i> Aumentar Texto</button>
+        <button class="a11y-btn" id="a11yDecreaseText" aria-label="Reducir tamaño del texto"><i class="bi bi-zoom-out"></i> Reducir Texto</button>
+        <button class="a11y-btn" id="a11yContrast" aria-label="Activar modo de alto contraste para daltonismo"><i class="bi bi-circle-half"></i> Alto Contraste</button>
+        <button class="a11y-btn" id="a11yReadText" aria-label="Activar lector de voz de la página"><i class="bi bi-play-circle"></i> Iniciar Lector</button>
+        <button class="a11y-btn" id="a11yStopText" aria-label="Detener lector de voz de la página"><i class="bi bi-stop-circle"></i> Detener Lector</button>
+      </div>
+    </div>
+
+    <style>
+      body.high-contrast-mode nav,
+      body.high-contrast-mode main,
+      body.high-contrast-mode section,
+      body.high-contrast-mode footer,
+      body.high-contrast-mode .bg-grid {
+        filter: contrast(150%) saturate(120%);
+      }
+      body.high-contrast-mode .p3r-card,
+      body.high-contrast-mode .friendly-dashboard-card,
+      body.high-contrast-mode .arch-content-container {
+        border: 2px solid #fff !important;
+      }
+      .a11y-widget {
+        position: fixed;
+        bottom: 120px;
+        right: 30px;
+        z-index: 1000;
+      }
+      .a11y-toggle {
+        width: 60px !important;
+        height: 60px !important;
+        min-width: 60px !important;
+        padding: 0 !important;
+        border-radius: 50% !important;
+        background-color: #0d6efd;
+        color: white;
+        border: none;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+        font-size: 28px !important;
+        cursor: pointer;
+        display: flex !important;
+        justify-content: center !important;
+        align-items: center !important;
+        transition: transform 0.2s;
+        line-height: 0;
+      }
+      .a11y-toggle i { display: flex !important; align-items: center !important; justify-content: center !important; line-height: 1 !important; margin: 0 !important; font-size: 28px !important; }
+      .a11y-toggle:hover {
+        transform: scale(1.1);
+      }
+      .a11y-panel {
+        position: absolute;
+        bottom: 60px;
+        right: 0;
+        background-color: #1e1e2d;
+        border: 1px solid #323246;
+        border-radius: 10px;
+        padding: 10px;
+        width: 200px;
+        display: none;
+        flex-direction: column;
+        gap: 8px;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+      }
+      .a11y-panel.show {
+        display: flex;
+      }
+      .a11y-header {
+        color: white;
+        font-weight: bold;
+        text-align: center;
+        border-bottom: 1px solid #323246;
+        padding-bottom: 8px;
+        margin-bottom: 5px;
+        font-size: 14px;
+      }
+      .a11y-btn {
+        background: transparent;
+        color: #adb5bd;
+        border: 1px solid transparent;
+        border-radius: 5px;
+        padding: 8px;
+        text-align: left;
+        font-size: 14px;
+        cursor: pointer;
+        transition: all 0.2s;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      .a11y-btn:hover {
+        background: rgba(255,255,255,0.1);
+        color: white;
+      }
+      .a11y-btn.active-reader {
+        background: #198754;
+        color: white;
+      }
+    </style>
+
+    <script>
+      // Lógica de Accesibilidad
+      const a11yToggle = document.getElementById('a11yToggle');
+      const a11yPanel = document.getElementById('a11yPanel');
+      const btnIncText = document.getElementById('a11yIncreaseText');
+      const btnDecText = document.getElementById('a11yDecreaseText');
+      const btnReadText = document.getElementById('a11yReadText');
+      const btnStopText = document.getElementById('a11yStopText');
+      const btnContrast = document.getElementById('a11yContrast');
+      
+      let currentFontSize = 100;
+      let synth = window.speechSynthesis;
+      let utterance = null;
+
+      a11yToggle.addEventListener('click', () => {
+        a11yPanel.classList.toggle('show');
+      });
+
+      btnIncText.addEventListener('click', () => {
+        if(currentFontSize < 150) {
+          currentFontSize += 10;
+          document.documentElement.style.fontSize = currentFontSize + '%';
+        }
+      });
+
+      btnDecText.addEventListener('click', () => {
+        if(currentFontSize > 80) {
+          currentFontSize -= 10;
+          document.documentElement.style.fontSize = currentFontSize + '%';
+        }
+      });
+
+      btnReadText.addEventListener('click', () => {
+        if(synth.speaking && !synth.paused) {
+          // Si está hablando, lo pausamos
+          synth.pause();
+          btnReadText.innerHTML = '<i class="bi bi-play-circle"></i> Reanudar Lector';
+          btnReadText.classList.remove('active-reader');
+        } else if (synth.paused) {
+          // Si está pausado, lo reanudamos
+          synth.resume();
+          btnReadText.innerHTML = '<i class="bi bi-pause-circle"></i> Pausar Lector';
+          btnReadText.classList.add('active-reader');
+        } else {
+          // Si no está hablando, empezamos de cero
+          synth.cancel(); // Limpiar colas previas
+          
+          // Construir el texto personalizado (ignorando el rack y enfocando en info clave)
+          let title = document.querySelector('.hero-content h1') ? document.querySelector('.hero-content h1').innerText : '';
+          let subtitle = document.querySelector('.hero-content p') ? document.querySelector('.hero-content p').innerText : '';
+          
+          let featuresSection = document.getElementById('caracteristicas');
+          let featuresText = featuresSection ? featuresSection.textContent : '';
+          
+          // Extraer manualmente Arquitectura para garantizar que lee todas las pestañas (incluso las ocultas)
+          let archText = '';
+          document.querySelectorAll('.arch-pane').forEach(pane => {
+            let pTitle = pane.querySelector('.pane-title') ? pane.querySelector('.pane-title').textContent : '';
+            let pText = pane.querySelector('.pane-text') ? pane.querySelector('.pane-text').textContent : '';
+            archText += ` Pestaña ${pTitle}: ${pText}. `;
+          });
+          
+          let contactSection = document.getElementById('contacto');
+          let contactText = contactSection ? contactSection.innerText : '';
+          
+          // Crear un string limpio con el texto a leer
+          let textoALeer = `Bienvenido a SysMonitor. ${title}. ${subtitle}. Sección Características: ${featuresText}. Sección Arquitectura: ${archText}. Sección Contacto: ${contactText}`;
+          
+          // Limpieza menor
+          textoALeer = textoALeer.replace(/CORE|ENERGY|SECURITY|SCALE/g, ''); 
+          
+          utterance = new SpeechSynthesisUtterance(textoALeer);
+          utterance.lang = 'es-ES';
+          utterance.rate = 0.9; // Un poco más lento para mejor dicción
+          
+          utterance.onend = () => {
+            btnReadText.classList.remove('active-reader');
+            btnReadText.innerHTML = '<i class="bi bi-play-circle"></i> Iniciar Lector';
+          };
+          
+          synth.speak(utterance);
+          btnReadText.classList.add('active-reader');
+          btnReadText.innerHTML = '<i class="bi bi-pause-circle"></i> Pausar Lector';
+        }
+      });
+      
+      btnStopText.addEventListener('click', () => {
+        synth.cancel();
+        btnReadText.classList.remove('active-reader');
+        btnReadText.innerHTML = '<i class="bi bi-play-circle"></i> Iniciar Lector';
+      });
+      
+      btnContrast.addEventListener('click', () => {
+        document.body.classList.toggle('high-contrast-mode');
+      });
+
+      // Ocultar automáticamente todos los íconos decorativos para los lectores de pantalla
+      document.querySelectorAll('i').forEach(icon => {
+        icon.setAttribute('aria-hidden', 'true');
+      });
     </script>
   </body>
 </html>
