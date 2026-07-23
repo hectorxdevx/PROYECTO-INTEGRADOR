@@ -1,8 +1,11 @@
 <?php
 class AdminController {
     public function dashboard() {
+
+
         require_once 'views/admin/dashboard.php';
     }
+
 
     public function usuarios() {
         // Necesitamos el modelo para obtener los datos reales de la base de datos

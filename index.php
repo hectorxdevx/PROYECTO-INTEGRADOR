@@ -34,7 +34,8 @@ switch ($page) {
         $controller = new AdminController();
         $controller->usuarios();
         break;
-        
+
+
     case 'admin_users_crear':
         require_once 'controllers/AdminController.php';
         $controller = new AdminController();

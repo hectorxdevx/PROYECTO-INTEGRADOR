@@ -4,4 +4,6 @@ class HomeController {
         // Carga la vista principal (Landing Page)
         require_once 'views/home/index.php';
     }
+
+
 }

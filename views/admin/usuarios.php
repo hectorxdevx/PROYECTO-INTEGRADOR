@@ -4,8 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gestión de Usuarios | SysMonitor</title>
+    <meta name="robots" content="noindex, nofollow">
 
     <link rel="icon" type="image/svg+xml" href="<?php echo BASE_URL; ?>/assets/favicon.svg">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     
     <link rel="stylesheet" crossorigin href="<?php echo BASE_URL; ?>/assets/dashboard/compiled/css/app.css">
     <link rel="stylesheet" crossorigin href="<?php echo BASE_URL; ?>/assets/dashboard/compiled/css/app-dark.css">
@@ -13,6 +15,24 @@
     
     <!-- Nuestro estilo de colores pastel (para el modo claro) -->
     <link rel="stylesheet" href="<?php echo BASE_URL; ?>/assets/dashboard/custom-theme.css?v=3">
+    
+    <style>
+        /* Estilos del Widget de Accesibilidad */
+        .a11y-widget { position: fixed; bottom: 30px; right: 30px; z-index: 1000; }
+        .a11y-toggle { background-color: #0d6efd; color: white; border: none; border-radius: 50% !important; width: 60px !important; height: 60px !important; min-width: 60px !important; padding: 0 !important; font-size: 28px !important; display: flex !important; align-items: center !important; justify-content: center !important; cursor: pointer; box-shadow: 0 4px 8px rgba(0,0,0,0.2); transition: transform 0.3s ease, background-color 0.3s ease; line-height: 0; }
+        .a11y-toggle i { display: flex !important; align-items: center !important; justify-content: center !important; line-height: 1 !important; margin: 0 !important; font-size: 28px !important; }
+        .a11y-toggle:hover { transform: scale(1.1); background-color: #0b5ed7; }
+        .a11y-panel { position: absolute; bottom: 60px; right: 0; background-color: white; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.15); width: 250px; padding: 15px; display: none; flex-direction: column; gap: 10px; border: 1px solid rgba(0,0,0,0.1); }
+        body.theme-dark .a11y-panel { background-color: #1e1e2d; border-color: #2b2b40; }
+        .a11y-panel.show { display: flex; animation: popIn 0.3s ease forwards; }
+        .a11y-header { font-weight: bold; margin-bottom: 10px; color: var(--bs-heading-color); border-bottom: 1px solid var(--bs-border-color); padding-bottom: 5px; }
+        .a11y-btn { background: transparent; border: 1px solid var(--bs-border-color); border-radius: 8px; padding: 8px 12px; text-align: left; cursor: pointer; display: flex; align-items: center; gap: 10px; color: var(--bs-body-color); transition: background 0.2s; }
+        .a11y-btn:hover { background-color: var(--bs-secondary-bg); }
+        .a11y-btn.active-reader { background-color: #198754; color: white; border-color: #198754; }
+        @keyframes popIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        body.high-contrast-mode .page-content, body.high-contrast-mode .sidebar-wrapper, body.high-contrast-mode header { filter: contrast(150%) saturate(120%); }
+        body.high-contrast-mode .card { border: 2px solid #fff !important; }
+    </style>
 </head>
 <body>
     <script src="<?php echo BASE_URL; ?>/assets/dashboard/static/js/initTheme.js"></script>
@@ -120,8 +140,8 @@
                                                 <td><?php echo htmlspecialchars($u['correo_electronico']); ?></td>
                                                 <td><?php echo htmlspecialchars($u['nombre_rol'] ?? 'Sin Rol'); ?></td>
                                                 <td>
-                                                    <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#modalEditarUsuario<?php echo $u['id_usuario']; ?>"><i class="bi bi-pencil-square"></i></button>
-                                                    <a href="<?php echo BASE_URL; ?>/index.php?page=admin_users_eliminar&id=<?php echo $u['id_usuario']; ?>" class="btn btn-sm btn-outline-danger" onclick="return confirm('¿Estás seguro de que deseas eliminar este usuario?');"><i class="bi bi-trash"></i></a>
+                                                    <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#modalEditarUsuario<?php echo $u['id_usuario']; ?>" aria-label="Editar usuario"><i class="bi bi-pencil-square" aria-hidden="true"></i></button>
+                                                    <button type="button" class="btn btn-sm btn-outline-danger btn-eliminar" data-url="<?php echo BASE_URL; ?>/index.php?page=admin_users_eliminar&id=<?php echo $u['id_usuario']; ?>" aria-label="Eliminar usuario"><i class="bi bi-trash" aria-hidden="true"></i></button>
                                                 </td>
                                             </tr>
                                             <?php endforeach; ?>
@@ -239,8 +259,102 @@
         </div>
     </div>
     
+    <!-- Widget de Accesibilidad -->
+    <div class="a11y-widget" id="a11yWidget">
+      <button class="a11y-toggle" id="a11yToggle" aria-label="Opciones de accesibilidad">
+        <i class="bi bi-person-wheelchair"></i>
+      </button>
+      <div class="a11y-panel" id="a11yPanel">
+        <div class="a11y-header">Accesibilidad</div>
+        <button class="a11y-btn" id="a11yIncreaseText" aria-label="Aumentar tamaño del texto"><i class="bi bi-zoom-in"></i> Aumentar Texto</button>
+        <button class="a11y-btn" id="a11yDecreaseText" aria-label="Reducir tamaño del texto"><i class="bi bi-zoom-out"></i> Reducir Texto</button>
+        <button class="a11y-btn" id="a11yContrast" aria-label="Activar modo de alto contraste para daltonismo"><i class="bi bi-circle-half"></i> Alto Contraste</button>
+        <button class="a11y-btn" id="a11yReadText" aria-label="Activar lector de voz de la página"><i class="bi bi-play-circle"></i> Iniciar Lector</button>
+        <button class="a11y-btn" id="a11yStopText" aria-label="Detener lector de voz de la página"><i class="bi bi-stop-circle"></i> Detener Lector</button>
+      </div>
+    </div>
+
     <script src="<?php echo BASE_URL; ?>/assets/dashboard/static/js/components/dark.js"></script>
     <script src="<?php echo BASE_URL; ?>/assets/dashboard/extensions/perfect-scrollbar/perfect-scrollbar.min.js"></script>
     <script src="<?php echo BASE_URL; ?>/assets/dashboard/compiled/js/app.js"></script>
+    
+    <script>
+        // UX: SweetAlert2 para eliminar
+        document.querySelectorAll('.btn-eliminar').forEach(button => {
+            button.addEventListener('click', function(e) {
+                e.preventDefault();
+                const url = this.getAttribute('data-url');
+                Swal.fire({
+                    title: '¿Estás seguro?',
+                    text: "Esta acción no se puede deshacer y borrará al usuario de la base de datos.",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#dc3545',
+                    cancelButtonColor: '#6c757d',
+                    confirmButtonText: 'Sí, eliminar',
+                    cancelButtonText: 'Cancelar'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location.href = url;
+                    }
+                });
+            });
+        });
+
+        // --- Accesibilidad A11y ---
+        const a11yToggle = document.getElementById('a11yToggle');
+        const a11yPanel = document.getElementById('a11yPanel');
+        const btnIncText = document.getElementById('a11yIncreaseText');
+        const btnDecText = document.getElementById('a11yDecreaseText');
+        const btnContrast = document.getElementById('a11yContrast');
+        const btnReadText = document.getElementById('a11yReadText');
+        const btnStopText = document.getElementById('a11yStopText');
+        
+        let currentFontSize = 100;
+        let synth = window.speechSynthesis;
+        let utterance = null;
+
+        a11yToggle.addEventListener('click', () => { a11yPanel.classList.toggle('show'); });
+
+        btnIncText.addEventListener('click', () => {
+            if(currentFontSize < 150) { currentFontSize += 10; document.documentElement.style.fontSize = currentFontSize + '%'; }
+        });
+        btnDecText.addEventListener('click', () => {
+            if(currentFontSize > 80) { currentFontSize -= 10; document.documentElement.style.fontSize = currentFontSize + '%'; }
+        });
+        btnContrast.addEventListener('click', () => { document.body.classList.toggle('high-contrast-mode'); });
+
+        btnReadText.addEventListener('click', () => {
+            if(synth.speaking && !synth.paused) {
+                synth.pause();
+                btnReadText.innerHTML = '<i class="bi bi-play-circle"></i> Reanudar Lector';
+                btnReadText.classList.remove('active-reader');
+            } else if (synth.paused) {
+                synth.resume();
+                btnReadText.innerHTML = '<i class="bi bi-pause-circle"></i> Pausar Lector';
+                btnReadText.classList.add('active-reader');
+            } else {
+                synth.cancel();
+                let textoALeer = `Estás en la vista de gestión de usuarios del administrador. Aquí puedes crear, editar y eliminar los accesos de los estudiantes y el personal.`;
+                utterance = new SpeechSynthesisUtterance(textoALeer);
+                utterance.lang = 'es-ES';
+                utterance.onend = () => {
+                    btnReadText.classList.remove('active-reader');
+                    btnReadText.innerHTML = '<i class="bi bi-play-circle"></i> Iniciar Lector';
+                };
+                synth.speak(utterance);
+                btnReadText.classList.add('active-reader');
+                btnReadText.innerHTML = '<i class="bi bi-pause-circle"></i> Pausar Lector';
+            }
+        });
+        
+        btnStopText.addEventListener('click', () => {
+            synth.cancel();
+            btnReadText.classList.remove('active-reader');
+            btnReadText.innerHTML = '<i class="bi bi-play-circle"></i> Iniciar Lector';
+        });
+        
+        document.querySelectorAll('i').forEach(icon => icon.setAttribute('aria-hidden', 'true'));
+    </script>
 </body>
 </html>

@@ -25,9 +25,9 @@ class AuthController {
                 exit();
             }
 
-            // 2. Revisar la longitud de la contraseña de nuevo
-            if (strlen($contrasena) < 8) {
-                header("Location: index.php?page=login&error=" . urlencode("La contraseña debe tener al menos 8 caracteres"));
+            // 2. Revisar la seguridad de la contraseña
+            if (strlen($contrasena) < 8 || !preg_match('/[A-Z]/', $contrasena) || !preg_match('/[0-9]/', $contrasena) || !preg_match('/[^a-zA-Z0-9]/', $contrasena)) {
+                header("Location: index.php?page=login&error=" . urlencode("La contraseña debe tener al menos 8 caracteres, una mayúscula, un número y un carácter especial"));
                 exit();
             }
 
