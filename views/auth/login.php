@@ -29,11 +29,6 @@
                   Registro exitoso. ¡Ahora puedes iniciar sesión!
               </div>
           <?php endif; ?>
-          <div class="social-container">
-            <a href="#" class="social"><i class="fab fa-facebook-f"></i></a>
-            <a href="#" class="social"><i class="fab fa-twitter"></i></a>
-            <a href="#" class="social"><i class="fab fa-linkedin-in"></i></a>
-          </div>
           <span>o usa tu correo electrónico</span>
           <div class="input-group">
             <i class="fas fa-user"></i>
@@ -64,11 +59,6 @@
                   <?php echo htmlspecialchars($_GET['error']); ?>
               </div>
           <?php endif; ?>
-          <div class="social-container">
-            <a href="#" class="social"><i class="fab fa-facebook-f"></i></a>
-            <a href="#" class="social"><i class="fab fa-twitter"></i></a>
-            <a href="#" class="social"><i class="fab fa-linkedin-in"></i></a>
-          </div>
           <span>o usa tu cuenta de correo</span>
           <div class="input-group">
             <i class="fas fa-envelope"></i>

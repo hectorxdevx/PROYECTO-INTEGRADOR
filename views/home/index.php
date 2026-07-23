@@ -364,7 +364,7 @@
           </div>
           <div class="col-md-6 text-center text-md-end">
             <div class="footer-icons d-flex justify-content-center justify-content-md-end gap-4">
-              <a href="https://github.com/hectorxdevx/PROYECTO-INTEGRADOR.git" target="_blank" class="footer-link" aria-label="GitHub"><i class="bi bi-github"></i></a>
+              
             </div>
           </div>
         </div>

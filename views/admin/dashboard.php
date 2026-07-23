@@ -221,7 +221,7 @@
                                     </div>
                                     <div class="ms-3 name">
                                         <h5 class="font-bold">Administrador</h5>
-                                        <h6 class="text-muted mb-0">admin@sysmonitor.com</h6>
+                                        <h6 class="text-muted mb-0" style="word-break: break-all;">admin@sysmonitor.com</h6>
                                     </div>
                                 </div>
                             </div>
