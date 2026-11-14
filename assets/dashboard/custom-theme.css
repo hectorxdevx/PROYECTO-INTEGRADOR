@@ -1,33 +1,37 @@
-/* assets/dashboard/custom-theme.css */
+/* assets/dashboard/custom-theme.css - Paleta Blanco y Azul (Aceternity UI + Minimalist Blue) con soporte Modo Oscuro */
 
-/* Modo Claro: Dos tonos pastel, sin blanco */
+/* Modo Claro: Fondo blanco/gris azulado ultra limpio y acentos en Azul Corporativo */
 html:not([data-bs-theme="dark"]) body {
-    background-color: #b8cef0 !important;
-    /* Fondo un poco más oscuro */
-    color: #334155 !important;
+    background-color: #f8fafc !important;
+    color: #0f172a !important;
 }
 
-/* Tarjetas y cajas de contenido (mismo tono que la barra lateral) */
+/* Tarjetas y contenedores en Blanco Puro con borde azulado sutil */
 html:not([data-bs-theme="dark"]) .card,
 html:not([data-bs-theme="dark"]) .card-header,
 html:not([data-bs-theme="dark"]) .card-body,
 html:not([data-bs-theme="dark"]) .card-footer {
-    background-color: #c9d9f7 !important;
-    /* Azul pastel claro */
-    border: 1px solid #cdddf4 !important;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05) !important;
+    background-color: #ffffff !important;
+    border-color: #e2e8f0 !important;
+    border-radius: 18px !important;
+    box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.04), 0 4px 10px -2px rgba(29, 78, 216, 0.03) !important;
 }
 
-/* El menú lateral (sidebar) y paneles (mismo tono que las tarjetas) */
+/* Barra lateral (Sidebar) en Blanco Puro con elementos activos en Azul */
 html:not([data-bs-theme="dark"]) #sidebar,
 html:not([data-bs-theme="dark"]) .sidebar-wrapper,
 html:not([data-bs-theme="dark"]) .sidebar-header {
-    background-color: #c9d9f7 !important;
-    box-shadow: 2px 0 8px rgba(0, 0, 0, 0.03) !important;
-    border-right: 1px solid #cdddf4 !important;
+    background-color: #ffffff !important;
+    box-shadow: 4px 0 24px rgba(15, 23, 42, 0.04) !important;
+    border-right: 1px solid #e2e8f0 !important;
 }
 
-/* Hacemos los títulos un poquito más elegantes */
+html:not([data-bs-theme="dark"]) .sidebar-wrapper .menu .sidebar-item.active > .sidebar-link {
+    background: linear-gradient(135deg, #1d4ed8 0%, #2563eb 100%) !important;
+    box-shadow: 0 8px 20px -4px rgba(29, 78, 216, 0.35) !important;
+}
+
+/* Tipografía nítida en Modo Claro */
 html:not([data-bs-theme="dark"]) h1,
 html:not([data-bs-theme="dark"]) h2,
 html:not([data-bs-theme="dark"]) h3,
@@ -35,5 +39,29 @@ html:not([data-bs-theme="dark"]) h4,
 html:not([data-bs-theme="dark"]) h5,
 html:not([data-bs-theme="dark"]) h6,
 html:not([data-bs-theme="dark"]) .card-title {
-    color: #1e293b !important;
+    color: #0f172a !important;
+}
+
+/* Modo Oscuro: Azul Noche Profundo estilo Aceternity UI */
+html[data-bs-theme="dark"] body,
+body.theme-dark {
+    background-color: #090d16 !important;
+    color: #f8fafc !important;
+}
+
+html[data-bs-theme="dark"] .card,
+html[data-bs-theme="dark"] .card-header,
+html[data-bs-theme="dark"] .card-body,
+html[data-bs-theme="dark"] .card-footer {
+    background-color: #111827 !important;
+    border-color: #1e293b !important;
+    border-radius: 18px !important;
+    box-shadow: 0 16px 32px -8px rgba(0, 0, 0, 0.5) !important;
+}
+
+html[data-bs-theme="dark"] #sidebar,
+html[data-bs-theme="dark"] .sidebar-wrapper,
+html[data-bs-theme="dark"] .sidebar-header {
+    background-color: #0f172a !important;
+    border-right: 1px solid #1e293b !important;
 }

@@ -19,20 +19,52 @@
     <link href="<?php echo BASE_URL; ?>/assets/landing_page/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
     <link href="<?php echo BASE_URL; ?>/assets/landing_page/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet" />
     <link href="<?php echo BASE_URL; ?>/assets/landing_page/css/color-style.css" rel="stylesheet" />
+    <link href="<?php echo BASE_URL; ?>/assets/css/aceternity-ui.css" rel="stylesheet" />
     
     <link href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="<?php echo BASE_URL; ?>/assets/js/aceternity-ui.js"></script>
     
     <style>
-      html {
-        scroll-behavior: smooth;
+      html { scroll-behavior: smooth; }
+      .custom-navbar {
+        background: var(--navbar-bg) !important;
+        border-bottom: 1px solid var(--border-color) !important;
       }
-      .p3r-card {
-        transition: transform 0.3s ease, box-shadow 0.3s ease !important;
+      .p3r-card, .arch-content-container {
+        background: var(--ac-surface) !important;
+        border: 1px solid var(--ac-border) !important;
+        border-radius: 22px !important;
+        box-shadow: var(--ac-card-shadow) !important;
+        color: var(--ac-text) !important;
       }
-      .p3r-card:hover {
-        transform: translateY(-8px);
-        box-shadow: 0 12px 24px rgba(135, 206, 235, 0.15) !important;
+      .p3r-card h3, .p3r-card h2, .pane-title, h1, h2 {
+        color: var(--ac-text) !important;
+      }
+      .p3r-card p, .pane-text, .arch-tab-btn, .gallery-tab-btn {
+        color: var(--ac-text-muted) !important;
+      }
+      .arch-tab-btn.active, .gallery-tab-btn.active {
+        color: var(--ac-primary) !important;
+        background: var(--ac-primary-light) !important;
+        border-left: 3px solid var(--ac-primary) !important;
+      }
+      .badge-cyan {
+        background: var(--ac-primary-light) !important;
+        color: var(--ac-primary) !important;
+        border: 1px solid rgba(29, 78, 216, 0.25) !important;
+      }
+      .btn-cyan {
+        background: linear-gradient(135deg, var(--ac-primary) 0%, var(--ac-accent) 100%) !important;
+        color: #ffffff !important;
+        border-radius: 999px !important;
+        box-shadow: var(--ac-btn-shadow) !important;
+      }
+      .p3r-input {
+        background-color: var(--ac-input-bg) !important;
+        color: var(--ac-text) !important;
+        border: 1.5px solid var(--ac-border) !important;
+        border-radius: 12px !important;
       }
     </style>
 
@@ -40,67 +72,57 @@
     <link rel="icon" type="image/svg+xml" href="<?php echo BASE_URL; ?>/assets/favicon.svg">
   </head>
 
-  <body>
-    <div class="bg-grid"></div>
+  <body class="ac-body">
+    <div class="ac-dot-bg"></div>
 
-    <nav class="navbar navbar-expand-lg fixed-top custom-navbar">
-      <div class="container-fluid container-xl">
+    <nav class="navbar navbar-expand-lg fixed-top custom-navbar ac-floating-nav">
+      <div class="container-fluid px-3 px-lg-5">
         <a class="navbar-brand d-flex align-items-center gap-2" href="<?php echo BASE_URL; ?>/">
-          
-          <!-- ========================================== -->
-          <!-- AQUI VA EL LOGO -->
-          <!-- LOGO CREADO A MEDIDA (SVG Minimalista y Brillante) -->
-          <div class="me-2 d-flex align-items-center">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="36" height="36">
-              <!-- Caja del servidor (Limpio y claro) -->
-              <rect x="1" y="2" width="22" height="20" rx="4" fill="rgba(135,206,235,0.15)" stroke="#87CEEB" stroke-width="2" />
-              
-              <!-- LEDs indicadores -->
-              <circle cx="18.5" cy="6" r="1.5" fill="#87CEEB" />
-              
-              <!-- Línea de pulso (Telemetría), gruesa y brillante -->
-              <path d="M 1 15 L 6 15 L 8.5 8 L 12 19 L 15 11 L 17 15 L 23 15" fill="none" stroke="#ffffff" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" filter="drop-shadow(0px 0px 4px rgba(255,255,255,0.8))" />
-            </svg>
+          <div class="ac-squircle-logo" style="width: 40px; height: 40px; border-radius: 12px; font-size: 1.2rem;">
+            <i class="bi bi-activity"></i>
           </div>
-          <span class="logo-text">Sys<span class="text-white">Monitor</span></span>
-          <!-- ========================================== -->
-
+          <span class="fw-bold fs-4" style="color: var(--ac-text);">Sys<span style="color: var(--ac-primary);">Monitor</span></span>
         </a>
 
         <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navmenu" aria-label="Abrir menú de navegación" aria-expanded="false">
-          <i class="bi bi-list text-white fs-2"></i>
+          <i class="bi bi-list fs-2" style="color: var(--ac-text);"></i>
         </button>
 
         <div class="collapse navbar-collapse" id="navmenu">
-          <ul class="navbar-nav mx-auto gap-4">
-            <li class="nav-item"><a class="nav-link" href="#caracteristicas">Características</a></li>
-            <li class="nav-item"><a class="nav-link" href="#arquitectura">Arquitectura</a></li>
-            <li class="nav-item"><a class="nav-link" href="#galeria">Interfaz</a></li>
-            <li class="nav-item"><a class="nav-link" href="#contacto">Contacto</a></li>
+          <ul class="navbar-nav mx-auto gap-3 gap-xl-4">
+            <li class="nav-item"><a class="nav-link fw-medium" href="#caracteristicas">Características</a></li>
+            <li class="nav-item"><a class="nav-link fw-medium" href="#modelo-b2b">Pasos</a></li>
+            <li class="nav-item"><a class="nav-link fw-medium" href="#arquitectura">Arquitectura</a></li>
+            <li class="nav-item"><a class="nav-link fw-medium" href="#galeria">Interfaz</a></li>
+            <li class="nav-item"><a class="nav-link fw-medium" href="#contacto">Contacto</a></li>
           </ul>
           <div class="nav-actions d-flex align-items-center gap-3 mt-3 mt-lg-0">
-            <a href="<?php echo BASE_URL; ?>/index.php?page=login" class="text-link">Iniciar sesión</a>
-            <a href="<?php echo BASE_URL; ?>/index.php?page=login" class="btn btn-cyan text-uppercase">REGISTRATE</a>
+            <a href="<?php echo BASE_URL; ?>/index.php?page=login" class="text-link fw-semibold">Acceso Institucional</a>
+            <a href="<?php echo BASE_URL; ?>/index.php?page=login&tab=representante" class="ac-btn-primary ac-btn-pill py-2 px-4">Alta de Empresa <i class="bi bi-arrow-right"></i></a>
+            <button type="button" class="ac-theme-btn ms-lg-2" aria-label="Cambiar modo de color">
+              <i class="bi bi-moon-stars-fill"></i> <span>Modo Oscuro</span>
+            </button>
           </div>
         </div>
       </div>
     </nav>
 
     <main class="hero-section">
-      <div class="bg-glow"></div>
-
       <div class="container">
         <div class="row align-items-center justify-content-between min-vh-100 pt-5">
           <div class="col-lg-6 hero-content">
-            <div class="badge-cyan mb-4"><span class="dot-pulse"></span> Software en desarrollo</div>
-            <h1 class="display-3 fw-bold mb-4">Tu infraestructura,<br /><span class="text-cyan">bajo control total.</span></h1>
-            <p class="hero-subtitle mb-5">Deja de preocuparte por fallos inesperados. Monitorea el estado físico de tus servidores desde una plataforma rápida y simple.</p>
-            <div class="hero-cta d-flex align-items-center gap-4 mb-3">
-            <a href="<?php echo BASE_URL; ?>/index.php?page=login" class="btn btn-cyan btn-lg d-inline-flex align-items-center gap-2">
-                REGISTRATE <i class="bi bi-arrow-right"></i>
-            </a>
+            <h1 class="display-3 fw-bold mb-4">Vigilancia IoT segura y <span style="color: var(--ac-primary);">eficiente para tu empresa.</span></h1>
+            <p class="hero-subtitle mb-4">Monitorea temperatura, humedad, consumo eléctrico y apertura de racks en tiempo real desde un solo lugar.</p>
+            <div class="d-flex flex-wrap align-items-center gap-3">
+              <a href="<?php echo BASE_URL; ?>/index.php?page=login" class="ac-btn-primary ac-btn-pill">
+                Comencemos <i class="bi bi-arrow-right"></i>
+              </a>
+              <a href="<?php echo BASE_URL; ?>/index.php?page=login&tab=representante" class="ac-oauth-btn" style="width: auto; border-radius: 999px;">
+                <i class="bi bi-building-check text-primary"></i> Registrar mi Institución
+              </a>
             </div>
-          </div> 
+          </div>
+ 
           
           <div class="col-lg-5 offset-lg-1">
             <div class="friendly-dashboard-card p-4" data-aos="fade-up">
@@ -162,55 +184,71 @@
         <div class="text-center mb-5" data-aos="fade-up">
           <h2 class="display-5 fw-bold mb-3">CARACTERÍSTICAS</h2>
         </div>
-        <div class="row g-4 mt-4">
+        <div class="row g-4 mt-2">
           <div class="col-md-6" data-aos="fade-up" data-aos-delay="100">
-            <article class="p3r-card h-100 p-4 p-lg-5">
-              <div class="d-flex justify-content-between align-items-start mb-4 card-header-icons">
-                <div class="icon-wrapper"><i class="bi bi-thermometer-half"></i></div>
-                <span class="card-badge">CORE</span>
-              </div>
-              <h3 class="h4 fw-bold text-white mb-3">Control Térmico</h3>
-              <p class="mb-0">Protege tus equipos contra el sobrecalentamiento y evita daños críticos por humedad.</p>
+            <article class="ac-bento-card ac-beam-top h-100 p-4 p-lg-5">
+              <div class="ac-squircle-logo mb-3" style="width: 48px; height: 48px; border-radius: 14px; font-size: 1.3rem;"><i class="bi bi-thermometer-half"></i></div>
+              <h3 class="h4 fw-bold mb-2">Control Térmico</h3>
+              <p class="mb-0" style="color: var(--ac-text-muted);">Previene el sobrecalentamiento y daños por humedad con alertas automáticas.</p>
             </article>
           </div>
           <div class="col-md-6" data-aos="fade-up" data-aos-delay="200">
-            <article class="p3r-card h-100 p-4 p-lg-5">
-              <div class="d-flex justify-content-between align-items-start mb-4 card-header-icons">
-                <div class="icon-wrapper"><i class="bi bi-lightning-charge"></i></div>
-                <span class="card-badge">ENERGY</span>
-              </div>
-              <h3 class="h4 fw-bold text-white mb-3">Eficiencia Energética</h3>
-              <p class="mb-0">Optimiza el consumo energético de tus cuartos de servidores con indicadores precisos.</p>
+            <article class="ac-bento-card ac-beam-top h-100 p-4 p-lg-5">
+              <div class="ac-squircle-logo mb-3" style="width: 48px; height: 48px; border-radius: 14px; font-size: 1.3rem;"><i class="bi bi-lightning-charge"></i></div>
+              <h3 class="h4 fw-bold mb-2">Eficiencia Energética</h3>
+              <p class="mb-0" style="color: var(--ac-text-muted);">Mide el consumo eléctrico en tiempo real por cada rack de tu centro de datos.</p>
             </article>
           </div>
           <div class="col-md-6" data-aos="fade-up" data-aos-delay="300">
-            <article class="p3r-card h-100 p-4 p-lg-5">
-              <div class="d-flex justify-content-between align-items-start mb-4 card-header-icons">
-                <div class="icon-wrapper"><i class="bi bi-shield-check"></i></div>
-                <span class="card-badge">SECURITY</span>
-              </div>
-              <h3 class="h4 fw-bold text-white mb-3">Seguridad Física</h3>
-              <p class="mb-0">Mantén una bitácora automatizada de accesos y recibe alertas inmediatas ante cualquier intrusión.</p>
+            <article class="ac-bento-card ac-beam-top h-100 p-4 p-lg-5">
+              <div class="ac-squircle-logo mb-3" style="width: 48px; height: 48px; border-radius: 14px; font-size: 1.3rem;"><i class="bi bi-shield-check"></i></div>
+              <h3 class="h4 fw-bold mb-2">Seguridad Física</h3>
+              <p class="mb-0" style="color: var(--ac-text-muted);">Detecta y registra al instante cualquier apertura de puertas en tus servidores.</p>
             </article>
           </div>
           <div class="col-md-6" data-aos="fade-up" data-aos-delay="400">
-            <article class="p3r-card h-100 p-4 p-lg-5">
-              <div class="d-flex justify-content-between align-items-start mb-4 card-header-icons">
-                <div class="icon-wrapper"><i class="bi bi-diagram-3"></i></div>
-                <span class="card-badge">SCALE</span>
-              </div>
-              <h3 class="h4 fw-bold text-white mb-3">Escalabilidad</h3>
-              <p class="">Arquitectura diseñada para gestionar desde un solo rack hasta una gran cantidad.</p>
+            <article class="ac-bento-card ac-beam-top h-100 p-4 p-lg-5">
+              <div class="ac-squircle-logo mb-3" style="width: 48px; height: 48px; border-radius: 14px; font-size: 1.3rem;"><i class="bi bi-diagram-3"></i></div>
+              <h3 class="h4 fw-bold mb-2">Cuentas Institucionales</h3>
+              <p class="mb-0" style="color: var(--ac-text-muted);">Centraliza el acceso de tu equipo con correos exclusivos para tu empresa.</p>
             </article>
           </div>
         </div>
       </div>
     </section>
 
-    <section id="arquitectura" class="arch-section py-5 mt-5">
+    <section id="modelo-b2b" class="py-5">
       <div class="container">
         <div class="text-center mb-5" data-aos="fade-up">
-          <h2 class="display-5 fw-bold mb-3 text-white">ARQUITECTURA</h2>
+          <h2 class="display-5 fw-bold mb-3">SEGURIDAD EXTREMA EN 3 PASOS</h2>
+        </div>
+        <div class="row g-4">
+          <div class="col-md-4" data-aos="fade-up" data-aos-delay="100">
+            <div class="ac-bento-card p-4 p-lg-5 h-100 d-flex flex-column justify-content-center">
+              <div class="ac-squircle-logo mb-3" style="width: 46px; height: 46px; border-radius: 14px; font-size: 1.15rem; font-weight: 800;">1</div>
+              <p class="fs-5 fw-semibold mb-0" style="color: var(--ac-text) !important;">Registra tu empresa en minutos usando tu cuenta de Google o Microsoft.</p>
+            </div>
+          </div>
+          <div class="col-md-4" data-aos="fade-up" data-aos-delay="200">
+            <div class="ac-bento-card p-4 p-lg-5 h-100 d-flex flex-column justify-content-center">
+              <div class="ac-squircle-logo mb-3" style="width: 46px; height: 46px; border-radius: 14px; font-size: 1.15rem; font-weight: 800;">2</div>
+              <p class="fs-5 fw-semibold mb-0" style="color: var(--ac-text) !important;">Recibe correos institucionales exclusivos para tu Jefe de TI y operadores.</p>
+            </div>
+          </div>
+          <div class="col-md-4" data-aos="fade-up" data-aos-delay="300">
+            <div class="ac-bento-card p-4 p-lg-5 h-100 d-flex flex-column justify-content-center">
+              <div class="ac-squircle-logo mb-3" style="width: 46px; height: 46px; border-radius: 14px; font-size: 1.15rem; font-weight: 800;">3</div>
+              <p class="fs-5 fw-semibold mb-0" style="color: var(--ac-text) !important;">Supervisa tus servidores en tiempo real desde la web o la app móvil.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="arquitectura" class="arch-section py-5 mt-4">
+      <div class="container">
+        <div class="text-center mb-5" data-aos="fade-up">
+          <h2 class="display-5 fw-bold mb-3">ARQUITECTURA</h2>
         </div>
         <div class="row mt-5">
           <div class="col-lg-4 col-md-5 mb-4 mb-md-0" data-aos="fade-right">
@@ -230,54 +268,34 @@
             </div>
           </div>
           <div class="col-lg-8 col-md-7" data-aos="fade-left">
-            <div id="arch-content-container" class="arch-content-container theme-blue">
+            <div id="arch-content-container" class="arch-content-container ac-bento-card theme-blue">
               <div id="tab-telemetria" class="arch-pane active-pane">
-                <div class="pane-header mb-4">
+                <div class="pane-header mb-3">
                   <div class="pane-icon"><i class="bi bi-broadcast"></i></div>
                   <h3 class="pane-title">Telemetría</h3>
                 </div>
-                <p class="pane-text">Captura de datos precisa. Nuestros sensores envían información clave de forma automática para que siempre sepas qué está pasando en tu infraestructura.</p>
-                <div class="pane-tags mt-4">
-                  <span class="arch-tag">Sensores IoT</span>
-                  <span class="arch-tag">Tiempo Real</span>
-                  <span class="arch-tag">Métricas Exactas</span>
-                </div>
+                <p class="pane-text mb-0">Los sensores envían lecturas continuas de temperatura, humedad, energía y puertas mediante nuestra API REST.</p>
               </div>
               <div id="tab-ingenieria" class="arch-pane">
-                <div class="pane-header mb-4">
+                <div class="pane-header mb-3">
                   <div class="pane-icon"><i class="bi bi-braces"></i></div>
                   <h3 class="pane-title">Ingeniería</h3>
                 </div>
-                <p class="pane-text">Desarrollado con una estructura organizada que facilita el mantenimiento y asegura que el sistema siempre esté disponible.</p>
-                <div class="pane-tags mt-4">
-                  <span class="arch-tag">Arquitectura segura</span>
-                  <span class="arch-tag">Escalabilidad</span>
-                  <span class="arch-tag">Código Limpio</span>
-                </div>
+                <p class="pane-text mb-0">Plataforma web MVC conectada con una API RESTful y aplicación móvil en Flutter.</p>
               </div>
               <div id="tab-seguridad" class="arch-pane">
-                <div class="pane-header mb-4">
+                <div class="pane-header mb-3">
                   <div class="pane-icon"><i class="bi bi-shield-lock"></i></div>
                   <h3 class="pane-title">Seguridad</h3>
                 </div>
-                <p class="pane-text">Tus datos viajan aislados. La red de monitoreo nunca se cruza con tu tráfico de producción, garantizando un entorno libre de riesgos externos.</p>
-                <div class="pane-tags mt-4">
-                  <span class="arch-tag">VLAN Aislada</span>
-                  <span class="arch-tag">Control de Acceso</span>
-                  <span class="arch-tag">MariaDB Segura</span>
-                </div>
+                <p class="pane-text mb-0">Aislamiento de datos por empresa, cuentas institucionales dedicadas y verificación desde el teléfono.</p>
               </div>
               <div id="tab-respaldo" class="arch-pane">
-                <div class="pane-header mb-4">
+                <div class="pane-header mb-3">
                   <div class="pane-icon"><i class="bi bi-database"></i></div>
                   <h3 class="pane-title">Respaldo</h3>
                 </div>
-                <p class="pane-text">Se hace un resumen de las telemetrías del día, así como un respaldo cada 6 y 12 meses para guardar el historial de monitoreo.</p>
-                <div class="pane-tags mt-4">
-                  <span class="arch-tag">Resumen Diario</span>
-                  <span class="arch-tag">Respaldo Semestral</span>
-                  <span class="arch-tag">Historial Seguro</span>
-                </div>
+                <p class="pane-text mb-0">Historial diario de métricas y registro automático de alertas e inicios de sesión.</p>
               </div>
             </div>
           </div>
@@ -290,10 +308,10 @@
           <div class="row justify-content-center">
               <div class="col-xl-10">
                   <div class="text-center mb-5" data-aos="fade-up">
-                      <h2 class="display-5 fw-bold mb-3 text-white">INTERFAZ</h2>
+                      <h2 class="display-5 fw-bold mb-3">INTERFAZ</h2>
                   </div>
-                  <div class="row g-0 align-items-stretch arch-content-container theme-blue p-0 overflow-hidden">
-                      <div class="col-md-3 border-end border-secondary p-4 bg-dark-surface">
+                  <div class="row g-0 align-items-stretch ac-bento-card p-0 overflow-hidden">
+                      <div class="col-md-3 border-end p-4" style="border-color: var(--ac-border) !important;">
                           <div class="gallery-sidebar d-flex flex-column gap-2">
                               <button class="gallery-tab-btn active" onclick="cambiarImagenGaleria(this, 'Panel General', '<?php echo BASE_URL; ?>/assets/landing_page/img/gallery/imgPanel.png')">
                                   <i class="bi bi-shield-lock"></i> Panel general
@@ -309,8 +327,8 @@
                               </button>
                           </div>
                       </div>
-                      <div class="col-md-9 bg-black d-flex p-3 rounded-end">
-                          <img id="gallery-img" src="<?php echo BASE_URL; ?>/assets/landing_page/img/gallery/imgPanel.png" alt="Dashboard Preview" class="gallery-img-fit w-100 h-100" style="object-fit: cover; border-radius: 8px; border: none; box-shadow: none; max-height: 100%;">
+                      <div class="col-md-9 d-flex p-3 rounded-end" style="background: var(--ac-bg-secondary);">
+                          <img id="gallery-img" src="<?php echo BASE_URL; ?>/assets/landing_page/img/gallery/imgPanel.png" alt="Dashboard Preview" class="gallery-img-fit w-100 h-100" style="object-fit: cover; border-radius: 12px; border: none; box-shadow: none; max-height: 100%;">
                       </div>
                   </div> 
               </div>
@@ -320,34 +338,34 @@
 
     <section id="contacto" class="contact-section py-5 mt-5 mb-5">
       <div class="text-center mb-5" data-aos="fade-up">
-          <h2 class="display-5 fw-bold mb-3 text-white">CONTACTO</h2>
+          <h2 class="display-5 fw-bold mb-3">CONTACTO</h2>
       </div>
       <div class="container">
         <div class="row justify-content-center">
           <div class="col-lg-6 col-md-8">
-            <div class="p3r-card p-4 p-lg-5" data-aos="fade-up">
+            <div class="ac-bento-card ac-beam-top p-4 p-lg-5" data-aos="fade-up">
               <div class="mb-4">
-                <h2 class="h3 fw-bold text-white mb-2">¿Tienes dudas?</h2>
+                <h2 class="h3 fw-bold mb-2">¿Tienes dudas sobre el alta corporativa?</h2>
               </div>
               <form action="<?php echo BASE_URL; ?>/index.php?page=procesar_contacto" method="POST" class="custom-form" autocomplete="off">
                 <div class="mb-4">
-                  <label class="form-label lbl-color font-mono small">NOMBRE COMPLETO</label>
+                  <label class="ac-label">NOMBRE COMPLETO</label>
                   <input type="text" class="form-control p3r-input" name="nombre" required />
                 </div>
                 <div class="mb-4">
-                  <label class="form-label lbl-color font-mono small">CORREO</label>
+                  <label class="ac-label">CORREO</label>
                   <input type="email" class="form-control p3r-input" name="correo" required />
                 </div>
                 <div class="mb-4">
-                  <label class="form-label lbl-color font-mono small">ASUNTO</label>
+                  <label class="ac-label">ASUNTO</label>
                   <input type="text" class="form-control p3r-input" name="asunto" required />
                 </div>
                 <div class="mb-4">
-                  <label class="form-label lbl-color font-mono small">MENSAJE</label>
+                  <label class="ac-label">MENSAJE</label>
                   <textarea class="form-control p3r-input" name="mensaje" rows="4" required></textarea>
                 </div>
-                <button type="submit" class="btn btn-cyan w-100 text-uppercase mt-2">
-                  Enviar <i class="bi bi-terminal ms-2"></i>
+                <button type="submit" class="ac-btn-primary w-100 text-uppercase mt-2">
+                  Enviar Mensaje <i class="bi bi-send ms-2"></i>
                 </button>
               </form>
             </div>
@@ -355,6 +373,7 @@
         </div>
       </div>
     </section>
+
 
     <footer class="site-footer border-top border-secondary py-4 mt-auto">
       <div class="container">

@@ -1,0 +1,20 @@
+name: sysmonitor_mobile
+description: Aplicacion movil oficial de SysMonitor IoT con Seguridad Extrema (OAuth 2.0 + Google Authenticator MFA + Telemetria de Racks en tiempo real).
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.0.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  http: ^1.2.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^3.0.0
+
+flutter:
+  uses-material-design: true

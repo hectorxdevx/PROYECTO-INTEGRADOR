@@ -1,0 +1,11 @@
+{
+    "name": "SysMonitor IoT",
+    "short_name": "SysMonitor",
+    "start_url": ".",
+    "display": "standalone",
+    "background_color": "#FFFFFF",
+    "theme_color": "#1D4ED8",
+    "description": "Monitoreo físico de servidores IoT en tiempo real.",
+    "orientation": "portrait-primary",
+    "prefer_related_applications": false
+}
