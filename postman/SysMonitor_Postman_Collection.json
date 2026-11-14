@@ -1,0 +1,158 @@
+{
+  "info": {
+    "_postman_id": "a7f902e1-4c2b-49d0-9b18-sysmonitor2026",
+    "name": "SysMonitor IoT - API REST B2B (Seguridad Extrema)",
+    "description": "Colección oficial de pruebas para Postman del proyecto SysMonitor IoT.\n\nIncluye:\n1. Estado de la API\n2. Login Institucional (Jefe de TI / Operador / SuperAdmin)\n3. Login OAuth 2.0 (Google / Microsoft para Representantes)\n4. Verificación Multifactor (Google Authenticator - 6 dígitos) y obtención de JWT\n5. Alta de Empresas y Aprovisionamiento de Correos Institucionales\n6. Consulta de Racks y Configuración de Umbrales\n7. Ingesta de Telemetría IoT (ESP32) y Alertas Críticas",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost/PROYECTO-INTEGRADOR/api/v1/index.php",
+      "type": "string"
+    },
+    {
+      "key": "temp_token",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "jwt_token",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "iot_api_key",
+      "value": "iot_key_rack01_sysmonitor_2026",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "1. Healthcheck & Catálogo de Endpoints",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}?endpoint=status",
+          "host": ["{{base_url}}"],
+          "query": [{ "key": "endpoint", "value": "status" }]
+        }
+      }
+    },
+    {
+      "name": "2. Auth Paso 1 - Login Institucional (Jefe de TI)",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"correo\": \"alex.vargas@infraops.sysmonitor.com\",\n  \"contrasena\": \"InfraOps2026!\"\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}?endpoint=auth/login",
+          "host": ["{{base_url}}"],
+          "query": [{ "key": "endpoint", "value": "auth/login" }]
+        }
+      }
+    },
+    {
+      "name": "3. Auth Paso 1 Alternativo - OAuth Google/Microsoft (Representante)",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"provider\": \"google\",\n  \"nombre\": \"Carlos\",\n  \"apellidos\": \"Mendoza\",\n  \"correo\": \"carlos.mendoza@gmail.com\"\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}?endpoint=auth/oauth",
+          "host": ["{{base_url}}"],
+          "query": [{ "key": "endpoint", "value": "auth/oauth" }]
+        }
+      }
+    },
+    {
+      "name": "4. Auth Paso 2 - Verificar Código Google Authenticator (6 dígitos) -> Obtener JWT",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"correo\": \"alex.vargas@infraops.sysmonitor.com\",\n  \"codigo_mfa\": \"000000\"\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}?endpoint=auth/mfa-verify",
+          "host": ["{{base_url}}"],
+          "query": [{ "key": "endpoint", "value": "auth/mfa-verify" }]
+        }
+      }
+    },
+    {
+      "name": "5. Empresas - Registrar Nueva Institución (Representante)",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" },
+          { "key": "Authorization", "value": "Bearer {{jwt_token}}" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"nombre_empresa\": \"Universidad Tecnológica Metropolitana\",\n  \"rfc_nit\": \"UTM260510AA1\",\n  \"slug_dominio\": \"utm\",\n  \"sector\": \"Educación Superior & DataCenter\",\n  \"telefono\": \"+52 999 940 6100\"\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}?endpoint=companies",
+          "host": ["{{base_url}}"],
+          "query": [{ "key": "endpoint", "value": "companies" }]
+        }
+      }
+    },
+    {
+      "name": "6. Racks IoT - Consultar Estado y Sensores en Tiempo Real",
+      "request": {
+        "method": "GET",
+        "header": [
+          { "key": "Authorization", "value": "Bearer {{jwt_token}}" }
+        ],
+        "url": {
+          "raw": "{{base_url}}?endpoint=racks",
+          "host": ["{{base_url}}"],
+          "query": [{ "key": "endpoint", "value": "racks" }]
+        }
+      }
+    },
+    {
+      "name": "7. Telemetría IoT - Enviar Lectura de Sensor (Con X-API-Key de Placa IoT)",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" },
+          { "key": "X-API-Key", "value": "{{iot_api_key}}" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"temperatura\": 29.4,\n  \"humedad\": 47.5,\n  \"consumo_kw\": 1.45,\n  \"puerta_abierta\": 1,\n  \"voltaje\": 121.2\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}?endpoint=telemetry",
+          "host": ["{{base_url}}"],
+          "query": [{ "key": "endpoint", "value": "telemetry" }]
+        }
+      }
+    },
+    {
+      "name": "8. Alertas - Consultar Alertas Activas de la Institución",
+      "request": {
+        "method": "GET",
+        "header": [
+          { "key": "Authorization", "value": "Bearer {{jwt_token}}" }
+        ],
+        "url": {
+          "raw": "{{base_url}}?endpoint=alerts",
+          "host": ["{{base_url}}"],
+          "query": [{ "key": "endpoint", "value": "alerts" }]
+        }
+      }
+    }
+  ]
+}

@@ -1,16 +1,31 @@
-/* --- VARIABLES GLOBALES --- */
-:root {
-  --bg-main: #355d97;
-  --bg-surface: #142850;
-  --cyan-primary: #87CEEB;
-  --btn-hover-color: #5FB3D8;
-  --cyan-hover: #5FB3D8;
-  --text-main: #ffffff;
-  --text-muted: #B0C4DE;
-  --border-color: #1e3a5f;
+/* --- VARIABLES GLOBALES (MODO CLARO BLANCO Y AZUL POR DEFECTO + MODO OSCURO ACETERNITY UI) --- */
+:root,
+html[data-bs-theme="light"] {
+  --bg-main: #ffffff;
+  --bg-surface: #f8fafc;
+  --cyan-primary: #1d4ed8;
+  --btn-hover-color: #1e40af;
+  --cyan-hover: #2563eb;
+  --text-main: #0f172a;
+  --text-muted: #475569;
+  --border-color: #e2e8f0;
+  --navbar-bg: rgba(255, 255, 255, 0.88);
 
   --font-sans: "Inter", sans-serif;
   --font-mono: "Fira Code", monospace;
+}
+
+html[data-bs-theme="dark"],
+body.theme-dark {
+  --bg-main: #090d16;
+  --bg-surface: #111827;
+  --cyan-primary: #3b82f6;
+  --btn-hover-color: #2563eb;
+  --cyan-hover: #60a5fa;
+  --text-main: #f8fafc;
+  --text-muted: #94a3b8;
+  --border-color: #1e293b;
+  --navbar-bg: rgba(9, 13, 22, 0.85);
 }
 
 /* --- REINICIO GENERAL --- */
@@ -20,7 +35,9 @@ body {
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
   position: relative;
+  transition: background-color 0.25s ease, color 0.25s ease;
 }
+
 
 /* ==========================================================================
    AJUSTES GLOBALES DE SECCIONES Y SCROLL (Layout y Espaciado)
@@ -141,7 +158,8 @@ section {
 
 .nav-link {
   color: var(--text-muted) !important;
-  font-size: 0.9rem;
+  font-size: 0.92rem;
+  white-space: nowrap;
   transition: color 0.2s;
 }
 
@@ -152,7 +170,9 @@ section {
 .text-link {
   color: var(--text-muted);
   text-decoration: none;
-  font-size: 0.9rem;
+  font-size: 0.92rem;
+  white-space: nowrap;
+  flex-shrink: 0;
   transition: color 0.2s;
 }
 
@@ -160,58 +180,31 @@ section {
   color: var(--text-main);
 }
 
-/* --- BOTONES (Estilo P3R Override - V2) --- */
+/* --- BOTONES --- */
 .btn-cyan {
-  position: relative;
-  background-color: var(--cyan-primary);
-  /* Azul cielo pastel */
-  color: #000 !important;
-  font-weight: 700;
-  letter-spacing: 0.5px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  white-space: nowrap;
+  flex-shrink: 0;
+  background: linear-gradient(135deg, var(--cyan-primary) 0%, var(--cyan-hover) 100%);
+  color: #ffffff !important;
+  font-weight: 600;
   border: none;
-  border-radius: 4px;
-  padding: 12px 28px;
-  font-size: 0.95rem;
-  overflow: hidden;
-  z-index: 1;
-  /* Suavizamos la transición del texto para que no parpadee brusco */
-  transition:
-    color 0.2s ease-in-out,
-    transform 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94),
-    box-shadow 0.2s ease;
+  border-radius: 999px;
+  padding: 10px 22px;
+  font-size: 0.92rem;
+  line-height: 1.2;
+  text-decoration: none;
+  box-shadow: 0 8px 20px -4px rgba(29, 78, 216, 0.35);
+  transition: transform 0.2s ease, filter 0.2s ease;
 }
 
-/* La capa de color que atraviesa el botón */
-.btn-cyan::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: -10%;
-  width: 120%;
-  /* Extra ancho para que el grado de inclinación no deje huecos */
-  height: 100%;
-
-  /* NUEVO COLOR: Azul oscuro vibrante */
-  background-color: #132a4c;
-
-  /* TRUCO DE VACIADO: Cuando quitas el cursor, el punto de fuga es la DERECHA */
-  transform-origin: left;
-  transform: skewX(-15deg) scaleX(0);
-  transition: transform 1.2s cubic-bezier(0.19, 1, 0.22, 1);
-  z-index: -1;
-}
-
-/* Estado Hover general */
 .btn-cyan:hover {
-  color: #fff !important;
-  transform: scale(1.03);
-  /* Actualizamos el brillo de la sombra para que coincida con el azul eléctrico */
-}
-
-/* TRUCO DE LLENADO: Cuando pones el cursor, el punto de inicio es la IZQUIERDA */
-.btn-cyan:hover::before {
-  transform-origin: left;
-  transform: skewX(-15deg) scaleX(1);
+  color: #ffffff !important;
+  transform: translateY(-2px);
+  filter: brightness(1.06);
 }
 
 .btn-play {

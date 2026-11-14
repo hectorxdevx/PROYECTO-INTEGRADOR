@@ -1,0 +1,383 @@
+/* ==========================================================================
+   ACETERNITY UI + MINIMALIST BLUE DESIGN SYSTEM (SysMonitor IoT)
+   Paleta Blanco y Azul (Modo Claro por defecto) + Modo Oscuro Sincronizado
+   ========================================================================== */
+
+:root,
+html[data-bs-theme="light"] {
+    --ac-bg: #ffffff;
+    --ac-bg-secondary: #f8fafc;
+    --ac-surface: rgba(255, 255, 255, 0.90);
+    --ac-surface-solid: #ffffff;
+    --ac-input-bg: #f1f5f9;
+    --ac-border: #e2e8f0;
+    --ac-border-hover: #93c5fd;
+    --ac-primary: #1d4ed8;
+    --ac-primary-hover: #1e40af;
+    --ac-primary-light: #eff6ff;
+    --ac-accent: #2563eb;
+    --ac-cyan: #0284c7;
+    --ac-text: #0f172a;
+    --ac-text-secondary: #334155;
+    --ac-text-muted: #64748b;
+    --ac-dot-color: rgba(29, 78, 216, 0.13);
+    --ac-grid-color: rgba(29, 78, 216, 0.06);
+    --ac-spotlight-color: rgba(37, 99, 235, 0.08);
+    --ac-card-shadow: 0 10px 30px -5px rgba(15, 23, 42, 0.05), 0 4px 12px -2px rgba(29, 78, 216, 0.04);
+    --ac-btn-shadow: 0 10px 25px -4px rgba(29, 78, 216, 0.38);
+}
+
+html[data-bs-theme="dark"],
+body.theme-dark {
+    --ac-bg: #090d16;
+    --ac-bg-secondary: #0f172a;
+    --ac-surface: rgba(15, 23, 42, 0.85);
+    --ac-surface-solid: #111827;
+    --ac-input-bg: #1e293b;
+    --ac-border: #1e293b;
+    --ac-border-hover: #3b82f6;
+    --ac-primary: #3b82f6;
+    --ac-primary-hover: #2563eb;
+    --ac-primary-light: rgba(59, 130, 246, 0.15);
+    --ac-accent: #60a5fa;
+    --ac-cyan: #38bdf8;
+    --ac-text: #f8fafc;
+    --ac-text-secondary: #e2e8f0;
+    --ac-text-muted: #94a3b8;
+    --ac-dot-color: rgba(59, 130, 246, 0.18);
+    --ac-grid-color: rgba(59, 130, 246, 0.08);
+    --ac-spotlight-color: rgba(59, 130, 246, 0.14);
+    --ac-card-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.6), 0 0 20px -5px rgba(59, 130, 246, 0.12);
+    --ac-btn-shadow: 0 10px 28px -4px rgba(59, 130, 246, 0.45);
+}
+
+/* Base Body */
+body.ac-body {
+    background-color: var(--ac-bg) !important;
+    color: var(--ac-text) !important;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    transition: background-color 0.25s ease, color 0.25s ease;
+    position: relative;
+    min-height: 100vh;
+}
+
+/* Aceternity Dot Matrix & Grid Backgrounds */
+.ac-dot-bg {
+    position: fixed;
+    inset: 0;
+    z-index: -2;
+    background-color: var(--ac-bg);
+    background-image: radial-gradient(var(--ac-dot-color) 1.25px, transparent 1.25px);
+    background-size: 24px 24px;
+    pointer-events: none;
+}
+
+.ac-dot-bg::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 50% 25%, rgba(37, 99, 235, 0.09) 0%, transparent 65%);
+    pointer-events: none;
+}
+
+.ac-grid-bg {
+    position: fixed;
+    inset: 0;
+    z-index: -2;
+    background-color: var(--ac-bg-secondary);
+    background-image:
+        linear-gradient(to right, var(--ac-grid-color) 1px, transparent 1px),
+        linear-gradient(to bottom, var(--ac-grid-color) 1px, transparent 1px);
+    background-size: 36px 36px;
+    pointer-events: none;
+}
+
+/* Aceternity Bento Card con Spotlight interactivo */
+.ac-bento-card {
+    position: relative;
+    background: var(--ac-surface);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid var(--ac-border);
+    border-radius: 22px;
+    box-shadow: var(--ac-card-shadow);
+    overflow: hidden;
+    transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.28s ease, box-shadow 0.28s ease;
+}
+
+.ac-bento-card::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(
+        500px circle at var(--mouse-x, 50%) var(--mouse-y, 0%),
+        var(--ac-spotlight-color),
+        transparent 40%
+    );
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+    z-index: 0;
+}
+
+.ac-bento-card:hover {
+    transform: translateY(-4px);
+    border-color: var(--ac-border-hover);
+}
+
+.ac-bento-card:hover::before {
+    opacity: 1;
+}
+
+.ac-bento-card > * {
+    position: relative;
+    z-index: 1;
+}
+
+/* Aceternity Border Beam (Línea luminosa superior) */
+.ac-beam-top::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 15%;
+    right: 15%;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--ac-primary), var(--ac-cyan), transparent);
+    opacity: 0.75;
+}
+
+/* Floating Glass Navbar (Aceternity FloatingNav) */
+.ac-floating-nav {
+    background: var(--ac-surface) !important;
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--ac-border);
+    transition: all 0.25s ease;
+}
+
+/* Pill Brand Badge (Estilo Stitch Imagen 2 y 3) */
+.ac-brand-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--ac-surface-solid);
+    border: 1px solid var(--ac-border);
+    padding: 8px 16px;
+    border-radius: 999px;
+    box-shadow: 0 4px 12px rgba(15, 23, 42, 0.04);
+    font-weight: 700;
+    color: var(--ac-text);
+    text-decoration: none;
+}
+
+.ac-squircle-logo {
+    width: 64px;
+    height: 64px;
+    border-radius: 20px;
+    background: var(--ac-primary-light);
+    color: var(--ac-primary);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.75rem;
+    box-shadow: 0 8px 20px -4px rgba(29, 78, 216, 0.18);
+}
+
+/* Inputs Minimalist Blue (Estilo Stitch Imagen 2 y 3) */
+.ac-label {
+    display: block;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--ac-text-secondary);
+    margin-bottom: 6px;
+}
+
+.ac-input-wrapper {
+    display: flex;
+    align-items: center;
+    background: var(--ac-input-bg);
+    border: 1.5px solid transparent;
+    border-radius: 14px;
+    padding: 4px 14px;
+    transition: all 0.2s ease;
+}
+
+.ac-input-wrapper:focus-within {
+    background: var(--ac-surface-solid);
+    border-color: var(--ac-primary);
+    box-shadow: 0 0 0 4px rgba(29, 78, 216, 0.12);
+}
+
+.ac-input-wrapper i {
+    color: var(--ac-text-muted);
+    font-size: 1.05rem;
+    margin-right: 10px;
+}
+
+.ac-input {
+    width: 100%;
+    border: none !important;
+    background: transparent !important;
+    padding: 11px 4px;
+    color: var(--ac-text) !important;
+    font-size: 0.95rem;
+    outline: none !important;
+    box-shadow: none !important;
+}
+
+.ac-input::placeholder {
+    color: var(--ac-text-muted);
+    opacity: 0.75;
+}
+
+/* Botón Primario Azul Brillante (Estilo Stitch + Aceternity Shimmer) */
+.ac-btn-primary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    background: linear-gradient(135deg, var(--ac-primary) 0%, var(--ac-accent) 100%);
+    color: #ffffff !important;
+    font-weight: 600;
+    font-size: 0.95rem;
+    line-height: 1.2;
+    white-space: nowrap;
+    flex-shrink: 0;
+    padding: 12px 24px;
+    border-radius: 14px;
+    border: none;
+    box-shadow: var(--ac-btn-shadow);
+    cursor: pointer;
+    text-decoration: none;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
+}
+
+.ac-btn-primary:hover {
+    transform: translateY(-2px);
+    filter: brightness(1.06);
+    color: #ffffff !important;
+}
+
+.ac-btn-pill {
+    border-radius: 999px !important;
+}
+
+/* Botones OAuth Google y Microsoft (Estilo Stitch Imagen 3) */
+.ac-oauth-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+    background: var(--ac-surface-solid);
+    color: var(--ac-text) !important;
+    border: 1.5px solid var(--ac-border);
+    border-radius: 14px;
+    padding: 11px 18px;
+    font-weight: 600;
+    font-size: 0.92rem;
+    line-height: 1.2;
+    white-space: nowrap;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 6px rgba(15, 23, 42, 0.04);
+}
+
+.ac-oauth-btn:hover {
+    border-color: var(--ac-primary);
+    background: var(--ac-primary-light);
+    transform: translateY(-2px);
+}
+
+/* Conmutador Modo Claro / Modo Oscuro Universal (Esquina Superior Derecha) */
+.ac-theme-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    background: var(--ac-surface-solid);
+    color: var(--ac-primary) !important;
+    border: 1.5px solid var(--ac-border-hover);
+    border-radius: 999px;
+    padding: 8px 16px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    line-height: 1;
+    white-space: nowrap;
+    flex-shrink: 0;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(15, 23, 42, 0.06);
+    transition: all 0.2s ease;
+}
+
+.ac-theme-btn:hover {
+    background: var(--ac-primary);
+    border-color: var(--ac-primary);
+    color: #ffffff !important;
+}
+
+.ac-theme-corner {
+    position: fixed;
+    top: 16px;
+    right: 20px;
+    z-index: 1060;
+}
+
+/* Badges de Estado (Aceternity Pill Badges) */
+.ac-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 12px;
+    border-radius: 999px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.03em;
+}
+
+.ac-badge-blue {
+    background: var(--ac-primary-light);
+    color: var(--ac-primary);
+    border: 1px solid rgba(29, 78, 216, 0.2);
+}
+
+.ac-badge-success {
+    background: rgba(16, 185, 129, 0.12);
+    color: #059669;
+    border: 1px solid rgba(16, 185, 129, 0.25);
+}
+
+html[data-bs-theme="dark"] .ac-badge-success {
+    color: #34d399;
+}
+
+.ac-badge-warning {
+    background: rgba(245, 158, 11, 0.14);
+    color: #d97706;
+    border: 1px solid rgba(245, 158, 11, 0.28);
+}
+
+html[data-bs-theme="dark"] .ac-badge-warning {
+    color: #fbbf24;
+}
+
+.ac-badge-danger {
+    background: rgba(239, 68, 68, 0.14);
+    color: #dc2626;
+    border: 1px solid rgba(239, 68, 68, 0.28);
+}
+
+html[data-bs-theme="dark"] .ac-badge-danger {
+    color: #f87171;
+}
+
+/* Cajas de dígitos OTP / MFA */
+.ac-otp-input {
+    letter-spacing: 0.45em;
+    font-family: 'Fira Code', monospace;
+    font-size: 1.5rem;
+    font-weight: 700;
+    text-align: center;
+}

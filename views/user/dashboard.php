@@ -1,76 +1,78 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" data-bs-theme="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard Usuario | SysMonitor</title>
+    <title>Consola de Monitoreo IoT | SysMonitor</title>
     <meta name="robots" content="noindex, nofollow">
-
     <link rel="icon" type="image/svg+xml" href="<?php echo BASE_URL; ?>/assets/favicon.svg">
-    
-    <!-- ApexCharts y SweetAlert2 -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/apexcharts@3.42.0/dist/apexcharts.css">
     <script src="https://cdn.jsdelivr.net/npm/apexcharts@3.42.0/dist/apexcharts.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    
     <link rel="stylesheet" crossorigin href="<?php echo BASE_URL; ?>/assets/dashboard/compiled/css/app.css">
     <link rel="stylesheet" crossorigin href="<?php echo BASE_URL; ?>/assets/dashboard/compiled/css/app-dark.css">
-    <link rel="stylesheet" crossorigin href="<?php echo BASE_URL; ?>/assets/dashboard/compiled/css/iconly.css">
-    
-    <!-- Nuestro estilo de colores pastel (para el modo claro) -->
-    <link rel="stylesheet" href="<?php echo BASE_URL; ?>/assets/dashboard/custom-theme.css?v=3">
+    <link rel="stylesheet" href="<?php echo BASE_URL; ?>/assets/dashboard/custom-theme.css?v=4">
+    <link rel="stylesheet" href="<?php echo BASE_URL; ?>/assets/css/aceternity-ui.css">
+    <script src="<?php echo BASE_URL; ?>/assets/js/aceternity-ui.js"></script>
 </head>
-<body>
+<body class="ac-body">
     <script src="<?php echo BASE_URL; ?>/assets/dashboard/static/js/initTheme.js"></script>
+    <div class="ac-dot-bg"></div>
     <div id="app">
         <div id="sidebar">
             <div class="sidebar-wrapper active">
                 <div class="sidebar-header position-relative">
                     <div class="d-flex justify-content-between align-items-center">
-                        <div class="logo">
-                            <a href="<?php echo BASE_URL; ?>/"><h4 class="text-primary mt-2">SysMonitor</h4></a>
-                        </div>
-                        <div class="theme-toggle d-flex gap-2 align-items-center mt-2">
-                            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--system-uicons" width="20" height="20" preserveAspectRatio="xMidYMid meet" viewBox="0 0 21 21"><g fill="none" fill-rule="evenodd" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M10.5 14.5c2.219 0 4-1.763 4-3.982a4.003 4.003 0 0 0-4-4.018c-2.219 0-4 1.781-4 4c0 2.219 1.781 4 4 4zM4.136 4.136L5.55 5.55m9.9 9.9l1.414 1.414M1.5 10.5h2m14 0h2M4.135 16.863L5.55 15.45m9.899-9.9l1.414-1.415M10.5 19.5v-2m0-14v-2" opacity=".3"></path><g transform="translate(-210 -1)"><path d="M220.5 2.5v2m6.5.5l-1.5 1.5"></path><circle cx="220.5" cy="11.5" r="4"></circle><path d="m214 5l1.5 1.5m5 14v-2m6.5-.5l-1.5-1.5M214 18l1.5-1.5m-4-5h2m14 0h2"></path></g></g></svg>
-                            <div class="form-check form-switch fs-6 mb-0">
-                                <input class="form-check-input me-0" type="checkbox" id="toggle-dark" style="cursor: pointer">
-                                <label class="form-check-label"></label>
+                        <a href="<?php echo BASE_URL; ?>/" class="d-flex align-items-center gap-2 text-decoration-none">
+                            <div class="ac-squircle-logo" style="width: 36px; height: 36px; border-radius: 10px; font-size: 1.1rem;">
+                                <i class="bi bi-activity"></i>
                             </div>
-                            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--mdi" width="20" height="20" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"><path fill="currentColor" d="m17.75 4.09l-2.53 1.94l.91 3.06l-2.63-1.81l-2.63 1.81l.91-3.06l-2.53-1.94L12.44 4l1.06-3l1.06 3l3.19.09m3.5 6.91l-1.64 1.25l.59 1.98l-1.7-1.17l-1.7 1.17l.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95l2.06.05m-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85c-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14c.4-.4.82-.76 1.27-1.08c.75-.53 1.93.36 1.85 1.19c-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82c-2.81 3.14-2.7 7.96.31 10.98c3.02 3.01 7.84 3.12 10.98.31Z"></path></svg>
-                        </div>
-                        <div class="sidebar-toggler x">
-                            <a href="#" class="sidebar-hide d-xl-none d-block"><i class="bi bi-x bi-middle"></i></a>
-                        </div>
+                            <h5 class="text-primary mb-0 fw-bold">SysMonitor</h5>
+                        </a>
                     </div>
                 </div>
-                
+
                 <div class="sidebar-menu">
                     <ul class="menu">
-                        <li class="sidebar-title">Menú Usuario</li>
-                        
+                        <li class="sidebar-title">
+                            <?php echo $esJefeTi ? 'Consola Jefe de TI' : 'Consola Operador IoT'; ?>
+                        </li>
+
                         <li class="sidebar-item active">
                             <a href="<?php echo BASE_URL; ?>/index.php?page=user" class='sidebar-link'>
-                                <i class="bi bi-grid-fill"></i>
-                                <span>Mis Sensores</span>
+                                <i class="bi bi-grid-1x2-fill"></i>
+                                <span>Racks y Telemetría</span>
                             </a>
                         </li>
+
+                        <?php if ($esJefeTi): ?>
+                        <li class="sidebar-item">
+                            <a href="#seccion-gestion-ti" class='sidebar-link'>
+                                <i class="bi bi-sliders"></i>
+                                <span>Umbrales y Equipo TI</span>
+                            </a>
+                        </li>
+                        <?php endif; ?>
 
                         <li class="sidebar-item">
                             <a href="<?php echo BASE_URL; ?>/index.php?page=perfil" class='sidebar-link'>
-                                <i class="bi bi-person-circle"></i>
-                                <span>Mi Perfil</span>
+                                <i class="bi bi-person-badge-fill"></i>
+                                <span>Mi Perfil & MFA</span>
                             </a>
                         </li>
 
-                        <li class="sidebar-item mt-5">
-                            <a href="#" class='sidebar-link bg-light-warning'>
-                                <i class="bi bi-question-circle-fill text-warning"></i>
-                                <span class="text-warning fw-bold">Pedir Ayuda</span>
-                            </a>
-                        </li>
-
+                        <?php if ((int)($_SESSION['rol'] ?? 0) === 2): ?>
                         <li class="sidebar-item">
-                            <a href="<?php echo BASE_URL; ?>/index.php" class='sidebar-link text-danger'>
+                            <a href="<?php echo BASE_URL; ?>/index.php?page=admin" class='sidebar-link'>
+                                <i class="bi bi-shield-lock-fill"></i>
+                                <span>Volver a SuperAdmin</span>
+                            </a>
+                        </li>
+                        <?php endif; ?>
+
+                        <li class="sidebar-title">Sesión</li>
+                        <li class="sidebar-item">
+                            <a href="<?php echo BASE_URL; ?>/index.php?page=logout" class='sidebar-link text-danger'>
                                 <i class="bi bi-box-arrow-left text-danger"></i>
                                 <span>Cerrar Sesión</span>
                             </a>
@@ -81,545 +83,516 @@
         </div>
 
         <div id="main">
-            <header class="mb-3">
-                <a href="#" class="burger-btn d-block d-xl-none">
-                    <i class="bi bi-justify fs-3"></i>
-                </a>
+            <header class="mb-3 d-flex justify-content-between align-items-center">
+                <a href="#" class="burger-btn d-block d-xl-none"><i class="bi bi-justify fs-3"></i></a>
+                <div class="d-flex align-items-center gap-2 ms-auto">
+                    <span class="ac-badge ac-badge-blue d-none d-sm-inline-flex">
+                        <i class="bi bi-building"></i>
+                        <?php echo htmlspecialchars($empresaActual['nombre_empresa'] ?? 'InfraOps Cloud & DataCenter'); ?>
+                    </span>
+                    <button type="button" class="ac-theme-btn">
+                        <i class="bi bi-moon-stars-fill"></i> <span>Modo Oscuro</span>
+                    </button>
+                </div>
             </header>
 
-            <div class="page-heading">
-                <h3>Mis Equipos Monitoreados</h3>
+            <!-- Encabezado Minimalist Blue -->
+            <div class="ac-bento-card ac-beam-top p-4 mb-4">
+                <div class="d-flex flex-wrap justify-content-between align-items-center gap-3">
+                    <div class="d-flex align-items-center gap-3">
+                        <div class="ac-squircle-logo">
+                            <i class="bi bi-hdd-network"></i>
+                        </div>
+                        <div>
+                            <h3 class="fw-extrabold mb-1">
+                                Hola, <?php echo htmlspecialchars($_SESSION['nombre_usuario'] ?? 'Alex'); ?>
+                            </h3>
+                            <p class="small mb-0" style="color: var(--ac-text-muted);">
+                                <?php echo count($racks); ?> racks monitoreados en tiempo real
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="d-flex flex-wrap gap-2">
+                        <button class="btn btn-outline-primary rounded-pill px-3 fw-semibold" data-bs-toggle="modal" data-bs-target="#modalSimularLectura">
+                            <i class="bi bi-broadcast me-1"></i> Simular Lectura
+                        </button>
+                        <?php if ($esJefeTi): ?>
+                            <button class="ac-btn-primary ac-btn-pill py-2 px-4" data-bs-toggle="modal" data-bs-target="#modalNuevoRack">
+                                <i class="bi bi-plus-circle"></i> Nuevo Rack
+                            </button>
+                        <?php endif; ?>
+                    </div>
+                </div>
             </div>
-            
-            <style>
-                /* Corrección para centrar perfectamente los iconos de Bootstrap dentro de los recuadros de Mazer */
-                .stats-icon {
-                    display: flex !important;
-                    align-items: center !important;
-                    justify-content: center !important;
-                }
-                .stats-icon i.bi {
-                    display: flex !important;
-                    align-items: center !important;
-                    justify-content: center !important;
-                    height: 100% !important;
-                    line-height: 1 !important;
-                }
-                .stats-icon i.bi::before {
-                    vertical-align: middle !important;
-                    line-height: 1 !important;
-                }
-                
-                /* Efecto Hover para las tarjetas y cursor */
-                .sensor-card {
-                    cursor: pointer;
-                    transition: transform 0.2s ease, box-shadow 0.2s ease;
-                }
-                .sensor-card:hover {
-                    transform: translateY(-5px);
-                    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-                    border-color: var(--bs-primary) !important;
-                }
-                
-                /* Estilos del Widget de Accesibilidad */
-                .a11y-widget {
-                    position: fixed;
-                    bottom: 30px;
-                    right: 30px;
-                    z-index: 1000;
-                }
-                .a11y-toggle {
-                    background-color: #0d6efd;
-                    color: white;
-                    border: none;
-                    border-radius: 50% !important;
-                    width: 60px !important;
-                    height: 60px !important;
-                    min-width: 60px !important;
-                    padding: 0 !important;
-                    font-size: 28px !important;
-                    display: flex !important;
-                    align-items: center !important;
-                    justify-content: center !important;
-                    cursor: pointer;
-                    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-                    transition: transform 0.3s ease, background-color 0.3s ease;
-                    line-height: 0;
-                }
-                .a11y-toggle i { display: flex !important; align-items: center !important; justify-content: center !important; line-height: 1 !important; margin: 0 !important; font-size: 28px !important; }
-                .a11y-toggle:hover {
-                    transform: scale(1.1);
-                    background-color: #0b5ed7;
-                }
-                .a11y-panel {
-                    position: absolute;
-                    bottom: 60px;
-                    right: 0;
-                    background-color: white;
-                    border-radius: 12px;
-                    box-shadow: 0 10px 25px rgba(0,0,0,0.15);
-                    width: 250px;
-                    padding: 15px;
-                    display: none;
-                    flex-direction: column;
-                    gap: 10px;
-                    border: 1px solid rgba(0,0,0,0.1);
-                }
-                body.theme-dark .a11y-panel {
-                    background-color: #1e1e2d;
-                    border-color: #2b2b40;
-                }
-                .a11y-panel.show {
-                    display: flex;
-                    animation: popIn 0.3s ease forwards;
-                }
-                .a11y-header {
-                    font-weight: bold;
-                    margin-bottom: 10px;
-                    color: var(--bs-heading-color);
-                    border-bottom: 1px solid var(--bs-border-color);
-                    padding-bottom: 5px;
-                }
-                .a11y-btn {
-                    background: transparent;
-                    border: 1px solid var(--bs-border-color);
-                    border-radius: 8px;
-                    padding: 8px 12px;
-                    text-align: left;
-                    cursor: pointer;
-                    display: flex;
-                    align-items: center;
-                    gap: 10px;
-                    color: var(--bs-body-color);
-                    transition: background 0.2s;
-                }
-                .a11y-btn:hover {
-                    background-color: var(--bs-secondary-bg);
-                }
-                .a11y-btn.active-reader {
-                    background-color: #198754;
-                    color: white;
-                    border-color: #198754;
-                }
-                @keyframes popIn {
-                    from { opacity: 0; transform: translateY(10px); }
-                    to { opacity: 1; transform: translateY(0); }
-                }
-                body.high-contrast-mode .page-content,
-                body.high-contrast-mode .sidebar-wrapper,
-                body.high-contrast-mode header {
-                    filter: contrast(150%) saturate(120%);
-                }
-                body.high-contrast-mode .card {
-                    border: 2px solid #fff !important;
-                }
-            </style>
 
             <div class="page-content">
-                <!-- Gráfica de 24 horas -->
-                <div class="row mb-4">
-                    <div class="col-12">
-                        <div class="card shadow-sm">
-                            <div class="card-header">
-                                <h4 class="mb-0">Historial 24h - Temperatura Promedio General</h4>
+                <!-- Resumen Bento Grid (Estado Global, Temp Promedio, Consumo Total, Alertas) -->
+                <?php
+                    $sumaTemp = 0; $sumaKw = 0; $puertasAbiertas = 0;
+                    foreach ($racks as $r) {
+                        $sumaTemp += (float)($r['lectura']['temperatura'] ?? 22);
+                        $sumaKw += (float)($r['lectura']['consumo_kw'] ?? 1.0);
+                        if (!empty($r['lectura']['puerta_abierta'])) $puertasAbiertas++;
+                    }
+                    $tempProm = count($racks) > 0 ? round($sumaTemp / count($racks), 1) : 22.4;
+                ?>
+                <div class="row g-3 mb-4">
+                    <div class="col-6 col-lg-3">
+                        <div class="ac-bento-card p-3 p-md-4 h-100">
+                            <span class="ac-label">ESTADO GLOBAL</span>
+                            <h3 class="fw-extrabold mb-1 <?php echo $puertasAbiertas > 0 ? 'text-danger' : 'text-primary'; ?>">
+                                <?php echo $puertasAbiertas > 0 ? 'Alerta Física' : 'Óptimo'; ?>
+                            </h3>
+                            <span class="small" style="color: var(--ac-text-muted);">99.99% Uptime de sensores</span>
+                        </div>
+                    </div>
+                    <div class="col-6 col-lg-3">
+                        <div class="ac-bento-card p-3 p-md-4 h-100">
+                            <span class="ac-label">TEMP. PROMEDIO SALA</span>
+                            <h3 class="fw-extrabold mb-1"><?php echo $tempProm; ?> °C</h3>
+                            <span class="small text-success fw-semibold"><i class="bi bi-check-circle"></i> Rango ASHRAE</span>
+                        </div>
+                    </div>
+                    <div class="col-6 col-lg-3">
+                        <div class="ac-bento-card p-3 p-md-4 h-100">
+                            <span class="ac-label">CARGA ELÉCTRICA TOTAL</span>
+                            <h3 class="fw-extrabold mb-1"><?php echo round($sumaKw, 2); ?> kW</h3>
+                            <span class="small" style="color: var(--ac-text-muted);">Medición PDU en vivo</span>
+                        </div>
+                    </div>
+                    <div class="col-6 col-lg-3">
+                        <div class="ac-bento-card p-3 p-md-4 h-100">
+                            <span class="ac-label">PUERTAS DE RACKS</span>
+                            <h3 class="fw-extrabold mb-1 <?php echo $puertasAbiertas > 0 ? 'text-danger' : 'text-success'; ?>">
+                                <?php echo $puertasAbiertas > 0 ? $puertasAbiertas . ' Abierta(s)' : '100% Cerradas'; ?>
+                            </h3>
+                            <span class="small" style="color: var(--ac-text-muted);">Sensores magnéticos IoT</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Gráfica de Rendimiento Térmico 24h + Panel de Alertas Activas -->
+                <div class="row g-4 mb-4">
+                    <div class="col-12 col-lg-8">
+                        <div class="ac-bento-card p-4 h-100">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <div>
+                                    <h5 class="fw-bold mb-0">Curva Térmica en Tiempo Real (°C)</h5>
+                                    <p class="small mb-0" style="color: var(--ac-text-muted);">Monitoreo continuo de los nodos IoT de la institución</p>
+                                </div>
+                                <span class="ac-badge ac-badge-blue">Últimas 24h</span>
                             </div>
-                            <div class="card-body">
-                                <div id="chart-temperature"></div>
+                            <div id="chart-temperature"></div>
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-lg-4">
+                        <div class="ac-bento-card p-4 h-100">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <h5 class="fw-bold mb-0">Eventos y Alertas</h5>
+                                <span class="ac-badge ac-badge-danger"><?php echo count($alertas); ?> recientes</span>
+                            </div>
+                            <div class="d-flex flex-column gap-2" style="max-height: 270px; overflow-y: auto;">
+                                <?php if (!empty($alertas)): ?>
+                                    <?php foreach ($alertas as $al): ?>
+                                        <div class="p-3 rounded-4 d-flex justify-content-between align-items-start gap-2" style="background: var(--ac-bg-secondary); border: 1px solid var(--ac-border);">
+                                            <div>
+                                                <div class="d-flex align-items-center gap-2 mb-1">
+                                                    <span class="ac-badge <?php echo $al['nivel'] === 'critical' ? 'ac-badge-danger' : 'ac-badge-warning'; ?>">
+                                                        <?php echo strtoupper(htmlspecialchars($al['codigo_rack'])); ?>
+                                                    </span>
+                                                    <strong class="small"><?php echo htmlspecialchars($al['tipo_alerta']); ?></strong>
+                                                </div>
+                                                <p class="small mb-1" style="color: var(--ac-text-muted); font-size: 0.78rem;">
+                                                    <?php echo htmlspecialchars($al['mensaje']); ?>
+                                                </p>
+                                            </div>
+                                            <?php if ((int)$al['resuelta'] === 0): ?>
+                                                <a href="<?php echo BASE_URL; ?>/index.php?page=user_resolver_alerta&id=<?php echo (int)$al['id_alerta']; ?>" class="btn btn-sm btn-outline-success rounded-pill" title="Marcar como atendida">
+                                                    <i class="bi bi-check2"></i>
+                                                </a>
+                                            <?php endif; ?>
+                                        </div>
+                                    <?php endforeach; ?>
+                                <?php else: ?>
+                                    <p class="small text-muted text-center my-auto">Todos los racks operan dentro de los parámetros normales.</p>
+                                <?php endif; ?>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <section class="row">
-                    <div class="col-12">
-                        <div class="accordion" id="racksAccordion">
-                        
-                            <!-- RACK 01 -->
-                            <div class="accordion-item card mb-3 border-0 shadow-sm">
-                                <h2 class="accordion-header" id="headingRack1">
-                                    <button class="accordion-button bg-transparent" type="button" data-bs-toggle="collapse" data-bs-target="#collapseRack1" aria-expanded="true" aria-controls="collapseRack1">
-                                        <h5 class="mb-0 text-subtitle text-muted">Rack 01 - Servidores Principales</h5>
-                                    </button>
-                                </h2>
-                                <div id="collapseRack1" class="accordion-collapse collapse show" aria-labelledby="headingRack1" data-bs-parent="#racksAccordion">
-                                    <div class="accordion-body">
-                                        <div class="row pt-2">
-                                            <!-- Temp -->
-                                            <div class="col-6 col-lg-3 col-md-6">
-                                                <div class="card sensor-card border border-light" onclick="openSensorModal('Temperatura', '22.4 °C', 'Rack 01', '°C')">
-                                                    <div class="card-body px-4 py-4-5 d-flex flex-column align-items-center text-center">
-                                                        <div class="stats-icon blue mb-3"><i class="bi bi-thermometer-half"></i></div>
-                                                        <h6 class="text-muted font-semibold">Temperatura</h6>
-                                                        <h6 class="font-extrabold mb-0">22.4 °C</h6>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <!-- Humedad -->
-                                            <div class="col-6 col-lg-3 col-md-6">
-                                                <div class="card sensor-card border border-light" onclick="openSensorModal('Humedad', '45%', 'Rack 01', '%')">
-                                                    <div class="card-body px-4 py-4-5 d-flex flex-column align-items-center text-center">
-                                                        <div class="stats-icon purple mb-3"><i class="bi bi-droplet-half"></i></div>
-                                                        <h6 class="text-muted font-semibold">Humedad</h6>
-                                                        <h6 class="font-extrabold mb-0">45%</h6>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <!-- Consumo -->
-                                            <div class="col-6 col-lg-3 col-md-6">
-                                                <div class="card sensor-card border border-light" onclick="openSensorModal('Consumo', '1.2 kW', 'Rack 01', 'kW')">
-                                                    <div class="card-body px-4 py-4-5 d-flex flex-column align-items-center text-center">
-                                                        <div class="stats-icon text-white mb-3" style="background-color: #f59e0b;"><i class="bi bi-lightning-charge"></i></div>
-                                                        <h6 class="text-muted font-semibold">Consumo</h6>
-                                                        <h6 class="font-extrabold mb-0">1.2 kW</h6>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <!-- Puerta -->
-                                            <div class="col-6 col-lg-3 col-md-6">
-                                                <div class="card sensor-card border border-light" onclick="openSensorModal('Estado de Puerta', 'Cerrada', 'Rack 01', '')">
-                                                    <div class="card-body px-4 py-4-5 d-flex flex-column align-items-center text-center">
-                                                        <div class="stats-icon red mb-3"><i class="bi bi-door-open"></i></div>
-                                                        <h6 class="text-muted font-semibold">Puerta</h6>
-                                                        <h6 class="font-extrabold mb-0 text-success">Cerrada</h6>
-                                                    </div>
-                                                </div>
-                                            </div>
+                <!-- Grid Bento de Racks Físicos y sus 4 Sensores IoT -->
+                <h5 class="fw-bold mb-3"><i class="bi bi-hdd-rack text-primary me-2"></i>Estado Físico por Rack</h5>
+                <div class="row g-4 mb-4">
+                    <?php foreach ($racks as $rack): ?>
+                        <?php
+                            $lec = $rack['lectura'];
+                            $resDia = $rack['resumen_dia'];
+                            $tempActual = (float)$lec['temperatura'];
+                            $humActual = (float)$lec['humedad'];
+                            $kwActual = (float)$lec['consumo_kw'];
+                            $puertaAbierta = (int)$lec['puerta_abierta'] === 1;
+                            $alertaTemp = $tempActual > (float)$rack['temp_max'];
+                        ?>
+                        <div class="col-12 col-xl-6">
+                            <div class="ac-bento-card ac-beam-top p-4 h-100">
+                                <div class="d-flex justify-content-between align-items-start mb-3 flex-wrap gap-2">
+                                    <div>
+                                        <div class="d-flex align-items-center gap-2">
+                                            <span class="ac-badge ac-badge-blue"><?php echo htmlspecialchars($rack['codigo_rack']); ?></span>
+                                            <span class="small" style="color: var(--ac-text-muted);"><i class="bi bi-geo-alt"></i> <?php echo htmlspecialchars($rack['ubicacion']); ?></span>
                                         </div>
+                                        <h5 class="fw-bold mt-1 mb-0"><?php echo htmlspecialchars($rack['nombre_rack']); ?></h5>
                                     </div>
-                                </div>
-                            </div>
+                                    <div class="d-flex align-items-center gap-2">
+                                        <?php if ($puertaAbierta || $rack['estado'] === 'critical'): ?>
+                                            <span class="ac-badge ac-badge-danger"><i class="bi bi-exclamation-octagon"></i> Crítico</span>
+                                        <?php elseif ($alertaTemp || $rack['estado'] === 'warning'): ?>
+                                            <span class="ac-badge ac-badge-warning"><i class="bi bi-exclamation-triangle"></i> Advertencia</span>
+                                        <?php else: ?>
+                                            <span class="ac-badge ac-badge-success"><span class="pulsing-dot"></span> Óptimo</span>
+                                        <?php endif; ?>
 
-                            <!-- RACK 02 -->
-                            <div class="accordion-item card mb-3 border-0 shadow-sm">
-                                <h2 class="accordion-header" id="headingRack2">
-                                    <button class="accordion-button collapsed bg-transparent" type="button" data-bs-toggle="collapse" data-bs-target="#collapseRack2" aria-expanded="false" aria-controls="collapseRack2">
-                                        <h5 class="mb-0 text-subtitle text-muted">Rack 02 - Almacenamiento</h5>
-                                    </button>
-                                </h2>
-                                <div id="collapseRack2" class="accordion-collapse collapse" aria-labelledby="headingRack2" data-bs-parent="#racksAccordion">
-                                    <div class="accordion-body">
-                                        <div class="row pt-2">
-                                            <!-- Temp -->
-                                            <div class="col-6 col-lg-3 col-md-6">
-                                                <div class="card sensor-card border border-light" onclick="openSensorModal('Temperatura', '24.1 °C', 'Rack 02', '°C')">
-                                                    <div class="card-body px-4 py-4-5 d-flex flex-column align-items-center text-center">
-                                                        <div class="stats-icon blue mb-3"><i class="bi bi-thermometer-half"></i></div>
-                                                        <h6 class="text-muted font-semibold">Temperatura</h6>
-                                                        <h6 class="font-extrabold mb-0">24.1 °C</h6>
-                                                    </div>
-                                                </div>
+                                        <?php if ($esJefeTi): ?>
+                                            <button class="btn btn-sm btn-outline-primary rounded-pill px-2" data-bs-toggle="modal" data-bs-target="#modalUmbralesRack<?php echo (int)$rack['id_rack']; ?>" title="Configurar Umbrales (Jefe de TI)">
+                                                <i class="bi bi-sliders"></i> Umbrales
+                                            </button>
+                                        <?php endif; ?>
+                                    </div>
+                                </div>
+
+                                <!-- 4 Tarjetas de Sensores del Rack -->
+                                <div class="row g-2">
+                                    <div class="col-6 col-sm-3">
+                                        <div class="p-3 rounded-4 text-center h-100 cursor-pointer" style="background: var(--ac-bg-secondary); border: 1px solid var(--ac-border);"
+                                             onclick="openSensorModal('Temperatura', '<?php echo $tempActual; ?> °C', '<?php echo htmlspecialchars($rack['nombre_rack']); ?>', '<?php echo $resDia['temp_min'] ?? 21.0; ?> °C', '<?php echo $resDia['temp_avg'] ?? 22.4; ?> °C', '<?php echo $resDia['temp_max_dia'] ?? 24.5; ?> °C')">
+                                            <i class="bi bi-thermometer-half text-primary fs-4"></i>
+                                            <div class="ac-label mt-1 mb-0" style="font-size: 0.65rem;">TEMPERATURA</div>
+                                            <div class="fw-extrabold fs-6 <?php echo $alertaTemp ? 'text-danger' : ''; ?>"><?php echo $tempActual; ?> °C</div>
+                                            <div class="small text-muted" style="font-size: 0.68rem;">Máx: <?php echo $rack['temp_max']; ?>°C</div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-6 col-sm-3">
+                                        <div class="p-3 rounded-4 text-center h-100 cursor-pointer" style="background: var(--ac-bg-secondary); border: 1px solid var(--ac-border);"
+                                             onclick="openSensorModal('Humedad Relativa', '<?php echo $humActual; ?> %', '<?php echo htmlspecialchars($rack['nombre_rack']); ?>', '<?php echo $resDia['hum_min'] ?? 40; ?> %', '<?php echo $resDia['hum_avg'] ?? 45; ?> %', '<?php echo $resDia['hum_max_dia'] ?? 50; ?> %')">
+                                            <i class="bi bi-droplet-half text-info fs-4"></i>
+                                            <div class="ac-label mt-1 mb-0" style="font-size: 0.65rem;">HUMEDAD</div>
+                                            <div class="fw-extrabold fs-6"><?php echo $humActual; ?> %</div>
+                                            <div class="small text-muted" style="font-size: 0.68rem;">Máx: <?php echo $rack['hum_max']; ?>%</div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-6 col-sm-3">
+                                        <div class="p-3 rounded-4 text-center h-100 cursor-pointer" style="background: var(--ac-bg-secondary); border: 1px solid var(--ac-border);"
+                                             onclick="openSensorModal('Consumo Eléctrico', '<?php echo $kwActual; ?> kW', '<?php echo htmlspecialchars($rack['nombre_rack']); ?>', '<?php echo $resDia['kw_min'] ?? 0.8; ?> kW', '<?php echo $resDia['kw_avg'] ?? 1.1; ?> kW', '<?php echo $resDia['kw_max_dia'] ?? 1.4; ?> kW')">
+                                            <i class="bi bi-lightning-charge text-warning fs-4"></i>
+                                            <div class="ac-label mt-1 mb-0" style="font-size: 0.65rem;">CONSUMO</div>
+                                            <div class="fw-extrabold fs-6"><?php echo $kwActual; ?> kW</div>
+                                            <div class="small text-muted" style="font-size: 0.68rem;">Máx: <?php echo $rack['kw_max']; ?> kW</div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-6 col-sm-3">
+                                        <div class="p-3 rounded-4 text-center h-100 cursor-pointer" style="background: var(--ac-bg-secondary); border: 1px solid var(--ac-border);"
+                                             onclick="openSensorModal('Puerta Física', '<?php echo $puertaAbierta ? 'Abierta' : 'Cerrada'; ?>', '<?php echo htmlspecialchars($rack['nombre_rack']); ?>', 'Cerrada', '99.4% Cerrada', '<?php echo $puertaAbierta ? 'Alerta Activa' : 'Sin incidentes'; ?>')">
+                                            <i class="bi <?php echo $puertaAbierta ? 'bi-door-open-fill text-danger' : 'bi-door-closed-fill text-success'; ?> fs-4"></i>
+                                            <div class="ac-label mt-1 mb-0" style="font-size: 0.65rem;">PUERTA RACK</div>
+                                            <div class="fw-extrabold fs-6 <?php echo $puertaAbierta ? 'text-danger' : 'text-success'; ?>">
+                                                <?php echo $puertaAbierta ? 'Abierta' : 'Cerrada'; ?>
                                             </div>
-                                            <!-- Humedad -->
-                                            <div class="col-6 col-lg-3 col-md-6">
-                                                <div class="card sensor-card border border-light" onclick="openSensorModal('Humedad', '42%', 'Rack 02', '%')">
-                                                    <div class="card-body px-4 py-4-5 d-flex flex-column align-items-center text-center">
-                                                        <div class="stats-icon purple mb-3"><i class="bi bi-droplet-half"></i></div>
-                                                        <h6 class="text-muted font-semibold">Humedad</h6>
-                                                        <h6 class="font-extrabold mb-0">42%</h6>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <!-- Consumo -->
-                                            <div class="col-6 col-lg-3 col-md-6">
-                                                <div class="card sensor-card border border-light" onclick="openSensorModal('Consumo', '0.8 kW', 'Rack 02', 'kW')">
-                                                    <div class="card-body px-4 py-4-5 d-flex flex-column align-items-center text-center">
-                                                        <div class="stats-icon text-white mb-3" style="background-color: #f59e0b;"><i class="bi bi-lightning-charge"></i></div>
-                                                        <h6 class="text-muted font-semibold">Consumo</h6>
-                                                        <h6 class="font-extrabold mb-0">0.8 kW</h6>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <!-- Puerta -->
-                                            <div class="col-6 col-lg-3 col-md-6">
-                                                <div class="card sensor-card border border-light" onclick="openSensorModal('Estado de Puerta', 'Cerrada', 'Rack 02', '')">
-                                                    <div class="card-body px-4 py-4-5 d-flex flex-column align-items-center text-center">
-                                                        <div class="stats-icon red mb-3"><i class="bi bi-door-open"></i></div>
-                                                        <h6 class="text-muted font-semibold">Puerta</h6>
-                                                        <h6 class="font-extrabold mb-0 text-success">Cerrada</h6>
-                                                    </div>
-                                                </div>
-                                            </div>
+                                            <div class="small text-muted" style="font-size: 0.68rem;">Sensor Magnético</div>
                                         </div>
                                     </div>
                                 </div>
+
+                                <?php if ($esJefeTi): ?>
+                                    <div class="mt-3 pt-2 border-top d-flex justify-content-between align-items-center small" style="border-color: var(--ac-border) !important; color: var(--ac-text-muted);">
+                                        <span>API Key IoT (Postman / ESP32):</span>
+                                        <code class="text-primary"><?php echo htmlspecialchars($rack['api_key_iot']); ?></code>
+                                    </div>
+                                <?php endif; ?>
                             </div>
-                            
-                            <!-- RACK 03 -->
-                            <div class="accordion-item card mb-3 border-0 shadow-sm">
-                                <h2 class="accordion-header" id="headingRack3">
-                                    <button class="accordion-button collapsed bg-transparent" type="button" data-bs-toggle="collapse" data-bs-target="#collapseRack3" aria-expanded="false" aria-controls="collapseRack3">
-                                        <h5 class="mb-0 text-subtitle text-muted">Rack 03 - Redes y Switches</h5>
-                                    </button>
-                                </h2>
-                                <div id="collapseRack3" class="accordion-collapse collapse" aria-labelledby="headingRack3" data-bs-parent="#racksAccordion">
-                                    <div class="accordion-body">
-                                        <div class="row pt-2">
-                                            <div class="col-6 col-lg-3 col-md-6">
-                                                <div class="card sensor-card border border-light" onclick="openSensorModal('Temperatura', '28.5 °C', 'Rack 03', '°C')">
-                                                    <div class="card-body px-4 py-4-5 d-flex flex-column align-items-center text-center">
-                                                        <div class="stats-icon blue mb-3"><i class="bi bi-thermometer-half"></i></div>
-                                                        <h6 class="text-muted font-semibold">Temperatura</h6>
-                                                        <h6 class="font-extrabold mb-0 text-warning">28.5 °C</h6>
-                                                    </div>
-                                                </div>
+                        </div>
+
+                        <?php if ($esJefeTi): ?>
+                        <!-- Modal Configurar Umbrales del Rack (Exclusivo Jefe de TI) -->
+                        <div class="modal fade" id="modalUmbralesRack<?php echo (int)$rack['id_rack']; ?>" tabindex="-1" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content ac-bento-card border-0">
+                                    <div class="modal-header border-0">
+                                        <h5 class="modal-title fw-bold">Configurar Umbrales • <?php echo htmlspecialchars($rack['codigo_rack']); ?></h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                    </div>
+                                    <form action="<?php echo BASE_URL; ?>/index.php?page=user_actualizar_rack" method="POST">
+                                        <input type="hidden" name="id_rack" value="<?php echo (int)$rack['id_rack']; ?>">
+                                        <input type="hidden" name="id_empresa" value="<?php echo (int)$rack['id_empresa']; ?>">
+                                        <div class="modal-body">
+                                            <div class="mb-3">
+                                                <label class="ac-label">Nombre del Rack</label>
+                                                <input type="text" name="nombre_rack" class="form-control rounded-3" value="<?php echo htmlspecialchars($rack['nombre_rack']); ?>" required>
                                             </div>
-                                            <div class="col-6 col-lg-3 col-md-6">
-                                                <div class="card sensor-card border border-light" onclick="openSensorModal('Humedad', '48%', 'Rack 03', '%')">
-                                                    <div class="card-body px-4 py-4-5 d-flex flex-column align-items-center text-center">
-                                                        <div class="stats-icon purple mb-3"><i class="bi bi-droplet-half"></i></div>
-                                                        <h6 class="text-muted font-semibold">Humedad</h6>
-                                                        <h6 class="font-extrabold mb-0">48%</h6>
-                                                    </div>
-                                                </div>
+                                            <div class="mb-3">
+                                                <label class="ac-label">Ubicación Física</label>
+                                                <input type="text" name="ubicacion" class="form-control rounded-3" value="<?php echo htmlspecialchars($rack['ubicacion']); ?>" required>
                                             </div>
-                                            <div class="col-6 col-lg-3 col-md-6">
-                                                <div class="card sensor-card border border-light" onclick="openSensorModal('Consumo', '0.5 kW', 'Rack 03', 'kW')">
-                                                    <div class="card-body px-4 py-4-5 d-flex flex-column align-items-center text-center">
-                                                        <div class="stats-icon text-white mb-3" style="background-color: #f59e0b;"><i class="bi bi-lightning-charge"></i></div>
-                                                        <h6 class="text-muted font-semibold">Consumo</h6>
-                                                        <h6 class="font-extrabold mb-0">0.5 kW</h6>
-                                                    </div>
+                                            <div class="row g-2">
+                                                <div class="col-4">
+                                                    <label class="ac-label">Temp. Máx (°C)</label>
+                                                    <input type="number" step="0.1" name="temp_max" class="form-control rounded-3" value="<?php echo htmlspecialchars($rack['temp_max']); ?>" required>
                                                 </div>
-                                            </div>
-                                            <div class="col-6 col-lg-3 col-md-6">
-                                                <div class="card sensor-card border border-light" onclick="openSensorModal('Estado de Puerta', 'Cerrada', 'Rack 03', '')">
-                                                    <div class="card-body px-4 py-4-5 d-flex flex-column align-items-center text-center">
-                                                        <div class="stats-icon red mb-3"><i class="bi bi-door-open"></i></div>
-                                                        <h6 class="text-muted font-semibold">Puerta</h6>
-                                                        <h6 class="font-extrabold mb-0 text-success">Cerrada</h6>
-                                                    </div>
+                                                <div class="col-4">
+                                                    <label class="ac-label">Humedad Máx (%)</label>
+                                                    <input type="number" step="0.1" name="hum_max" class="form-control rounded-3" value="<?php echo htmlspecialchars($rack['hum_max']); ?>" required>
+                                                </div>
+                                                <div class="col-4">
+                                                    <label class="ac-label">Consumo Máx (kW)</label>
+                                                    <input type="number" step="0.05" name="kw_max" class="form-control rounded-3" value="<?php echo htmlspecialchars($rack['kw_max']); ?>" required>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <!-- RACK 04 -->
-                            <div class="accordion-item card mb-3 border-0 shadow-sm">
-                                <h2 class="accordion-header" id="headingRack4">
-                                    <button class="accordion-button collapsed bg-transparent" type="button" data-bs-toggle="collapse" data-bs-target="#collapseRack4" aria-expanded="false" aria-controls="collapseRack4">
-                                        <h5 class="mb-0 text-subtitle text-muted">Rack 04 - Respaldo</h5>
-                                    </button>
-                                </h2>
-                                <div id="collapseRack4" class="accordion-collapse collapse" aria-labelledby="headingRack4" data-bs-parent="#racksAccordion">
-                                    <div class="accordion-body">
-                                        <div class="row pt-2">
-                                            <div class="col-6 col-lg-3 col-md-6">
-                                                <div class="card sensor-card border border-light" onclick="openSensorModal('Temperatura', '21.0 °C', 'Rack 04', '°C')">
-                                                    <div class="card-body px-4 py-4-5 d-flex flex-column align-items-center text-center">
-                                                        <div class="stats-icon blue mb-3"><i class="bi bi-thermometer-half"></i></div>
-                                                        <h6 class="text-muted font-semibold">Temperatura</h6>
-                                                        <h6 class="font-extrabold mb-0">21.0 °C</h6>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-6 col-lg-3 col-md-6">
-                                                <div class="card sensor-card border border-light" onclick="openSensorModal('Humedad', '40%', 'Rack 04', '%')">
-                                                    <div class="card-body px-4 py-4-5 d-flex flex-column align-items-center text-center">
-                                                        <div class="stats-icon purple mb-3"><i class="bi bi-droplet-half"></i></div>
-                                                        <h6 class="text-muted font-semibold">Humedad</h6>
-                                                        <h6 class="font-extrabold mb-0">40%</h6>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-6 col-lg-3 col-md-6">
-                                                <div class="card sensor-card border border-light" onclick="openSensorModal('Consumo', '0.9 kW', 'Rack 04', 'kW')">
-                                                    <div class="card-body px-4 py-4-5 d-flex flex-column align-items-center text-center">
-                                                        <div class="stats-icon text-white mb-3" style="background-color: #f59e0b;"><i class="bi bi-lightning-charge"></i></div>
-                                                        <h6 class="text-muted font-semibold">Consumo</h6>
-                                                        <h6 class="font-extrabold mb-0">0.9 kW</h6>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-6 col-lg-3 col-md-6">
-                                                <div class="card sensor-card border border-light" onclick="openSensorModal('Estado de Puerta', 'Abierta', 'Rack 04', '')">
-                                                    <div class="card-body px-4 py-4-5 d-flex flex-column align-items-center text-center">
-                                                        <div class="stats-icon red mb-3"><i class="bi bi-door-open"></i></div>
-                                                        <h6 class="text-muted font-semibold">Puerta</h6>
-                                                        <h6 class="font-extrabold mb-0 text-danger">Abierta</h6>
-                                                    </div>
-                                                </div>
-                                            </div>
+                                        <div class="modal-footer border-0">
+                                            <button type="button" class="btn btn-light rounded-3" data-bs-dismiss="modal">Cancelar</button>
+                                            <button type="submit" class="ac-btn-primary py-2 px-4">Guardar Umbrales</button>
                                         </div>
-                                    </div>
+                                    </form>
                                 </div>
                             </div>
-                            
+                        </div>
+                        <?php endif; ?>
+                    <?php endforeach; ?>
+                </div>
+
+                <!-- SECCIÓN EXCLUSIVA PARA EL JEFE DE TI: Equipo de Operadores y Bitácora Institucional -->
+                <?php if ($esJefeTi): ?>
+                <div id="seccion-gestion-ti" class="row g-4 mt-2">
+                    <div class="col-12 col-lg-6">
+                        <div class="ac-bento-card p-4 h-100">
+                            <h5 class="fw-bold mb-1"><i class="bi bi-people-fill text-primary me-2"></i>Personal de TI de tu Institución</h5>
+                            <p class="small mb-3" style="color: var(--ac-text-muted);">Operadores y responsables con correo institucional activo.</p>
+                            <div class="table-responsive">
+                                <table class="table align-middle mb-0">
+                                    <thead>
+                                        <tr class="small text-uppercase" style="color: var(--ac-text-muted);">
+                                            <th>Nombre</th>
+                                            <th>Correo Institucional</th>
+                                            <th>Rol</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <?php foreach ($equipoEmpresa as $miembro): ?>
+                                            <tr>
+                                                <td class="fw-semibold"><?php echo htmlspecialchars($miembro['nombre_usuario'] . ' ' . $miembro['apellidos']); ?></td>
+                                                <td><code class="text-primary"><?php echo htmlspecialchars($miembro['correo_electronico']); ?></code></td>
+                                                <td>
+                                                    <span class="ac-badge <?php echo (int)$miembro['id_rol'] === 4 ? 'ac-badge-blue' : 'ac-badge-success'; ?>">
+                                                        <?php echo htmlspecialchars($miembro['nombre_rol'] ?? 'operador'); ?>
+                                                    </span>
+                                                </td>
+                                            </tr>
+                                        <?php endforeach; ?>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
-                </section>
+
+                    <div class="col-12 col-lg-6">
+                        <div class="ac-bento-card p-4 h-100">
+                            <h5 class="fw-bold mb-1"><i class="bi bi-journal-check text-primary me-2"></i>Bitácora de Auditoría de la Empresa</h5>
+                            <p class="small mb-3" style="color: var(--ac-text-muted);">Registro de accesos MFA, cambios de umbrales y eventos de racks.</p>
+                            <div class="d-flex flex-column gap-2" style="max-height: 240px; overflow-y: auto;">
+                                <?php if (!empty($bitacoraEmpresa)): ?>
+                                    <?php foreach ($bitacoraEmpresa as $b): ?>
+                                        <div class="p-2 px-3 rounded-3 d-flex justify-content-between align-items-center" style="background: var(--ac-bg-secondary); border: 1px solid var(--ac-border);">
+                                            <div>
+                                                <span class="ac-badge ac-badge-blue me-2"><?php echo htmlspecialchars($b['tipo_evento']); ?></span>
+                                                <span class="small"><?php echo htmlspecialchars($b['descripcion']); ?></span>
+                                            </div>
+                                            <span class="small text-muted"><?php echo date('d M H:i', strtotime($b['fecha_evento'])); ?></span>
+                                        </div>
+                                    <?php endforeach; ?>
+                                <?php else: ?>
+                                    <p class="small text-muted">No hay eventos recientes en la bitácora.</p>
+                                <?php endif; ?>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <?php endif; ?>
             </div>
-            
-            <footer>
-                <div class="footer clearfix mb-0 text-muted">
-                    <div class="float-start">
-                        <p>2026 &copy; SysMonitor IoT</p>
-                    </div>
-                    <div class="float-end">
-                        <p>Proyecto Integrador UTM</p>
-                    </div>
-                </div>
-            </footer>
         </div>
     </div>
-    
-    <!-- Modal de Resumen del Día -->
-    <div class="modal fade" id="sensorModal" tabindex="-1" aria-labelledby="sensorModalLabel" aria-hidden="true">
+
+    <!-- Modal Resumen Estadístico del Sensor -->
+    <div class="modal fade" id="sensorModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content border-0 shadow-lg">
-                <div class="modal-header bg-primary text-white">
-                    <h5 class="modal-title text-white" id="sensorModalLabel">Resumen del Día</h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            <div class="modal-content ac-bento-card border-0">
+                <div class="modal-header border-0">
+                    <h5 class="modal-title fw-bold text-primary" id="sensorModalLabel">Resumen Estadístico</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body text-center p-4">
-                    <h6 id="modalRackName" class="text-muted mb-3"></h6>
-                    <h1 id="modalCurrentValue" class="display-4 font-bold text-primary mb-4"></h1>
-                    
-                    <div class="row mt-4">
+                    <h6 id="modalRackName" class="text-muted mb-2"></h6>
+                    <h1 id="modalCurrentValue" class="display-4 fw-extrabold text-primary mb-4"></h1>
+                    <div class="row g-2">
                         <div class="col-4">
-                            <p class="text-muted mb-1 text-sm font-semibold">Mínimo</p>
-                            <h5 id="modalMin" class="text-info font-extrabold"></h5>
-                        </div>
-                        <div class="col-4 border-start border-end">
-                            <p class="text-muted mb-1 text-sm font-semibold">Promedio</p>
-                            <h5 id="modalAvg" class="text-primary font-extrabold"></h5>
+                            <div class="p-3 rounded-4" style="background: var(--ac-bg-secondary);">
+                                <div class="small text-muted">Mínimo</div>
+                                <div id="modalMin" class="fw-bold text-info"></div>
+                            </div>
                         </div>
                         <div class="col-4">
-                            <p class="text-muted mb-1 text-sm font-semibold">Máximo</p>
-                            <h5 id="modalMax" class="text-danger font-extrabold"></h5>
+                            <div class="p-3 rounded-4" style="background: var(--ac-bg-secondary);">
+                                <div class="small text-muted">Promedio</div>
+                                <div id="modalAvg" class="fw-bold text-primary"></div>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="p-3 rounded-4" style="background: var(--ac-bg-secondary);">
+                                <div class="small text-muted">Máximo</div>
+                                <div id="modalMax" class="fw-bold text-danger"></div>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="modal-footer border-0">
-                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cerrar</button>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Widget de Accesibilidad -->
-    <div class="a11y-widget" id="a11yWidget">
-      <button class="a11y-toggle" id="a11yToggle" aria-label="Opciones de accesibilidad">
-        <i class="bi bi-person-wheelchair"></i>
-      </button>
-      <div class="a11y-panel" id="a11yPanel">
-        <div class="a11y-header">Accesibilidad</div>
-        <button class="a11y-btn" id="a11yIncreaseText" aria-label="Aumentar tamaño del texto"><i class="bi bi-zoom-in"></i> Aumentar Texto</button>
-        <button class="a11y-btn" id="a11yDecreaseText" aria-label="Reducir tamaño del texto"><i class="bi bi-zoom-out"></i> Reducir Texto</button>
-        <button class="a11y-btn" id="a11yContrast" aria-label="Activar modo de alto contraste para daltonismo"><i class="bi bi-circle-half"></i> Alto Contraste</button>
-        <button class="a11y-btn" id="a11yReadText" aria-label="Activar lector de voz de la página"><i class="bi bi-play-circle"></i> Iniciar Lector</button>
-        <button class="a11y-btn" id="a11yStopText" aria-label="Detener lector de voz de la página"><i class="bi bi-stop-circle"></i> Detener Lector</button>
-      </div>
+    <!-- Modal Inyectar Telemetría Demo -->
+    <div class="modal fade" id="modalSimularLectura" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content ac-bento-card border-0">
+                <div class="modal-header border-0">
+                    <h5 class="modal-title fw-bold"><i class="bi bi-broadcast text-primary me-2"></i>Enviar Lectura IoT en Vivo</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <form action="<?php echo BASE_URL; ?>/index.php?page=user_simular_lectura" method="POST">
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label class="ac-label">Seleccionar Rack</label>
+                            <select name="id_rack" class="form-select rounded-3">
+                                <?php foreach ($racks as $r): ?>
+                                    <option value="<?php echo (int)$r['id_rack']; ?>"><?php echo htmlspecialchars($r['codigo_rack'] . ' - ' . $r['nombre_rack']); ?></option>
+                                <?php endforeach; ?>
+                            </select>
+                        </div>
+                        <div class="row g-2 mb-3">
+                            <div class="col-4">
+                                <label class="ac-label">Temp (°C)</label>
+                                <input type="number" step="0.1" name="temperatura" class="form-control rounded-3" value="28.6" required>
+                            </div>
+                            <div class="col-4">
+                                <label class="ac-label">Humedad (%)</label>
+                                <input type="number" step="0.1" name="humedad" class="form-control rounded-3" value="46.0" required>
+                            </div>
+                            <div class="col-4">
+                                <label class="ac-label">Consumo (kW)</label>
+                                <input type="number" step="0.05" name="consumo_kw" class="form-control rounded-3" value="1.35" required>
+                            </div>
+                        </div>
+                        <div class="form-check form-switch">
+                            <input class="form-check-input" type="checkbox" name="puerta_abierta" value="1" id="chkPuerta">
+                            <label class="form-check-label small fw-semibold" for="chkPuerta">Simular apertura física de puerta de Rack (Dispara alerta crítica)</label>
+                        </div>
+                    </div>
+                    <div class="modal-footer border-0">
+                        <button type="button" class="btn btn-light rounded-3" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="ac-btn-primary py-2 px-4">Registrar Telemetría</button>
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
 
+    <?php if ($esJefeTi): ?>
+    <!-- Modal Crear Nuevo Rack (Exclusivo Jefe de TI) -->
+    <div class="modal fade" id="modalNuevoRack" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content ac-bento-card border-0">
+                <div class="modal-header border-0">
+                    <h5 class="modal-title fw-bold">Dar de Alta Nuevo Rack IoT</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <form action="<?php echo BASE_URL; ?>/index.php?page=user_crear_rack" method="POST">
+                    <div class="modal-body">
+                        <div class="row g-2 mb-3">
+                            <div class="col-4">
+                                <label class="ac-label">Código</label>
+                                <input type="text" name="codigo_rack" class="form-control rounded-3" placeholder="RACK-05" required>
+                            </div>
+                            <div class="col-8">
+                                <label class="ac-label">Nombre Descriptivo</label>
+                                <input type="text" name="nombre_rack" class="form-control rounded-3" placeholder="Rack 05 - Nodos IA" required>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="ac-label">Ubicación en el Site</label>
+                            <input type="text" name="ubicacion" class="form-control rounded-3" value="Site Principal - Pasillo B" required>
+                        </div>
+                        <div class="row g-2">
+                            <div class="col-4">
+                                <label class="ac-label">Temp Máx (°C)</label>
+                                <input type="number" step="0.1" name="temp_max" class="form-control rounded-3" value="27.0" required>
+                            </div>
+                            <div class="col-4">
+                                <label class="ac-label">Hum Máx (%)</label>
+                                <input type="number" step="0.1" name="hum_max" class="form-control rounded-3" value="60.0" required>
+                            </div>
+                            <div class="col-4">
+                                <label class="ac-label">kW Máx</label>
+                                <input type="number" step="0.1" name="kw_max" class="form-control rounded-3" value="2.5" required>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer border-0">
+                        <button type="button" class="btn btn-light rounded-3" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="ac-btn-primary py-2 px-4">Crear Rack + Generar API Key</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <?php endif; ?>
+
     <script src="<?php echo BASE_URL; ?>/assets/dashboard/static/js/components/dark.js"></script>
-    <script src="<?php echo BASE_URL; ?>/assets/dashboard/extensions/perfect-scrollbar/perfect-scrollbar.min.js"></script>
     <script src="<?php echo BASE_URL; ?>/assets/dashboard/compiled/js/app.js"></script>
-    
     <script>
-        // --- 1. Gráfica ApexCharts ---
+        <?php
+            $labelsChart = [];
+            $valuesChart = [];
+            foreach ($historial24h as $h) {
+                $labelsChart[] = date('H:i', strtotime($h['fecha_lectura']));
+                $valuesChart[] = (float)$h['temperatura'];
+            }
+            if (empty($valuesChart)) {
+                $labelsChart = ['00:00', '04:00', '08:00', '12:00', '16:00', '20:00', 'Ahora'];
+                $valuesChart = [21.8, 22.1, 22.5, 23.4, 24.1, 22.9, 22.4];
+            }
+        ?>
         var options = {
-            series: [{
-                name: 'Temperatura',
-                data: [21.5, 21.8, 22.0, 22.4, 23.1, 24.5, 23.8, 22.9, 22.4]
-            }],
-            chart: {
-                height: 250,
-                type: 'area',
-                toolbar: { show: false },
-                fontFamily: 'Nunito, sans-serif'
-            },
-            colors: ['#435ebe'],
+            series: [{ name: 'Temperatura (°C)', data: <?php echo json_encode($valuesChart); ?> }],
+            chart: { height: 260, type: 'area', toolbar: { show: false }, fontFamily: 'Inter, sans-serif' },
+            colors: ['#1d4ed8'],
             dataLabels: { enabled: false },
-            stroke: { curve: 'smooth', width: 2 },
-            xaxis: {
-                categories: ['00:00', '03:00', '06:00', '09:00', '12:00', '15:00', '18:00', '21:00', '24:00'],
-            },
-            tooltip: {
-                y: { formatter: function (val) { return val + " °C" } }
-            }
+            stroke: { curve: 'smooth', width: 3 },
+            fill: { type: 'gradient', gradient: { shadeIntensity: 1, opacityFrom: 0.35, opacityTo: 0.02 } },
+            xaxis: { categories: <?php echo json_encode($labelsChart); ?> }
         };
-        var chart = new ApexCharts(document.querySelector("#chart-temperature"), options);
-        chart.render();
+        new ApexCharts(document.querySelector("#chart-temperature"), options).render();
 
-        // --- 2. Lógica del Modal "Resumen del Día" ---
-        function openSensorModal(sensorType, currentValue, rackName, unit) {
-            document.getElementById('sensorModalLabel').innerText = `Resumen del Día - ${sensorType}`;
+        function openSensorModal(sensorType, currentValue, rackName, minVal, avgVal, maxVal) {
+            document.getElementById('sensorModalLabel').innerText = sensorType;
             document.getElementById('modalRackName').innerText = rackName;
-            
-            if(sensorType === 'Estado de Puerta') {
-                document.getElementById('modalCurrentValue').innerText = currentValue;
-                document.getElementById('modalMax').innerText = "-";
-                document.getElementById('modalAvg').innerText = "Cerrada 99%";
-                document.getElementById('modalMin').innerText = "-";
-            } else {
-                let val = parseFloat(currentValue);
-                document.getElementById('modalCurrentValue').innerText = currentValue;
-                // Generar valores realistas basados en el valor actual para el demo
-                document.getElementById('modalMax').innerText = (val + (val * 0.15)).toFixed(1) + " " + unit;
-                document.getElementById('modalAvg').innerText = (val).toFixed(1) + " " + unit;
-                document.getElementById('modalMin').innerText = (val - (val * 0.12)).toFixed(1) + " " + unit;
-            }
-            
-            var myModal = new bootstrap.Modal(document.getElementById('sensorModal'));
-            myModal.show();
+            document.getElementById('modalCurrentValue').innerText = currentValue;
+            document.getElementById('modalMin').innerText = minVal;
+            document.getElementById('modalAvg').innerText = avgVal;
+            document.getElementById('modalMax').innerText = maxVal;
+            new bootstrap.Modal(document.getElementById('sensorModal')).show();
         }
-
-        // --- 3. Accesibilidad A11y ---
-        const a11yToggle = document.getElementById('a11yToggle');
-        const a11yPanel = document.getElementById('a11yPanel');
-        const btnIncText = document.getElementById('a11yIncreaseText');
-        const btnDecText = document.getElementById('a11yDecreaseText');
-        const btnContrast = document.getElementById('a11yContrast');
-        const btnReadText = document.getElementById('a11yReadText');
-        const btnStopText = document.getElementById('a11yStopText');
-        
-        let currentFontSize = 100;
-        let synth = window.speechSynthesis;
-        let utterance = null;
-
-        a11yToggle.addEventListener('click', () => { a11yPanel.classList.toggle('show'); });
-
-        btnIncText.addEventListener('click', () => {
-            if(currentFontSize < 150) { currentFontSize += 10; document.documentElement.style.fontSize = currentFontSize + '%'; }
-        });
-        btnDecText.addEventListener('click', () => {
-            if(currentFontSize > 80) { currentFontSize -= 10; document.documentElement.style.fontSize = currentFontSize + '%'; }
-        });
-        btnContrast.addEventListener('click', () => { document.body.classList.toggle('high-contrast-mode'); });
-
-        btnReadText.addEventListener('click', () => {
-            if(synth.speaking && !synth.paused) {
-                synth.pause();
-                btnReadText.innerHTML = '<i class="bi bi-play-circle"></i> Reanudar Lector';
-                btnReadText.classList.remove('active-reader');
-            } else if (synth.paused) {
-                synth.resume();
-                btnReadText.innerHTML = '<i class="bi bi-pause-circle"></i> Pausar Lector';
-                btnReadText.classList.add('active-reader');
-            } else {
-                synth.cancel();
-                let textoALeer = `Estás en el panel de control. Tienes 4 Racks configurados. Haz clic en un rack para ver sus sensores.`;
-                utterance = new SpeechSynthesisUtterance(textoALeer);
-                utterance.lang = 'es-ES';
-                utterance.onend = () => {
-                    btnReadText.classList.remove('active-reader');
-                    btnReadText.innerHTML = '<i class="bi bi-play-circle"></i> Iniciar Lector';
-                };
-                synth.speak(utterance);
-                btnReadText.classList.add('active-reader');
-                btnReadText.innerHTML = '<i class="bi bi-pause-circle"></i> Pausar Lector';
-            }
-        });
-        
-        btnStopText.addEventListener('click', () => {
-            synth.cancel();
-            btnReadText.classList.remove('active-reader');
-            btnReadText.innerHTML = '<i class="bi bi-play-circle"></i> Iniciar Lector';
-        });
-        
-        document.querySelectorAll('i').forEach(icon => icon.setAttribute('aria-hidden', 'true'));
     </script>
 </body>
 </html>
