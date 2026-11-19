@@ -183,6 +183,17 @@ body.ac-body {
     box-shadow: 0 8px 20px -4px rgba(29, 78, 216, 0.18);
 }
 
+.ac-squircle-logo i,
+.ac-input-wrapper i,
+.ac-theme-btn i {
+    width: auto !important;
+    height: auto !important;
+    line-height: 1 !important;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
 /* Inputs Minimalist Blue (Estilo Stitch Imagen 2 y 3) */
 .ac-label {
     display: block;
@@ -310,9 +321,34 @@ body.ac-body {
     cursor: pointer;
     box-shadow: 0 4px 12px rgba(15, 23, 42, 0.06);
     transition: all 0.2s ease;
+    max-width: 100%;
+}
+
+@media (max-width: 480px) {
+    .ac-theme-btn span {
+        display: none;
+    }
+    .ac-theme-btn {
+        padding: 8px 12px;
+    }
 }
 
 .ac-theme-btn:hover {
+    background: var(--ac-primary);
+    border-color: var(--ac-primary);
+    color: #ffffff !important;
+}
+
+html[data-bs-theme="dark"] .ac-theme-btn,
+body.theme-dark .ac-theme-btn {
+    background: rgba(30, 41, 59, 0.92);
+    color: #93c5fd !important;
+    border-color: rgba(96, 165, 250, 0.45);
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
+}
+
+html[data-bs-theme="dark"] .ac-theme-btn:hover,
+body.theme-dark .ac-theme-btn:hover {
     background: var(--ac-primary);
     border-color: var(--ac-primary);
     color: #ffffff !important;

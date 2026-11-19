@@ -12,6 +12,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 require_once __DIR__ . '/../../config/config.php';
 require_once __DIR__ . '/../../models/Usuario.php';
 require_once __DIR__ . '/../../models/Empresa.php';
+require_once __DIR__ . '/../../models/MailerService.php';
 require_once __DIR__ . '/../../models/Sensor.php';
 require_once __DIR__ . '/../../models/TOTP.php';
 require_once __DIR__ . '/../../models/JwtHelper.php';
@@ -51,6 +52,33 @@ function requireJwtAuth(): array {
     return $payload;
 }
 
+function resolverIdEmpresaUsuario(array $auth, array $body = [], ?Empresa $empresaModel = null): ?int {
+    $idRol = (int)($auth['id_rol'] ?? 0);
+    if ($idRol === 2) {
+        if (isset($_GET['id_empresa']) && $_GET['id_empresa'] !== '') {
+            return (int)$_GET['id_empresa'];
+        }
+        if (!empty($body['id_empresa'])) {
+            return (int)$body['id_empresa'];
+        }
+    }
+    $usuarioModel = new Usuario();
+    $userDb = $usuarioModel->obtenerPorId((int)$auth['id_usuario']);
+    if ($userDb && !empty($userDb['id_empresa'])) {
+        return (int)$userDb['id_empresa'];
+    }
+    if ($empresaModel !== null) {
+        $emp = $empresaModel->obtenerPorRepresentante((int)$auth['id_usuario']);
+        if ($emp && !empty($emp['id_empresa'])) {
+            return (int)$emp['id_empresa'];
+        }
+    }
+    if (!empty($auth['id_empresa'])) {
+        return (int)$auth['id_empresa'];
+    }
+    return $idRol === 3 ? null : 1;
+}
+
 // Determinar el endpoint solicitado (soporta ?endpoint=racks o /api/v1/racks)
 $endpoint = $_GET['endpoint'] ?? '';
 if (empty($endpoint)) {
@@ -79,14 +107,16 @@ switch ($endpoint) {
             'security_model' => 'Zero-Trust B2B (OAuth 2.0 + Google Authenticator TOTP + JWT + IoT API Keys)',
             'timestamp' => date('c'),
             'endpoints_disponibles' => [
-                'POST /api/v1/index.php?endpoint=auth/login' => 'Autenticación institucional (Jefe de TI, Operador, SuperAdmin)',
+                'POST /api/v1/index.php?endpoint=auth/login' => 'Autenticación institucional (Jefe de TI, Operador, SuperAdmin, Representante)',
                 'POST /api/v1/index.php?endpoint=auth/oauth' => 'Autenticación OAuth 2.0 Google/Microsoft (Representantes)',
+                'POST /api/v1/index.php?endpoint=auth/register-company' => 'Registro unificado de Representante + Empresa + Plan B2B + Jefe de TI',
                 'POST /api/v1/index.php?endpoint=auth/mfa-verify' => 'Verificación de 6 dígitos Google Authenticator y emisión de JWT',
-                'GET  /api/v1/index.php?endpoint=companies' => 'Listar empresas registradas',
-                'POST /api/v1/index.php?endpoint=companies' => 'Registrar nueva empresa (Representante)',
+                'GET  /api/v1/index.php?endpoint=companies' => 'Listar empresas registradas (?mine=1 para resumen del representante y correos SMTP)',
+                'POST /api/v1/index.php?endpoint=companies' => 'Registrar nueva empresa con Plan B2B (Representante)',
+                'POST /api/v1/index.php?endpoint=companies/upgrade' => 'Cambiar plan B2B de la empresa (starter, corporate, enterprise)',
                 'POST /api/v1/index.php?endpoint=companies/provision-email' => 'Solicitar o generar correo institucional (@empresa.sysmonitor.com)',
                 'GET  /api/v1/index.php?endpoint=racks' => 'Obtener racks y sensores IoT en tiempo real',
-                'POST /api/v1/index.php?endpoint=racks' => 'Crear rack o actualizar umbrales de alerta (Jefe de TI)',
+                'POST /api/v1/index.php?endpoint=racks' => 'Crear rack o actualizar umbrales de alerta (Jefe de TI / Representante)',
                 'GET  /api/v1/index.php?endpoint=telemetry' => 'Historial de lecturas de sensores',
                 'POST /api/v1/index.php?endpoint=telemetry' => 'Enviar lectura desde placa IoT (ESP32) o Postman',
                 'GET  /api/v1/index.php?endpoint=alerts' => 'Listar alertas críticas y advertencias',
@@ -141,7 +171,8 @@ switch ($endpoint) {
                 'rol' => $usuario['nombre_rol'] ?? 'operador',
                 'id_rol' => (int)$usuario['id_rol'],
                 'id_empresa' => $usuario['id_empresa'] ? (int)$usuario['id_empresa'] : null,
-                'empresa' => $usuario['nombre_empresa'] ?? 'SysMonitor Global'
+                'empresa' => $usuario['nombre_empresa'] ?? 'SysMonitor Global',
+                'slug_dominio' => $usuario['slug_dominio'] ?? null
             ]
         ]);
         break;
@@ -180,9 +211,138 @@ switch ($endpoint) {
             'codigo_totp_actual_para_pruebas_postman' => TOTP::obtenerCodigo($usuario['mfa_secret']),
             'usuario' => [
                 'id_usuario' => (int)$usuario['id_usuario'],
+                'id_empresa' => $usuario['id_empresa'] ? (int)$usuario['id_empresa'] : null,
+                'nombre' => $usuario['nombre_usuario'] . ' ' . $usuario['apellidos'],
                 'correo' => $usuario['correo_electronico'],
                 'rol' => 'representante',
-                'id_rol' => 3
+                'id_rol' => 3,
+                'empresa' => $usuario['nombre_empresa'] ?? 'Sin empresa asignada'
+            ]
+        ]);
+        break;
+
+    // ----------------------------------------------------------
+    // 3B. REGISTRO UNIFICADO: REPRESENTANTE + EMPRESA + PLAN B2B + JEFE TI
+    // ----------------------------------------------------------
+    case 'auth/register-company':
+        if ($method !== 'POST') {
+            jsonResponse(405, ['ok' => false, 'error' => 'Método no permitido. Usa POST.']);
+        }
+
+        $nombre = trim((string)($body['nombre'] ?? ''));
+        $apellidos = trim((string)($body['apellidos'] ?? ''));
+        $correo = strtolower(trim((string)($body['correo'] ?? $body['email'] ?? '')));
+        $contrasena = trim((string)($body['contrasena'] ?? $body['password'] ?? ''));
+        $nombreEmpresa = trim((string)($body['nombre_empresa'] ?? ''));
+        $rfcNit = strtoupper(trim((string)($body['rfc_nit'] ?? '')));
+        $slugDominio = strtolower(trim((string)($body['slug_dominio'] ?? '')));
+        $sector = trim((string)($body['sector'] ?? 'DataCenter & Cloud'));
+        if ($sector === '') {
+            $sector = 'DataCenter & Cloud';
+        }
+        $telefono = trim((string)($body['telefono'] ?? ''));
+        $planSuscripcion = strtolower(trim((string)($body['plan_suscripcion'] ?? $body['plan'] ?? 'corporate')));
+
+        $planesValidos = defined('B2B_PLANS') ? array_keys(B2B_PLANS) : ['starter', 'corporate', 'enterprise'];
+
+        if ($nombre === '' || $apellidos === '' || $correo === '' || $contrasena === '' || $nombreEmpresa === '' || $rfcNit === '' || $slugDominio === '' || $telefono === '') {
+            jsonResponse(400, [
+                'ok' => false,
+                'error' => 'Todos los campos del representante y de la empresa son obligatorios.'
+            ]);
+        }
+
+        if (!filter_var($correo, FILTER_VALIDATE_EMAIL)) {
+            jsonResponse(400, ['ok' => false, 'error' => 'El correo electrónico proporcionado no es válido.']);
+        }
+
+        if (strlen($contrasena) < 8) {
+            jsonResponse(400, ['ok' => false, 'error' => 'La contraseña debe tener al menos 8 caracteres.']);
+        }
+
+        if (!in_array($planSuscripcion, $planesValidos, true)) {
+            jsonResponse(400, [
+                'ok' => false,
+                'error' => 'Plan de suscripción inválido. Valores permitidos: starter, corporate, enterprise.'
+            ]);
+        }
+
+        $usuarioModel = new Usuario();
+        if ($usuarioModel->existeCorreo($correo)) {
+            jsonResponse(409, ['ok' => false, 'error' => 'Ya existe una cuenta registrada con ese correo electrónico.']);
+        }
+
+        $passwordHash = password_hash($contrasena, PASSWORD_BCRYPT);
+        $creadoRep = $usuarioModel->guardar($nombre, $apellidos, $correo, $passwordHash, 3, null, 'institucional', null);
+        if (!$creadoRep) {
+            jsonResponse(500, ['ok' => false, 'error' => 'No fue posible crear la cuenta del representante.']);
+        }
+
+        $usuario = $usuarioModel->obtenerPorCorreo($correo);
+        if (!$usuario) {
+            jsonResponse(500, ['ok' => false, 'error' => 'No fue posible recuperar la cuenta recién creada.']);
+        }
+
+        $empresaModel = new Empresa();
+        $registroEmpresa = $empresaModel->registrarEmpresa(
+            (int)$usuario['id_usuario'],
+            $nombreEmpresa,
+            $rfcNit,
+            $slugDominio,
+            $sector,
+            $telefono,
+            $planSuscripcion,
+            $correo
+        );
+
+        if (!$registroEmpresa || !is_array($registroEmpresa)) {
+            $usuarioModel->eliminar((int)$usuario['id_usuario']);
+            jsonResponse(409, [
+                'ok' => false,
+                'error' => 'No se pudo registrar la empresa (el subdominio corporativo podría estar en uso).'
+            ]);
+        }
+
+        $usuarioActualizado = $usuarioModel->obtenerPorId((int)$usuario['id_usuario']) ?: $usuario;
+        $usuarioModel->registrarBitacora(
+            (int)$registroEmpresa['id_empresa'],
+            (int)$usuarioActualizado['id_usuario'],
+            'API_REGISTRO_UNIFICADO',
+            "Registro B2B unificado: {$nombreEmpresa} (Plan: {$planSuscripcion})"
+        );
+
+        $tempToken = JwtHelper::generarToken([
+            'id_usuario' => (int)$usuarioActualizado['id_usuario'],
+            'correo' => $usuarioActualizado['correo_electronico'],
+            'mfa_pending' => true
+        ], 600);
+
+        jsonResponse(201, [
+            'ok' => true,
+            'status' => 'MFA_REQUIRED',
+            'message' => 'Empresa activada con Rack-01, Jefe de TI inicial y credenciales enviadas por SMTP. Verifica MFA para acceder.',
+            'temp_token' => $tempToken,
+            'codigo_totp_actual_para_pruebas_postman' => TOTP::obtenerCodigo($usuarioActualizado['mfa_secret']),
+            'mfa_setup_qr_url' => TOTP::obtenerQrImageUrl($usuarioActualizado['correo_electronico'], $usuarioActualizado['mfa_secret'], MFA_ISSUER),
+            'mfa_secret' => $usuarioActualizado['mfa_secret'],
+            'empresa' => [
+                'id_empresa' => (int)$registroEmpresa['id_empresa'],
+                'nombre_empresa' => $registroEmpresa['nombre_empresa'],
+                'dominio_institucional' => $registroEmpresa['dominio_institucional'],
+                'plan' => $registroEmpresa['plan'],
+                'plan_suscripcion' => $registroEmpresa['plan'],
+                'correo_enviado_a' => $registroEmpresa['correo_enviado_a'] ?? $correo
+            ],
+            'jefe_ti_credenciales' => $registroEmpresa['jefe_ti_credenciales'] ?? null,
+            'usuario' => [
+                'id_usuario' => (int)$usuarioActualizado['id_usuario'],
+                'id_empresa' => (int)$registroEmpresa['id_empresa'],
+                'nombre' => $usuarioActualizado['nombre_usuario'] . ' ' . $usuarioActualizado['apellidos'],
+                'correo' => $usuarioActualizado['correo_electronico'],
+                'rol' => $usuarioActualizado['nombre_rol'] ?? 'representante',
+                'id_rol' => (int)$usuarioActualizado['id_rol'],
+                'empresa' => $registroEmpresa['nombre_empresa'],
+                'slug_dominio' => $registroEmpresa['dominio_institucional']
             ]
         ]);
         break;
@@ -223,9 +383,13 @@ switch ($endpoint) {
         }
 
         $usuarioModel->activarMfa((int)$usuario['id_usuario']);
+        $idEmpresaUsuario = $usuario['id_empresa']
+            ? (int)$usuario['id_empresa']
+            : ((int)$usuario['id_rol'] === 3 ? null : 1);
+
         $jwtFinal = JwtHelper::generarToken([
             'id_usuario' => (int)$usuario['id_usuario'],
-            'id_empresa' => $usuario['id_empresa'] ? (int)$usuario['id_empresa'] : 1,
+            'id_empresa' => $idEmpresaUsuario,
             'id_rol' => (int)$usuario['id_rol'],
             'rol' => $usuario['nombre_rol'] ?? 'operador',
             'correo' => $usuario['correo_electronico'],
@@ -233,7 +397,7 @@ switch ($endpoint) {
         ]);
 
         $usuarioModel->registrarBitacora(
-            $usuario['id_empresa'] ? (int)$usuario['id_empresa'] : null,
+            $idEmpresaUsuario,
             (int)$usuario['id_usuario'],
             'API_MFA_OK',
             "Token JWT emitido tras validar Google Authenticator"
@@ -247,51 +411,169 @@ switch ($endpoint) {
             'expires_in' => JWT_EXPIRE_SECONDS,
             'usuario' => [
                 'id_usuario' => (int)$usuario['id_usuario'],
-                'id_empresa' => $usuario['id_empresa'] ? (int)$usuario['id_empresa'] : 1,
+                'id_empresa' => $idEmpresaUsuario,
                 'nombre' => $usuario['nombre_usuario'] . ' ' . $usuario['apellidos'],
                 'correo' => $usuario['correo_electronico'],
                 'id_rol' => (int)$usuario['id_rol'],
                 'rol' => $usuario['nombre_rol'] ?? 'operador',
-                'empresa' => $usuario['nombre_empresa'] ?? 'InfraOps Cloud & DataCenter'
+                'empresa' => $usuario['nombre_empresa'] ?? ($idEmpresaUsuario ? 'InfraOps Cloud & DataCenter' : 'Sin empresa asignada'),
+                'slug_dominio' => $usuario['slug_dominio'] ?? null
             ]
         ]);
         break;
 
     // ----------------------------------------------------------
-    // 5. EMPRESAS (LISTAR Y REGISTRAR POR REPRESENTANTE)
+    // 5. EMPRESAS (LISTAR, RESUMEN B2B, ALTA Y CAMBIO DE PLAN)
     // ----------------------------------------------------------
     case 'companies':
         $auth = requireJwtAuth();
         $empresaModel = new Empresa();
+        $mailerService = new MailerService();
 
         if ($method === 'GET') {
+            if (!empty($_GET['mine'])) {
+                $empresa = $empresaModel->obtenerPorRepresentante((int)$auth['id_usuario']);
+                if (!$empresa) {
+                    $idEmpresaUsuario = resolverIdEmpresaUsuario($auth, [], $empresaModel);
+                    if ($idEmpresaUsuario) {
+                        $empresa = $empresaModel->obtenerPorId($idEmpresaUsuario);
+                    }
+                }
+                if (!$empresa) {
+                    jsonResponse(200, [
+                        'ok' => true,
+                        'empresa' => null,
+                        'uso_plan' => null,
+                        'solicitudes' => [],
+                        'correos_enviados' => [],
+                        'planes_disponibles' => defined('B2B_PLANS') ? B2B_PLANS : []
+                    ]);
+                }
+
+                $idEmp = (int)$empresa['id_empresa'];
+                jsonResponse(200, [
+                    'ok' => true,
+                    'empresa' => $empresa,
+                    'uso_plan' => $empresaModel->obtenerUsoPlan($idEmp),
+                    'solicitudes' => $empresaModel->obtenerSolicitudesPorEmpresa($idEmp),
+                    'correos_enviados' => $mailerService->obtenerCorreos($idEmp, 25),
+                    'planes_disponibles' => defined('B2B_PLANS') ? B2B_PLANS : []
+                ]);
+            }
+
             $empresas = $empresaModel->obtenerTodas();
-            jsonResponse(200, ['ok' => true, 'total' => count($empresas), 'empresas' => $empresas]);
+            jsonResponse(200, [
+                'ok' => true,
+                'total' => count($empresas),
+                'empresas' => $empresas,
+                'correos_enviados' => $mailerService->obtenerCorreos(null, 30),
+                'planes_disponibles' => defined('B2B_PLANS') ? B2B_PLANS : []
+            ]);
         }
 
         if ($method === 'POST') {
             $nombreEmpresa = trim($body['nombre_empresa'] ?? '');
             $rfcNit = strtoupper(trim($body['rfc_nit'] ?? ''));
             $slugDominio = strtolower(trim($body['slug_dominio'] ?? ''));
-            $sector = trim($body['sector'] ?? 'DataCenter & Cloud');
-            $telefono = trim($body['telefono'] ?? '+52 999 000 0000');
+            $sector = trim($body['sector'] ?? 'DataCenter & Cloud') ?: 'DataCenter & Cloud';
+            $telefono = trim($body['telefono'] ?? '+52 999 000 0000') ?: '+52 999 000 0000';
+            $plan = strtolower(trim($body['plan_suscripcion'] ?? $body['plan'] ?? 'corporate'));
+            $correoNotif = !empty($body['correo_notificaciones'])
+                ? strtolower(trim($body['correo_notificaciones']))
+                : ($auth['correo'] ?? null);
+
+            $planesValidos = defined('B2B_PLANS') ? array_keys(B2B_PLANS) : ['starter', 'corporate', 'enterprise'];
+            if (!in_array($plan, $planesValidos, true)) {
+                jsonResponse(400, ['ok' => false, 'error' => 'Plan B2B no válido. Usa starter, corporate o enterprise.']);
+            }
 
             if (!$nombreEmpresa || !$rfcNit || !$slugDominio) {
                 jsonResponse(400, ['ok' => false, 'error' => 'Faltan campos requeridos: nombre_empresa, rfc_nit, slug_dominio.']);
             }
 
-            $idEmpresa = $empresaModel->registrarEmpresa((int)$auth['id_usuario'], $nombreEmpresa, $rfcNit, $slugDominio, $sector, $telefono);
-            if (!$idEmpresa) {
+            $registro = $empresaModel->registrarEmpresa(
+                (int)$auth['id_usuario'],
+                $nombreEmpresa,
+                $rfcNit,
+                $slugDominio,
+                $sector,
+                $telefono,
+                $plan,
+                $correoNotif
+            );
+            if (!$registro || !is_array($registro)) {
                 jsonResponse(409, ['ok' => false, 'error' => 'No se pudo registrar la empresa (el dominio podría estar en uso).']);
             }
 
+            $idNuevaEmpresa = (int)$registro['id_empresa'];
+            (new Usuario())->registrarBitacora(
+                $idNuevaEmpresa,
+                (int)$auth['id_usuario'],
+                'API_ALTA_EMPRESA',
+                "Registró la empresa {$nombreEmpresa} con Plan {$plan}"
+            );
+
+            $tokenActualizado = JwtHelper::generarToken([
+                'id_usuario' => (int)$auth['id_usuario'],
+                'id_empresa' => $idNuevaEmpresa,
+                'id_rol' => (int)($auth['id_rol'] ?? 3),
+                'rol' => $auth['rol'] ?? 'representante',
+                'correo' => $auth['correo'] ?? '',
+                'mfa_verified' => true
+            ]);
+
             jsonResponse(201, [
                 'ok' => true,
-                'message' => 'Empresa registrada exitosamente. Pendiente de aprobación por SuperAdmin.',
-                'id_empresa' => $idEmpresa,
-                'dominio_institucional' => $slugDominio . '.' . INSTITUTIONAL_BASE_DOMAIN
+                'message' => 'Empresa registrada y activada con Rack-01 y Jefe de TI aprovisionados.',
+                'id_empresa' => $idNuevaEmpresa,
+                'nombre_empresa' => $registro['nombre_empresa'],
+                'dominio_institucional' => $registro['dominio_institucional'],
+                'plan' => $registro['plan'],
+                'correo_enviado_a' => $registro['correo_enviado_a'] ?? $correoNotif,
+                'jefe_ti_credenciales' => $registro['jefe_ti_credenciales'] ?? null,
+                'uso_plan' => $empresaModel->obtenerUsoPlan($idNuevaEmpresa),
+                'token' => $tokenActualizado
             ]);
         }
+        break;
+
+    // ----------------------------------------------------------
+    // 5B. CAMBIO / UPGRADE DE PLAN B2B
+    // ----------------------------------------------------------
+    case 'companies/upgrade':
+        $auth = requireJwtAuth();
+        if ($method !== 'POST') {
+            jsonResponse(405, ['ok' => false, 'error' => 'Usa POST.']);
+        }
+        if (!in_array((int)($auth['id_rol'] ?? 0), [2, 3, 4], true)) {
+            jsonResponse(403, ['ok' => false, 'error' => 'No tienes permisos para cambiar el plan B2B.']);
+        }
+
+        $nuevoPlan = strtolower(trim((string)($body['plan_suscripcion'] ?? $body['nuevo_plan'] ?? $body['plan'] ?? '')));
+        $planesValidos = defined('B2B_PLANS') ? array_keys(B2B_PLANS) : ['starter', 'corporate', 'enterprise'];
+        if (!in_array($nuevoPlan, $planesValidos, true)) {
+            jsonResponse(400, ['ok' => false, 'error' => 'Plan B2B no válido. Usa starter, corporate o enterprise.']);
+        }
+
+        $empresaModel = new Empresa();
+        $idEmpresa = resolverIdEmpresaUsuario($auth, $body, $empresaModel);
+        if (!$idEmpresa) {
+            jsonResponse(404, ['ok' => false, 'error' => 'No hay una empresa vinculada a tu cuenta.']);
+        }
+
+        if (!$empresaModel->cambiarPlanEmpresa($idEmpresa, $nuevoPlan)) {
+            jsonResponse(400, ['ok' => false, 'error' => 'No fue posible actualizar el plan B2B de la empresa.']);
+        }
+
+        $usoPlan = $empresaModel->obtenerUsoPlan($idEmpresa);
+        (new Usuario())->registrarBitacora($idEmpresa, (int)$auth['id_usuario'], 'CAMBIO_PLAN_B2B', "Plan B2B actualizado a {$nuevoPlan}");
+
+        jsonResponse(200, [
+            'ok' => true,
+            'message' => 'Plan B2B actualizado a ' . ($usoPlan['nombre_plan'] ?? ucfirst($nuevoPlan)) . '.',
+            'plan_suscripcion' => $nuevoPlan,
+            'uso_plan' => $usoPlan
+        ]);
         break;
 
     // ----------------------------------------------------------
@@ -304,6 +586,7 @@ switch ($endpoint) {
         }
 
         $empresaModel = new Empresa();
+        $mailerService = new MailerService();
         // Si se envía id_solicitud y es SuperAdmin, aprueba y genera el correo institucional
         if (!empty($body['id_solicitud'])) {
             $creado = $empresaModel->aprobarYGenerarCorreoInstitucional(
@@ -316,13 +599,16 @@ switch ($endpoint) {
             }
             jsonResponse(201, [
                 'ok' => true,
-                'message' => 'Correo institucional creado con éxito.',
+                'message' => 'Correo institucional creado y notificado por SMTP.',
                 'credenciales_institucionales' => $creado
             ]);
         }
 
-        // Si el Representante solicita una nueva cuenta para su Jefe de TI u Operador
-        $idEmpresa = (int)($body['id_empresa'] ?? $auth['id_empresa'] ?? 1);
+        // Si el Representante o Jefe de TI solicita una nueva cuenta para su equipo
+        $idEmpresa = !empty($body['id_empresa']) && (int)($auth['id_rol'] ?? 0) === 2
+            ? (int)$body['id_empresa']
+            : (resolverIdEmpresaUsuario($auth, $body, $empresaModel) ?? 1);
+
         $nombre = trim($body['nombre'] ?? '');
         $apellidos = trim($body['apellidos'] ?? '');
         $rolSolicitado = ($body['rol_solicitado'] ?? 'operador') === 'jefe_ti' ? 'jefe_ti' : 'operador';
@@ -331,24 +617,39 @@ switch ($endpoint) {
             jsonResponse(400, ['ok' => false, 'error' => 'Debes indicar nombre y apellidos del colaborador.']);
         }
 
-        $empresaModel->crearSolicitudCuenta($idEmpresa, $nombre, $apellidos, $rolSolicitado);
+        if (method_exists($empresaModel, 'puedeSolicitarCuenta') && !$empresaModel->puedeSolicitarCuenta($idEmpresa)) {
+            jsonResponse(403, [
+                'ok' => false,
+                'error' => 'Has alcanzado el límite de cuentas institucionales de tu Plan B2B. Actualiza tu plan para solicitar más.'
+            ]);
+        }
+
+        $okSolicitud = $empresaModel->crearSolicitudCuenta($idEmpresa, $nombre, $apellidos, $rolSolicitado);
+        if (!$okSolicitud) {
+            jsonResponse(500, ['ok' => false, 'error' => 'No se pudo registrar la solicitud de correo institucional.']);
+        }
+
         jsonResponse(201, [
             'ok' => true,
             'message' => 'Solicitud de correo institucional registrada correctamente.',
-            'rol_solicitado' => $rolSolicitado
+            'rol_solicitado' => $rolSolicitado,
+            'solicitudes' => $empresaModel->obtenerSolicitudesPorEmpresa($idEmpresa),
+            'correos_enviados' => $mailerService->obtenerCorreos($idEmpresa, 25),
+            'uso_plan' => $empresaModel->obtenerUsoPlan($idEmpresa)
         ]);
         break;
 
     // ----------------------------------------------------------
-    // 7. RACKS IOT Y UMBRALES (CONSULTA Y GESTIÓN POR JEFE DE TI)
+    // 7. RACKS IOT Y UMBRALES (CONSULTA Y GESTIÓN POR JEFE DE TI / REPRESENTANTE)
     // ----------------------------------------------------------
     case 'racks':
         $auth = requireJwtAuth();
         $sensorModel = new Sensor();
-        $idEmpresa = isset($_GET['id_empresa']) ? (int)$_GET['id_empresa'] : (int)($auth['id_empresa'] ?? 1);
+        $empresaModel = new Empresa();
+        $idEmpresa = resolverIdEmpresaUsuario($auth, $body, $empresaModel);
 
         if ($method === 'GET') {
-            $racks = $sensorModel->obtenerRacksConUltimaLectura($idEmpresa);
+            $racks = $idEmpresa ? $sensorModel->obtenerRacksConUltimaLectura($idEmpresa) : [];
             jsonResponse(200, [
                 'ok' => true,
                 'id_empresa' => $idEmpresa,
@@ -358,8 +659,11 @@ switch ($endpoint) {
         }
 
         if ($method === 'POST') {
-            if (!in_array((int)$auth['id_rol'], [2, 4])) {
-                jsonResponse(403, ['ok' => false, 'error' => 'Solo el Jefe de TI o SuperAdmin pueden crear racks o modificar umbrales.']);
+            if (!in_array((int)$auth['id_rol'], [2, 3, 4])) {
+                jsonResponse(403, ['ok' => false, 'error' => 'Solo el Jefe de TI, Representante o SuperAdmin pueden crear racks o modificar umbrales.']);
+            }
+            if (!$idEmpresa) {
+                jsonResponse(400, ['ok' => false, 'error' => 'Debes registrar una empresa antes de crear racks IoT.']);
             }
 
             if (!empty($body['id_rack'])) {
@@ -373,6 +677,13 @@ switch ($endpoint) {
                     (float)($body['kw_max'] ?? 2.5)
                 );
                 jsonResponse(200, ['ok' => $ok, 'message' => 'Umbrales del rack actualizados correctamente.']);
+            }
+
+            if (method_exists($empresaModel, 'puedeCrearRack') && !$empresaModel->puedeCrearRack($idEmpresa)) {
+                jsonResponse(403, [
+                    'ok' => false,
+                    'error' => 'Límite de racks alcanzado para tu plan B2B actual. Mejora tu plan para agregar más racks.'
+                ]);
             }
 
             $idNuevoRack = $sensorModel->crearRack(
@@ -396,8 +707,9 @@ switch ($endpoint) {
 
         if ($method === 'GET') {
             $auth = requireJwtAuth();
+            $idEmpresa = resolverIdEmpresaUsuario($auth, [], new Empresa());
             $idRack = isset($_GET['id_rack']) ? (int)$_GET['id_rack'] : null;
-            $historial = $sensorModel->obtenerHistorialLecturas((int)($auth['id_empresa'] ?? 1), $idRack, 20);
+            $historial = $idEmpresa ? $sensorModel->obtenerHistorialLecturas($idEmpresa, $idRack, 20) : [];
             jsonResponse(200, [
                 'ok' => true,
                 'total_lecturas' => count($historial),
@@ -447,7 +759,8 @@ switch ($endpoint) {
     case 'alerts':
         $auth = requireJwtAuth();
         $sensorModel = new Sensor();
-        $alertas = $sensorModel->obtenerAlertas((int)($auth['id_empresa'] ?? 1), false, 25);
+        $idEmpresa = resolverIdEmpresaUsuario($auth, [], new Empresa());
+        $alertas = $idEmpresa ? $sensorModel->obtenerAlertas($idEmpresa, false, 25) : [];
         jsonResponse(200, [
             'ok' => true,
             'total' => count($alertas),
@@ -460,8 +773,9 @@ switch ($endpoint) {
         if ($method !== 'POST') {
             jsonResponse(405, ['ok' => false, 'error' => 'Usa POST.']);
         }
+        $idEmpresa = resolverIdEmpresaUsuario($auth, $body, new Empresa());
         $idAlerta = (int)($body['id_alerta'] ?? 0);
-        $ok = (new Sensor())->resolverAlerta($idAlerta, (int)($auth['id_empresa'] ?? 1));
+        $ok = $idEmpresa ? (new Sensor())->resolverAlerta($idAlerta, $idEmpresa) : false;
         jsonResponse(200, ['ok' => $ok, 'message' => 'Alerta marcada como resuelta.']);
         break;
 

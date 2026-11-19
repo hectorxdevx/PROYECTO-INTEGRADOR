@@ -1,6 +1,7 @@
 <?php
 require_once __DIR__ . '/Database.php';
 require_once __DIR__ . '/TOTP.php';
+require_once __DIR__ . '/MailerService.php';
 
 class Empresa {
     private $db;
@@ -9,27 +10,116 @@ class Empresa {
         $this->db = (new Database())->conectar();
     }
 
+    private function resolverPlan(string $plan): array {
+        $planes = defined('B2B_PLANS') ? B2B_PLANS : [
+            'starter' => ['nombre' => 'Starter', 'precio' => 49.00, 'max_racks' => 2, 'max_cuentas' => 3],
+            'corporate' => ['nombre' => 'Corporate', 'precio' => 149.00, 'max_racks' => 10, 'max_cuentas' => 15],
+            'enterprise' => ['nombre' => 'Enterprise', 'precio' => 399.00, 'max_racks' => 999, 'max_cuentas' => 999],
+        ];
+        $planKey = strtolower(trim($plan));
+        if (!isset($planes[$planKey])) {
+            $planKey = 'corporate';
+        }
+        $info = $planes[$planKey];
+        $info['key'] = $planKey;
+        return $info;
+    }
+
+    private function asegurarRackInicial(int $idEmpresa): void {
+        $stmtCheck = $this->db->prepare("SELECT id_rack FROM racks WHERE id_empresa = ? LIMIT 1");
+        if (!$stmtCheck) return;
+        $stmtCheck->bind_param("i", $idEmpresa);
+        $stmtCheck->execute();
+        $existe = $stmtCheck->get_result()->num_rows > 0;
+        $stmtCheck->close();
+
+        if ($existe) return;
+
+        $apiKey = 'iot_key_emp' . $idEmpresa . '_' . bin2hex(random_bytes(6));
+        $stmtRack = $this->db->prepare("INSERT INTO racks (id_empresa, codigo_rack, nombre_rack, ubicacion, api_key_iot)
+            VALUES (?, 'RACK-01', 'Rack 01 - Nodo Principal', 'Site Principal', ?)");
+        if ($stmtRack) {
+            $stmtRack->bind_param("is", $idEmpresa, $apiKey);
+            $stmtRack->execute();
+            $idRack = $stmtRack->insert_id;
+            $stmtRack->close();
+
+            if ($idRack) {
+                $this->db->query("INSERT INTO lecturas_sensores (id_rack, temperatura, humedad, consumo_kw, puerta_abierta)
+                    VALUES ($idRack, 22.0, 45.0, 1.15, 0)");
+            }
+        }
+    }
+
     /**
-     * Registra una nueva empresa por parte de un Representante (cuenta personal).
+     * Registra una nueva empresa en modo activo inmediato con plan B2B, Rack inicial y Jefe de TI aprovisionado.
      */
-    public function registrarEmpresa(int $idRepresentante, string $nombreEmpresa, string $rfcNit, string $slugDominio, string $sector, string $telefono): int|false {
-        $slugLimpio = strtolower(preg_replace('/[^a-zA-Z0-9\-]/', '', $slugDominio));
+    public function registrarEmpresa(
+        int $idRepresentante,
+        string $nombreEmpresa,
+        string $rfcNit,
+        string $slugDominio,
+        string $sector,
+        string $telefono,
+        string $plan = 'corporate',
+        ?string $correoNotificaciones = null
+    ): array|false {
+        $baseSlug = str_ireplace('.' . INSTITUTIONAL_BASE_DOMAIN, '', trim($slugDominio));
+        $slugLimpio = strtolower(preg_replace('/[^a-zA-Z0-9\-]/', '', $baseSlug));
         if (empty($slugLimpio)) {
             $slugLimpio = 'emp' . time();
         }
         $dominioCompleto = $slugLimpio . '.' . INSTITUTIONAL_BASE_DOMAIN;
 
-        $sql = "INSERT INTO empresas (id_representante, nombre_empresa, rfc_nit, slug_dominio, sector, telefono_contacto, estado)
-                VALUES (?, ?, ?, ?, ?, ?, 'pendiente')";
+        $planInfo = $this->resolverPlan($plan);
+        $planKey = $planInfo['key'];
+        $maxRacks = (int)$planInfo['max_racks'];
+        $maxCuentas = (int)$planInfo['max_cuentas'];
+        $costoMensual = (float)$planInfo['precio'];
+
+        $correoDestino = null;
+        if ($correoNotificaciones !== null && filter_var(trim($correoNotificaciones), FILTER_VALIDATE_EMAIL)) {
+            $correoDestino = strtolower(trim($correoNotificaciones));
+        } else {
+            $stmtRep = $this->db->prepare("SELECT correo_electronico FROM users WHERE id_usuario = ? LIMIT 1");
+            if ($stmtRep) {
+                $stmtRep->bind_param("i", $idRepresentante);
+                $stmtRep->execute();
+                $repRow = $stmtRep->get_result()->fetch_assoc();
+                $stmtRep->close();
+                if (!empty($repRow['correo_electronico'])) {
+                    $correoDestino = $repRow['correo_electronico'];
+                }
+            }
+        }
+
+        $sql = "INSERT INTO empresas (
+                    id_representante, nombre_empresa, rfc_nit, slug_dominio, sector,
+                    telefono_contacto, estado, plan_suscripcion, max_racks, max_cuentas,
+                    costo_mensual, correo_notificaciones
+                ) VALUES (?, ?, ?, ?, ?, ?, 'aprobada', ?, ?, ?, ?, ?)";
         $stmt = $this->db->prepare($sql);
         if (!$stmt) return false;
 
-        $stmt->bind_param("isssss", $idRepresentante, $nombreEmpresa, $rfcNit, $dominioCompleto, $sector, $telefono);
+        $stmt->bind_param(
+            "issssssiids",
+            $idRepresentante,
+            $nombreEmpresa,
+            $rfcNit,
+            $dominioCompleto,
+            $sector,
+            $telefono,
+            $planKey,
+            $maxRacks,
+            $maxCuentas,
+            $costoMensual,
+            $correoDestino
+        );
         if (!$stmt->execute()) {
             $stmt->close();
             return false;
         }
-        $idEmpresa = $stmt->insert_id;
+        $idEmpresa = (int)$stmt->insert_id;
         $stmt->close();
 
         // Vincular al representante con su empresa recién creada
@@ -40,7 +130,21 @@ class Empresa {
             $stmtUser->close();
         }
 
-        return $idEmpresa;
+        // Crear RACK-01 inicial + lectura base
+        $this->asegurarRackInicial($idEmpresa);
+
+        // Auto-aprovisionar primera cuenta de Jefe de TI y enviar credenciales SMTP
+        $idSolicitud = $this->crearSolicitudCuentaInterna($idEmpresa, 'Jefe', 'TI', 'jefe_ti');
+        $creado = $idSolicitud ? $this->aprobarYGenerarCorreoInstitucional($idSolicitud) : null;
+
+        return [
+            'id_empresa' => $idEmpresa,
+            'nombre_empresa' => $nombreEmpresa,
+            'dominio_institucional' => $dominioCompleto,
+            'plan' => $planKey,
+            'jefe_ti_credenciales' => $creado,
+            'correo_enviado_a' => $correoDestino
+        ];
     }
 
     public function obtenerPorRepresentante(int $idRepresentante): ?array {
@@ -92,23 +196,7 @@ class Empresa {
 
         // Si se aprueba y no tiene racks aún, crear un Rack 01 inicial para la empresa
         if ($ok && $nuevoEstado === 'aprobada') {
-            $check = $this->db->query("SELECT id_rack FROM racks WHERE id_empresa = $idEmpresa LIMIT 1");
-            if ($check && $check->num_rows === 0) {
-                $apiKey = 'iot_key_emp' . $idEmpresa . '_' . bin2hex(random_bytes(6));
-                $stmtRack = $this->db->prepare("INSERT INTO racks (id_empresa, codigo_rack, nombre_rack, ubicacion, api_key_iot)
-                    VALUES (?, 'RACK-01', 'Rack 01 - Nodo Principal', 'Site Principal', ?)");
-                if ($stmtRack) {
-                    $stmtRack->bind_param("is", $idEmpresa, $apiKey);
-                    $stmtRack->execute();
-                    $idRack = $stmtRack->insert_id;
-                    $stmtRack->close();
-
-                    if ($idRack) {
-                        $this->db->query("INSERT INTO lecturas_sensores (id_rack, temperatura, humedad, consumo_kw, puerta_abierta)
-                            VALUES ($idRack, 22.0, 45.0, 1.15, 0)");
-                    }
-                }
-            }
+            $this->asegurarRackInicial($idEmpresa);
         }
 
         return $ok;
@@ -118,14 +206,22 @@ class Empresa {
      * El Representante solicita una cuenta institucional (para su Jefe de TI o un Operador).
      */
     public function crearSolicitudCuenta(int $idEmpresa, string $nombre, string $apellidos, string $rolSolicitado): bool {
+        return $this->crearSolicitudCuentaInterna($idEmpresa, $nombre, $apellidos, $rolSolicitado) !== false;
+    }
+
+    private function crearSolicitudCuentaInterna(int $idEmpresa, string $nombre, string $apellidos, string $rolSolicitado): int|false {
         $rolSolicitado = ($rolSolicitado === 'jefe_ti') ? 'jefe_ti' : 'operador';
         $stmt = $this->db->prepare("INSERT INTO solicitudes_cuentas (id_empresa, nombre, apellidos, rol_solicitado, estado)
                                     VALUES (?, ?, ?, ?, 'pendiente')");
         if (!$stmt) return false;
         $stmt->bind_param("isss", $idEmpresa, $nombre, $apellidos, $rolSolicitado);
-        $ok = $stmt->execute();
+        if (!$stmt->execute()) {
+            $stmt->close();
+            return false;
+        }
+        $idSolicitud = (int)$stmt->insert_id;
         $stmt->close();
-        return $ok;
+        return $idSolicitud > 0 ? $idSolicitud : false;
     }
 
     public function obtenerSolicitudesPorEmpresa(int $idEmpresa): array {
@@ -158,13 +254,15 @@ class Empresa {
     }
 
     /**
-     * El SuperAdmin aprueba una solicitud y el sistema genera automáticamente el correo institucional
-     * (como las universidades con los correos institucionales) y su contraseña inicial + secreto MFA.
+     * El SuperAdmin (o el alta inmediata) aprueba una solicitud, genera el correo institucional,
+     * marca cambio_password_requerido = 1 y envía credenciales + TOTP vía MailerService.
      */
     public function aprobarYGenerarCorreoInstitucional(int $idSolicitud, ?string $correoPersonalizado = null, ?string $passwordInicial = null): ?array {
-        $stmt = $this->db->prepare("SELECT s.*, e.slug_dominio, e.nombre_empresa
+        $stmt = $this->db->prepare("SELECT s.*, e.slug_dominio, e.nombre_empresa, e.plan_suscripcion,
+                                           e.correo_notificaciones, u.correo_electronico AS rep_correo
                                     FROM solicitudes_cuentas s
                                     INNER JOIN empresas e ON s.id_empresa = e.id_empresa
+                                    LEFT JOIN users u ON e.id_representante = u.id_usuario
                                     WHERE s.id_solicitud = ? LIMIT 1");
         if (!$stmt) return null;
         $stmt->bind_param("i", $idSolicitud);
@@ -176,8 +274,10 @@ class Empresa {
 
         // Construir correo institucional tipo universidad: nombre.apellido@empresa.sysmonitor.com
         if (empty($correoPersonalizado)) {
-            $primerNombre = strtolower(preg_replace('/[^a-zA-Z0-9]/', '', explode(' ', trim($solicitud['nombre']))[0]));
-            $primerApellido = strtolower(preg_replace('/[^a-zA-Z0-9]/', '', explode(' ', trim($solicitud['apellidos']))[0]));
+            $primerNombre = strtolower(preg_replace('/[^a-zA-Z0-9]/', '', explode(' ', trim($solicitud['nombre']))[0] ?? ''));
+            $primerApellido = strtolower(preg_replace('/[^a-zA-Z0-9]/', '', explode(' ', trim($solicitud['apellidos']))[0] ?? ''));
+            if ($primerNombre === '') $primerNombre = 'usuario';
+            if ($primerApellido === '') $primerApellido = 'ti';
             $baseUser = $primerNombre . '.' . $primerApellido;
             $correoInstitucional = $baseUser . '@' . $solicitud['slug_dominio'];
 
@@ -189,10 +289,15 @@ class Empresa {
             }
         } else {
             $correoInstitucional = strtolower(trim($correoPersonalizado));
+            if ($this->existeCorreoEnUsers($correoInstitucional)) {
+                return null;
+            }
         }
 
         if (empty($passwordInicial)) {
-            $passwordInicial = 'Sys' . ucfirst(substr(preg_replace('/[^a-zA-Z]/', '', $solicitud['nombre']), 0, 3)) . random_int(1000, 9999) . '!';
+            $prefijoNombre = preg_replace('/[^a-zA-Z]/', '', $solicitud['nombre']);
+            if ($prefijoNombre === '') $prefijoNombre = 'Sys';
+            $passwordInicial = 'Sys' . ucfirst(substr($prefijoNombre, 0, 3)) . random_int(1000, 9999) . '!';
         }
 
         $hash = password_hash($passwordInicial, PASSWORD_BCRYPT);
@@ -200,15 +305,15 @@ class Empresa {
         $mfaSecret = TOTP::generarSecreto();
         $idEmpresa = (int)$solicitud['id_empresa'];
 
-        $stmtUser = $this->db->prepare("INSERT INTO users (id_empresa, id_rol, nombre_usuario, apellidos, correo_electronico, contrasena, oauth_provider, mfa_secret, mfa_enabled)
-                                        VALUES (?, ?, ?, ?, ?, ?, 'institucional', ?, 0)");
+        $stmtUser = $this->db->prepare("INSERT INTO users (id_empresa, id_rol, nombre_usuario, apellidos, correo_electronico, contrasena, oauth_provider, mfa_secret, mfa_enabled, cambio_password_requerido)
+                                        VALUES (?, ?, ?, ?, ?, ?, 'institucional', ?, 0, 1)");
         if (!$stmtUser) return null;
         $stmtUser->bind_param("iisssss", $idEmpresa, $idRol, $solicitud['nombre'], $solicitud['apellidos'], $correoInstitucional, $hash, $mfaSecret);
         if (!$stmtUser->execute()) {
             $stmtUser->close();
             return null;
         }
-        $idNuevoUsuario = $stmtUser->insert_id;
+        $idNuevoUsuario = (int)$stmtUser->insert_id;
         $stmtUser->close();
 
         // Actualizar la solicitud con el correo asignado y la contraseña temporal
@@ -221,12 +326,130 @@ class Empresa {
             $stmtUpd->close();
         }
 
+        $correoDestinoRep = !empty($solicitud['correo_notificaciones'])
+            ? (string)$solicitud['correo_notificaciones']
+            : (string)($solicitud['rep_correo'] ?? '');
+
+        $smtpResultado = null;
+        if ($correoDestinoRep !== '') {
+            $mailer = new MailerService();
+            $smtpResultado = $mailer->enviarCredencialesInstitucionales(
+                [
+                    'id_empresa' => $idEmpresa,
+                    'nombre_empresa' => $solicitud['nombre_empresa'],
+                    'slug_dominio' => $solicitud['slug_dominio'],
+                    'plan_suscripcion' => $solicitud['plan_suscripcion'] ?? 'corporate',
+                ],
+                [
+                    'id_usuario' => $idNuevoUsuario,
+                    'correo_institucional' => $correoInstitucional,
+                    'password_temporal' => $passwordInicial,
+                    'rol' => $solicitud['rol_solicitado'],
+                    'mfa_secret' => $mfaSecret,
+                ],
+                $correoDestinoRep
+            );
+        }
+
         return [
             'id_usuario' => $idNuevoUsuario,
             'correo_institucional' => $correoInstitucional,
             'password_temporal' => $passwordInicial,
             'rol' => $solicitud['rol_solicitado'],
-            'mfa_secret' => $mfaSecret
+            'mfa_secret' => $mfaSecret,
+            'smtp' => $smtpResultado
+        ];
+    }
+
+    public function puedeCrearRack(int $idEmpresa): bool {
+        $uso = $this->obtenerUsoPlan($idEmpresa);
+        return $uso['racks_usados'] < $uso['max_racks'];
+    }
+
+    public function puedeSolicitarCuenta(int $idEmpresa): bool {
+        $uso = $this->obtenerUsoPlan($idEmpresa);
+        $pendientes = 0;
+        $stmt = $this->db->prepare("SELECT COUNT(*) AS total FROM solicitudes_cuentas WHERE id_empresa = ? AND estado = 'pendiente'");
+        if ($stmt) {
+            $stmt->bind_param("i", $idEmpresa);
+            $stmt->execute();
+            $row = $stmt->get_result()->fetch_assoc();
+            $pendientes = (int)($row['total'] ?? 0);
+            $stmt->close();
+        }
+        return ($uso['cuentas_usadas'] + $pendientes) < $uso['max_cuentas'];
+    }
+
+    public function cambiarPlanEmpresa(int $idEmpresa, string $nuevoPlan): bool {
+        if ($idEmpresa <= 0) return false;
+        $planes = defined('B2B_PLANS') ? B2B_PLANS : [];
+        $planKey = strtolower(trim($nuevoPlan));
+        if (!isset($planes[$planKey])) {
+            return false;
+        }
+        $planInfo = $planes[$planKey];
+        $maxRacks = (int)$planInfo['max_racks'];
+        $maxCuentas = (int)$planInfo['max_cuentas'];
+        $costoMensual = (float)$planInfo['precio'];
+
+        $stmt = $this->db->prepare("UPDATE empresas SET plan_suscripcion = ?, max_racks = ?, max_cuentas = ?, costo_mensual = ? WHERE id_empresa = ?");
+        if (!$stmt) return false;
+        $stmt->bind_param("siidi", $planKey, $maxRacks, $maxCuentas, $costoMensual, $idEmpresa);
+        $ok = $stmt->execute();
+        $stmt->close();
+        return $ok;
+    }
+
+    public function obtenerUsoPlan(int $idEmpresa): array {
+        $stmt = $this->db->prepare(
+            "SELECT e.plan_suscripcion, e.max_racks, e.max_cuentas, e.costo_mensual, e.estado,
+                    (SELECT COUNT(*) FROM racks r WHERE r.id_empresa = e.id_empresa) AS racks_usados,
+                    (SELECT COUNT(*) FROM users u WHERE u.id_empresa = e.id_empresa AND u.id_rol IN (1, 4)) AS cuentas_usadas
+             FROM empresas e
+             WHERE e.id_empresa = ? LIMIT 1"
+        );
+        if (!$stmt) {
+            return [
+                'plan_suscripcion' => 'corporate',
+                'nombre_plan' => 'Corporate',
+                'costo_mensual' => 149.00,
+                'racks_usados' => 0,
+                'max_racks' => 10,
+                'cuentas_usadas' => 0,
+                'max_cuentas' => 15,
+                'estado' => 'pendiente'
+            ];
+        }
+        $stmt->bind_param("i", $idEmpresa);
+        $stmt->execute();
+        $row = $stmt->get_result()->fetch_assoc();
+        $stmt->close();
+
+        if (!$row) {
+            return [
+                'plan_suscripcion' => 'corporate',
+                'nombre_plan' => 'Corporate',
+                'costo_mensual' => 149.00,
+                'racks_usados' => 0,
+                'max_racks' => 10,
+                'cuentas_usadas' => 0,
+                'max_cuentas' => 15,
+                'estado' => 'pendiente'
+            ];
+        }
+
+        $planKey = strtolower((string)($row['plan_suscripcion'] ?? 'corporate'));
+        $planInfo = $this->resolverPlan($planKey);
+
+        return [
+            'plan_suscripcion' => $planInfo['key'],
+            'nombre_plan' => (string)$planInfo['nombre'],
+            'costo_mensual' => (float)$row['costo_mensual'],
+            'racks_usados' => (int)$row['racks_usados'],
+            'max_racks' => (int)$row['max_racks'],
+            'cuentas_usadas' => (int)$row['cuentas_usadas'],
+            'max_cuentas' => (int)$row['max_cuentas'],
+            'estado' => (string)$row['estado']
         ];
     }
 

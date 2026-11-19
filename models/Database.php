@@ -66,6 +66,7 @@ class Database {
         $this->asegurarColumna('users', 'mfa_enabled', "TINYINT(1) NOT NULL DEFAULT 0");
         $this->asegurarColumna('users', 'foto_perfil', "VARCHAR(255) DEFAULT 'default.png'");
         $this->asegurarColumna('users', 'activo', "TINYINT(1) NOT NULL DEFAULT 1");
+        $this->asegurarColumna('users', 'cambio_password_requerido', "TINYINT(1) NOT NULL DEFAULT 0");
         $this->asegurarColumna('users', 'fecha_creacion', "TIMESTAMP DEFAULT CURRENT_TIMESTAMP");
 
         // 3. Tabla empresas
@@ -80,6 +81,12 @@ class Database {
             estado ENUM('pendiente', 'aprobada', 'suspendida') NOT NULL DEFAULT 'pendiente',
             fecha_registro TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         )");
+
+        $this->asegurarColumna('empresas', 'plan_suscripcion', "VARCHAR(30) NOT NULL DEFAULT 'corporate'");
+        $this->asegurarColumna('empresas', 'max_racks', "INT NOT NULL DEFAULT 10");
+        $this->asegurarColumna('empresas', 'max_cuentas', "INT NOT NULL DEFAULT 15");
+        $this->asegurarColumna('empresas', 'costo_mensual', "DECIMAL(8,2) NOT NULL DEFAULT 149.00");
+        $this->asegurarColumna('empresas', 'correo_notificaciones', "VARCHAR(320) NULL DEFAULT NULL");
 
         // 4. Tabla solicitudes_cuentas
         $this->conexion->query("CREATE TABLE IF NOT EXISTS solicitudes_cuentas (
@@ -154,6 +161,24 @@ class Database {
             mensaje TEXT NOT NULL,
             leido TINYINT(1) NOT NULL DEFAULT 0,
             fecha_envio TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        )");
+        $this->asegurarColumna('contactos', 'ip_origen', "VARCHAR(45) DEFAULT '127.0.0.1'");
+
+        // 10. Tabla correos_enviados (Auditoría SMTP y Filtro Anti-Spam WAF)
+        $this->conexion->query("CREATE TABLE IF NOT EXISTS correos_enviados (
+            id_correo INT PRIMARY KEY AUTO_INCREMENT,
+            id_empresa INT NULL,
+            destinatario VARCHAR(320) NOT NULL DEFAULT '',
+            remitente_reply VARCHAR(320) NULL,
+            asunto VARCHAR(255) NOT NULL DEFAULT '',
+            cuerpo_html MEDIUMTEXT NULL,
+            tipo_correo VARCHAR(50) NOT NULL DEFAULT 'credenciales_ti',
+            estado_smtp VARCHAR(40) NOT NULL DEFAULT 'cola_local_auditable',
+            detalle_filtro VARCHAR(255) NULL,
+            ip_origen VARCHAR(45) DEFAULT '127.0.0.1',
+            fecha_envio TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            INDEX idx_correos_empresa (id_empresa),
+            INDEX idx_correos_rate (ip_origen, tipo_correo, fecha_envio)
         )");
 
         // 10. Semilla inicial de demostración B2B si no existe el SuperAdmin institucional
