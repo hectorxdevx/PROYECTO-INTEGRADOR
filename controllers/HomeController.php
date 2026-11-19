@@ -1,5 +1,6 @@
 <?php
 require_once __DIR__ . '/../models/Contacto.php';
+require_once __DIR__ . '/../models/MailerService.php';
 
 class HomeController {
     public function index() {
@@ -8,16 +9,31 @@ class HomeController {
 
     public function procesarContacto() {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $nombre = htmlspecialchars(trim($_POST['nombre'] ?? ''));
-            $correo = filter_var(trim($_POST['correo'] ?? ''), FILTER_SANITIZE_EMAIL);
-            $asunto = htmlspecialchars(trim($_POST['asunto'] ?? ''));
-            $mensaje = htmlspecialchars(trim($_POST['mensaje'] ?? ''));
+            $nombreRaw = trim($_POST['nombre'] ?? '');
+            $correoRaw = trim($_POST['correo'] ?? '');
+            $asuntoRaw = trim($_POST['asunto'] ?? '');
+            $mensajeRaw = trim($_POST['mensaje'] ?? '');
+            $honeypot = trim($_POST['website_hp'] ?? '');
 
-            if ($nombre && $correo && $asunto && $mensaje) {
-                $contactoModel = new Contacto();
-                $contactoModel->guardarMensaje($nombre, $correo, $asunto, $mensaje);
+            $mailer = new MailerService();
+            $resultadoEnvio = $mailer->enviarDudaContactoWeb($nombreRaw, $correoRaw, $asuntoRaw, $mensajeRaw, $honeypot);
+
+            if (empty($resultadoEnvio['ok'])) {
+                $motivo = $resultadoEnvio['motivo'] ?? 'Tu mensaje fue rechazado por el filtro de seguridad.';
+                header("Location: " . BASE_URL . "/index.php?error=" . urlencode($motivo) . "#contacto");
+                exit();
             }
-            header("Location: " . BASE_URL . "/index.php?success=contacto#contacto");
+
+            $nombre = htmlspecialchars(MailerService::sanitizarCabecera($nombreRaw), ENT_QUOTES, 'UTF-8');
+            $correo = filter_var(MailerService::sanitizarCabecera($correoRaw), FILTER_SANITIZE_EMAIL);
+            $asunto = htmlspecialchars(MailerService::sanitizarCabecera($asuntoRaw), ENT_QUOTES, 'UTF-8');
+            $mensaje = htmlspecialchars($mensajeRaw, ENT_QUOTES, 'UTF-8');
+            $ip = $_SERVER['REMOTE_ADDR'] ?? '127.0.0.1';
+
+            $contactoModel = new Contacto();
+            $contactoModel->guardarMensaje($nombre, $correo, $asunto, $mensaje, $ip);
+
+            header("Location: " . BASE_URL . "/index.php?success=contacto_smtp#contacto");
             exit();
         }
         header("Location: " . BASE_URL . "/index.php");

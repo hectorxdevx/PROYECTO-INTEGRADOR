@@ -7,8 +7,8 @@
     <link rel="icon" type="image/svg+xml" href="<?php echo BASE_URL; ?>/assets/favicon.svg">
     <link rel="stylesheet" crossorigin href="<?php echo BASE_URL; ?>/assets/dashboard/compiled/css/app.css">
     <link rel="stylesheet" crossorigin href="<?php echo BASE_URL; ?>/assets/dashboard/compiled/css/app-dark.css">
-    <link rel="stylesheet" href="<?php echo BASE_URL; ?>/assets/dashboard/custom-theme.css?v=4">
-    <link rel="stylesheet" href="<?php echo BASE_URL; ?>/assets/css/aceternity-ui.css">
+    <link rel="stylesheet" href="<?php echo BASE_URL; ?>/assets/dashboard/custom-theme.css?v=5">
+    <link rel="stylesheet" href="<?php echo BASE_URL; ?>/assets/css/aceternity-ui.css?v=2">
     <script src="<?php echo BASE_URL; ?>/assets/js/aceternity-ui.js"></script>
 </head>
 <body class="ac-body">
@@ -51,11 +51,13 @@
         </div>
 
         <div id="main">
-            <header class="mb-3 d-flex justify-content-between align-items-center">
+            <header class="mb-4 d-flex justify-content-between align-items-center">
                 <a href="#" class="burger-btn d-block d-xl-none"><i class="bi bi-justify fs-3"></i></a>
-                <button type="button" class="ac-theme-btn ms-auto">
-                    <i class="bi bi-moon-stars-fill"></i> <span>Modo Oscuro</span>
-                </button>
+                <div class="ms-auto d-flex align-items-center pe-2">
+                    <button type="button" class="ac-theme-btn">
+                        <i class="bi bi-moon-stars-fill"></i> <span>Modo Oscuro</span>
+                    </button>
+                </div>
             </header>
 
             <div class="page-heading mb-4">
@@ -72,25 +74,27 @@
                 <div class="row g-4">
                     <div class="col-12 col-lg-4">
                         <div class="ac-bento-card ac-beam-top p-4 text-center mb-4">
-                            <form action="<?php echo BASE_URL; ?>/index.php?page=upload_photo" method="POST" enctype="multipart/form-data">
-                                <div class="mx-auto mb-3 d-flex align-items-center justify-content-center" style="width: 110px; height: 110px;">
+                            <form action="<?php echo BASE_URL; ?>/index.php?page=upload_photo" method="POST" enctype="multipart/form-data" class="d-flex flex-column align-items-center">
+                                <div class="mx-auto mb-3 position-relative d-flex align-items-center justify-content-center" style="width: 96px; height: 96px;">
                                     <?php if (!empty($usuario['foto_perfil']) && $usuario['foto_perfil'] !== 'default.png'): ?>
-                                        <img src="<?php echo BASE_URL; ?>/assets/uploads/<?php echo htmlspecialchars($usuario['foto_perfil']); ?>" alt="Avatar" style="width: 110px; height: 110px; object-fit: cover; border-radius: 50%;">
+                                        <img src="<?php echo BASE_URL; ?>/assets/uploads/<?php echo htmlspecialchars($usuario['foto_perfil']); ?>" alt="Avatar" style="width: 96px; height: 96px; object-fit: cover; border-radius: 50%; border: 3px solid var(--ac-border-hover); box-shadow: 0 4px 14px rgba(29, 78, 216, 0.2);">
                                     <?php else: ?>
-                                        <div class="ac-squircle-logo rounded-circle" style="width: 100px; height: 100px; font-size: 2.5rem;">
+                                        <div class="ac-squircle-logo rounded-circle d-flex align-items-center justify-content-center" style="width: 88px; height: 88px; font-size: 2.2rem; border: 2px solid var(--ac-border-hover); box-shadow: 0 4px 14px rgba(29, 78, 216, 0.15);">
                                             <i class="bi bi-person-fill"></i>
                                         </div>
                                     <?php endif; ?>
                                 </div>
-                                <h5 class="fw-bold mb-1"><?php echo htmlspecialchars(($usuario['nombre_usuario'] ?? '') . ' ' . ($usuario['apellidos'] ?? '')); ?></h5>
-                                <div class="small text-primary mb-2" style="font-family: 'Fira Code', monospace;">
+                                <h5 class="fw-bold mb-1 w-100 text-break"><?php echo htmlspecialchars(($usuario['nombre_usuario'] ?? '') . ' ' . ($usuario['apellidos'] ?? '')); ?></h5>
+                                <div class="small text-primary mb-2 w-100 text-break" style="font-family: 'Fira Code', monospace; word-break: break-all;">
                                     <?php echo htmlspecialchars($usuario['correo_electronico'] ?? ''); ?>
                                 </div>
-                                <span class="ac-badge ac-badge-blue mb-3">
-                                    <?php echo strtoupper(htmlspecialchars($usuario['nombre_rol'] ?? 'Institucional')); ?>
-                                </span>
-                                <div>
-                                    <label class="btn btn-sm btn-outline-primary rounded-pill px-3" for="profile-upload" style="cursor: pointer;">
+                                <div class="mb-3">
+                                    <span class="ac-badge ac-badge-blue">
+                                        <?php echo strtoupper(htmlspecialchars($usuario['nombre_rol'] ?? 'Institucional')); ?>
+                                    </span>
+                                </div>
+                                <div class="w-100 pt-1 pb-1">
+                                    <label class="btn btn-sm btn-outline-primary rounded-pill px-3 py-1 shadow-sm" for="profile-upload" style="cursor: pointer; font-size: 0.85rem; font-weight: 600;">
                                         <i class="bi bi-camera me-1"></i> Cambiar Foto
                                     </label>
                                     <input type="file" name="foto" id="profile-upload" accept="image/png, image/jpeg" class="d-none" onchange="this.form.submit()">

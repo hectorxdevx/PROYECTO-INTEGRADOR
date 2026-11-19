@@ -3,6 +3,7 @@ require_once __DIR__ . '/../models/Usuario.php';
 require_once __DIR__ . '/../models/Empresa.php';
 require_once __DIR__ . '/../models/Sensor.php';
 require_once __DIR__ . '/../models/Contacto.php';
+require_once __DIR__ . '/../models/MailerService.php';
 
 class AdminController {
 
@@ -24,9 +25,118 @@ class AdminController {
 
     public function empresas() {
         $empresaModel = new Empresa();
+        $mailerService = new MailerService();
         $empresas = $empresaModel->obtenerTodas();
         $solicitudes = $empresaModel->obtenerSolicitudesPendientes();
+        $correosAuditoria = $mailerService->obtenerCorreos(null, 30);
         require_once 'views/admin/empresas.php';
+    }
+
+    public function crearEmpresaDirecta() {
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            header("Location: " . BASE_URL . "/index.php?page=admin_empresas");
+            exit();
+        }
+
+        $usuarioModel = new Usuario();
+        $empresaModel = new Empresa();
+
+        $nombreEmpresa = htmlspecialchars(trim($_POST['nombre_empresa'] ?? ''));
+        $rfcNit = strtoupper(htmlspecialchars(trim($_POST['rfc_nit'] ?? '')));
+        $slugDominio = strtolower(preg_replace('/[^a-zA-Z0-9\-]/', '', trim($_POST['slug_dominio'] ?? '')));
+        $sector = htmlspecialchars(trim($_POST['sector'] ?? 'DataCenter & Cloud'));
+        $telefono = htmlspecialchars(trim($_POST['telefono'] ?? ''));
+        $plan = trim($_POST['plan_suscripcion'] ?? 'corporate');
+
+        $planesValidos = defined('B2B_PLANS') ? array_keys(B2B_PLANS) : ['starter', 'corporate', 'enterprise'];
+        if (!in_array($plan, $planesValidos, true)) {
+            $plan = 'corporate';
+        }
+
+        $repNombre = htmlspecialchars(trim($_POST['rep_nombre'] ?? 'Representante'));
+        $repApellidos = htmlspecialchars(trim($_POST['rep_apellidos'] ?? 'Legal'));
+        $repCorreo = strtolower(filter_var(trim($_POST['rep_correo'] ?? ''), FILTER_SANITIZE_EMAIL));
+        $repPassword = trim($_POST['rep_password'] ?? '');
+
+        if ($nombreEmpresa === '' || $rfcNit === '' || $slugDominio === '' || !filter_var($repCorreo, FILTER_VALIDATE_EMAIL)) {
+            header("Location: " . BASE_URL . "/index.php?page=admin_empresas&error=datos_invalidos");
+            exit();
+        }
+
+        $rep = $usuarioModel->obtenerPorCorreo($repCorreo);
+        if (!$rep) {
+            if ($repPassword === '') {
+                $repPassword = 'Rep' . random_int(10000, 99999) . '!';
+            }
+            $hash = password_hash($repPassword, PASSWORD_BCRYPT);
+            $usuarioModel->guardar($repNombre, $repApellidos, $repCorreo, $hash, 3, null, 'institucional');
+            $rep = $usuarioModel->obtenerPorCorreo($repCorreo);
+        }
+
+        if (!$rep) {
+            header("Location: " . BASE_URL . "/index.php?page=admin_empresas&error=rep_fallido");
+            exit();
+        }
+
+        $res = $empresaModel->registrarEmpresa(
+            (int)$rep['id_usuario'],
+            $nombreEmpresa,
+            $rfcNit,
+            $slugDominio,
+            $sector !== '' ? $sector : 'DataCenter & Cloud',
+            $telefono,
+            $plan,
+            $repCorreo
+        );
+
+        if (is_array($res) && !empty($res['id_empresa'])) {
+            if (!empty($res['jefe_ti_credenciales'])) {
+                $_SESSION['admin_ultima_empresa_creada'] = [
+                    'nombre_empresa' => $res['nombre_empresa'] ?? $nombreEmpresa,
+                    'dominio_institucional' => $res['dominio_institucional'] ?? ($slugDominio . '.' . INSTITUTIONAL_BASE_DOMAIN),
+                    'plan' => $res['plan'] ?? $plan,
+                    'correo_enviado_a' => $res['correo_enviado_a'] ?? $repCorreo,
+                    'jefe_ti' => $res['jefe_ti_credenciales'],
+                ];
+            }
+            $usuarioModel->registrarBitacora(
+                (int)$res['id_empresa'],
+                $_SESSION['usuario_id'] ?? null,
+                'ADMIN_CREAR_EMPRESA',
+                "SuperAdmin dio de alta empresa directa: $nombreEmpresa (Plan: $plan)"
+            );
+            header("Location: " . BASE_URL . "/index.php?page=admin_empresas&msg=empresa_creada");
+            exit();
+        }
+
+        header("Location: " . BASE_URL . "/index.php?page=admin_empresas&error=error_crear_empresa");
+        exit();
+    }
+
+    public function cambiarPlanEmpresa() {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $idEmpresa = (int)($_POST['id_empresa'] ?? 0);
+            $nuevoPlan = trim($_POST['plan_suscripcion'] ?? '');
+            $planesValidos = defined('B2B_PLANS') ? array_keys(B2B_PLANS) : ['starter', 'corporate', 'enterprise'];
+
+            if ($idEmpresa > 0 && in_array($nuevoPlan, $planesValidos, true)) {
+                $empresaModel = new Empresa();
+                if ($empresaModel->cambiarPlanEmpresa($idEmpresa, $nuevoPlan)) {
+                    (new Usuario())->registrarBitacora(
+                        $idEmpresa,
+                        $_SESSION['usuario_id'] ?? null,
+                        'ADMIN_CAMBIAR_PLAN',
+                        "SuperAdmin actualizó plan de empresa #$idEmpresa a $nuevoPlan"
+                    );
+                    header("Location: " . BASE_URL . "/index.php?page=admin_empresas&msg=plan_actualizado");
+                    exit();
+                }
+            }
+            header("Location: " . BASE_URL . "/index.php?page=admin_empresas&error=plan_invalido");
+            exit();
+        }
+        header("Location: " . BASE_URL . "/index.php?page=admin_empresas");
+        exit();
     }
 
     public function aprobarEmpresa() {

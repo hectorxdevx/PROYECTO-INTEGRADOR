@@ -92,13 +92,14 @@
           <ul class="navbar-nav mx-auto gap-3 gap-xl-4">
             <li class="nav-item"><a class="nav-link fw-medium" href="#caracteristicas">Características</a></li>
             <li class="nav-item"><a class="nav-link fw-medium" href="#modelo-b2b">Pasos</a></li>
+            <li class="nav-item"><a class="nav-link fw-medium" href="#planes">Planes B2B</a></li>
             <li class="nav-item"><a class="nav-link fw-medium" href="#arquitectura">Arquitectura</a></li>
             <li class="nav-item"><a class="nav-link fw-medium" href="#galeria">Interfaz</a></li>
             <li class="nav-item"><a class="nav-link fw-medium" href="#contacto">Contacto</a></li>
           </ul>
           <div class="nav-actions d-flex align-items-center gap-3 mt-3 mt-lg-0">
             <a href="<?php echo BASE_URL; ?>/index.php?page=login" class="text-link fw-semibold">Acceso Institucional</a>
-            <a href="<?php echo BASE_URL; ?>/index.php?page=login&tab=representante" class="ac-btn-primary ac-btn-pill py-2 px-4">Alta de Empresa <i class="bi bi-arrow-right"></i></a>
+            <a href="<?php echo BASE_URL; ?>/index.php?page=login&tab=registro" class="ac-btn-primary ac-btn-pill py-2 px-4">Alta de Empresa <i class="bi bi-arrow-right"></i></a>
             <button type="button" class="ac-theme-btn ms-lg-2" aria-label="Cambiar modo de color">
               <i class="bi bi-moon-stars-fill"></i> <span>Modo Oscuro</span>
             </button>
@@ -117,7 +118,7 @@
               <a href="<?php echo BASE_URL; ?>/index.php?page=login" class="ac-btn-primary ac-btn-pill">
                 Comencemos <i class="bi bi-arrow-right"></i>
               </a>
-              <a href="<?php echo BASE_URL; ?>/index.php?page=login&tab=representante" class="ac-oauth-btn" style="width: auto; border-radius: 999px;">
+              <a href="<?php echo BASE_URL; ?>/index.php?page=login&tab=registro" class="ac-oauth-btn" style="width: auto; border-radius: 999px;">
                 <i class="bi bi-building-check text-primary"></i> Registrar mi Institución
               </a>
             </div>
@@ -245,6 +246,64 @@
       </div>
     </section>
 
+    <section id="planes" class="py-5">
+      <div class="container">
+        <div class="text-center mb-5" data-aos="fade-up">
+          <span class="ac-badge ac-badge-blue mb-2">LICENCIAMIENTO B2B</span>
+          <h2 class="display-5 fw-bold mb-2">PLANES CORPORATIVOS</h2>
+          <p class="mx-auto" style="max-width: 620px; color: var(--ac-text-muted);">
+            Activa tu empresa de inmediato con aprovisionamiento automático de Jefe de TI, notificaciones SMTP y MFA obligatorio.
+          </p>
+        </div>
+
+        <?php
+          $planesLanding = defined('B2B_PLANS') ? B2B_PLANS : [
+            'starter' => ['nombre' => 'Starter', 'precio' => 49.00, 'max_racks' => 2, 'max_cuentas' => 3, 'descripcion' => 'Pequeñas empresas / 1 site'],
+            'corporate' => ['nombre' => 'Corporate', 'precio' => 149.00, 'max_racks' => 10, 'max_cuentas' => 15, 'descripcion' => 'Empresas medianas / multi-rack'],
+            'enterprise' => ['nombre' => 'Enterprise', 'precio' => 399.00, 'max_racks' => 999, 'max_cuentas' => 999, 'descripcion' => 'DataCenters / cuentas ilimitadas'],
+          ];
+        ?>
+        <div class="row g-4 align-items-stretch">
+          <?php $delay = 100; foreach ($planesLanding as $pKey => $pInfo): ?>
+            <?php
+              $esPopular = ($pKey === 'corporate');
+              $racksTexto = ((int)$pInfo['max_racks'] >= 999) ? 'Racks IoT Ilimitados (999)' : 'Hasta ' . (int)$pInfo['max_racks'] . ' Racks IoT';
+              $cuentasTexto = ((int)$pInfo['max_cuentas'] >= 999) ? 'Cuentas Institucionales Ilimitadas' : 'Hasta ' . (int)$pInfo['max_cuentas'] . ' Cuentas Institucionales';
+            ?>
+            <div class="col-lg-4" data-aos="fade-up" data-aos-delay="<?php echo $delay; ?>">
+              <div class="ac-bento-card <?php echo $esPopular ? 'ac-beam-top border-primary' : ''; ?> p-4 p-lg-5 h-100 d-flex flex-column" <?php echo $esPopular ? 'style="border-width: 2px !important;"' : ''; ?>>
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                  <span class="ac-label mb-0"><?php echo htmlspecialchars($pInfo['nombre']); ?></span>
+                  <?php if ($esPopular): ?>
+                    <span class="ac-badge ac-badge-blue">Más Popular</span>
+                  <?php endif; ?>
+                </div>
+                <div class="mb-2">
+                  <span class="display-5 fw-bold" style="color: var(--ac-primary);">$<?php echo number_format((float)$pInfo['precio'], 0); ?></span>
+                  <span class="small" style="color: var(--ac-text-muted);">USD / mes</span>
+                </div>
+                <p class="small mb-4" style="color: var(--ac-text-muted);"><?php echo htmlspecialchars($pInfo['descripcion']); ?></p>
+
+                <ul class="list-unstyled d-flex flex-column gap-2 mb-4 small" style="color: var(--ac-text-secondary);">
+                  <li><i class="bi bi-check-circle-fill text-primary me-2"></i><?php echo htmlspecialchars($racksTexto); ?></li>
+                  <li><i class="bi bi-check-circle-fill text-primary me-2"></i><?php echo htmlspecialchars($cuentasTexto); ?></li>
+                  <li><i class="bi bi-check-circle-fill text-primary me-2"></i>Jefe de TI automático vía SMTP</li>
+                  <li><i class="bi bi-check-circle-fill text-primary me-2"></i>MFA TOTP + API ESP32 + App Flutter</li>
+                </ul>
+
+                <div class="mt-auto">
+                  <a href="<?php echo BASE_URL; ?>/index.php?page=login&tab=registro&plan=<?php echo urlencode($pKey); ?>" class="<?php echo $esPopular ? 'ac-btn-primary w-100' : 'ac-oauth-btn'; ?>">
+                    <span>Comenzar con <?php echo htmlspecialchars($pInfo['nombre']); ?></span>
+                    <i class="bi bi-arrow-right"></i>
+                  </a>
+                </div>
+              </div>
+            </div>
+          <?php $delay += 100; endforeach; ?>
+        </div>
+      </div>
+    </section>
+
     <section id="arquitectura" class="arch-section py-5 mt-4">
       <div class="container">
         <div class="text-center mb-5" data-aos="fade-up">
@@ -346,8 +405,23 @@
             <div class="ac-bento-card ac-beam-top p-4 p-lg-5" data-aos="fade-up">
               <div class="mb-4">
                 <h2 class="h3 fw-bold mb-2">¿Tienes dudas sobre el alta corporativa?</h2>
+                <p class="small mb-0" style="color: var(--ac-text-muted);">Nuestro equipo recibe tu consulta por correo SMTP con protección anti-spam.</p>
               </div>
+
+              <?php if (isset($_GET['success']) && in_array($_GET['success'], ['contacto', 'contacto_smtp'], true)): ?>
+                <div class="alert alert-success rounded-4 py-2 px-3 small mb-4 d-flex align-items-center gap-2">
+                  <i class="bi bi-envelope-check-fill fs-5"></i>
+                  <span>¡Mensaje enviado correctamente por SMTP! Te responderemos muy pronto.</span>
+                </div>
+              <?php elseif (isset($_GET['error'])): ?>
+                <div class="alert alert-danger rounded-4 py-2 px-3 small mb-4 d-flex align-items-center gap-2">
+                  <i class="bi bi-shield-exclamation fs-5"></i>
+                  <span><?php echo htmlspecialchars($_GET['error']); ?></span>
+                </div>
+              <?php endif; ?>
+
               <form action="<?php echo BASE_URL; ?>/index.php?page=procesar_contacto" method="POST" class="custom-form" autocomplete="off">
+                <input type="text" name="website_hp" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;opacity:0;">
                 <div class="mb-4">
                   <label class="ac-label">NOMBRE COMPLETO</label>
                   <input type="text" class="form-control p3r-input" name="nombre" required />
@@ -392,17 +466,22 @@
 
     <script src="<?php echo BASE_URL; ?>/assets/landing_page/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script>
-      <?php if(isset($_GET['success']) && $_GET['success'] == 'contacto'): ?>
+      <?php if(isset($_GET['success']) && in_array($_GET['success'], ['contacto', 'contacto_smtp'], true)): ?>
         Swal.fire({
             title: '¡Mensaje Enviado!',
-            text: 'Nos pondremos en contacto contigo lo más pronto posible.',
+            text: 'Tu consulta fue procesada vía SMTP. Nos pondremos en contacto contigo lo más pronto posible.',
             icon: 'success',
-            confirmButtonColor: '#0dcaf0',
-            background: '#1d355c',
-            color: '#ffffff'
+            confirmButtonColor: '#1d4ed8'
         });
-        // Limpiar la URL sin recargar
-        window.history.replaceState(null, null, window.location.pathname);
+        window.history.replaceState(null, null, window.location.pathname + '#contacto');
+      <?php elseif(isset($_GET['error'])): ?>
+        Swal.fire({
+            title: 'No se pudo enviar el mensaje',
+            text: <?php echo json_encode((string)$_GET['error']); ?>,
+            icon: 'warning',
+            confirmButtonColor: '#1d4ed8'
+        });
+        window.history.replaceState(null, null, window.location.pathname + '#contacto');
       <?php endif; ?>
     </script>
     <script>

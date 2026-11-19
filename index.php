@@ -13,6 +13,10 @@ switch ($page) {
         require_once 'controllers/AuthController.php';
         (new AuthController())->login();
         break;
+    case 'registro_unificado':
+        require_once 'controllers/AuthController.php';
+        (new AuthController())->registroUnificado();
+        break;
     case 'oauth_login':
         require_once 'controllers/AuthController.php';
         (new AuthController())->oauthLogin();
@@ -47,6 +51,10 @@ switch ($page) {
         require_once 'controllers/RepresentanteController.php';
         (new RepresentanteController())->solicitarCuenta();
         break;
+    case 'rep_cambiar_plan':
+        require_once 'controllers/RepresentanteController.php';
+        (new RepresentanteController())->cambiarPlan();
+        break;
 
     // --- PANEL SUPER ADMINISTRADOR ---
     case 'admin':
@@ -56,6 +64,14 @@ switch ($page) {
     case 'admin_empresas':
         require_once 'controllers/AdminController.php';
         (new AdminController())->empresas();
+        break;
+    case 'admin_crear_empresa':
+        require_once 'controllers/AdminController.php';
+        (new AdminController())->crearEmpresaDirecta();
+        break;
+    case 'admin_cambiar_plan':
+        require_once 'controllers/AdminController.php';
+        (new AdminController())->cambiarPlanEmpresa();
         break;
     case 'admin_aprobar_empresa':
         require_once 'controllers/AdminController.php';

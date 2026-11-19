@@ -8,10 +8,14 @@ class Contacto {
         $this->db = (new Database())->conectar();
     }
 
-    public function guardarMensaje($nombre, $correo, $asunto, $mensaje) {
-        $stmt = $this->db->prepare("INSERT INTO contactos (nombre, correo, asunto, mensaje) VALUES (?, ?, ?, ?)");
-        $stmt->bind_param("ssss", $nombre, $correo, $asunto, $mensaje);
-        return $stmt->execute();
+    public function guardarMensaje($nombre, $correo, $asunto, $mensaje, $ipOrigen = null) {
+        $ip = $ipOrigen ?? ($_SERVER['REMOTE_ADDR'] ?? '127.0.0.1');
+        $stmt = $this->db->prepare("INSERT INTO contactos (nombre, correo, asunto, mensaje, ip_origen) VALUES (?, ?, ?, ?, ?)");
+        if (!$stmt) return false;
+        $stmt->bind_param("sssss", $nombre, $correo, $asunto, $mensaje, $ip);
+        $ok = $stmt->execute();
+        $stmt->close();
+        return $ok;
     }
 
     public function obtenerMensajesNoLeidos() {

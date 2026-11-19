@@ -1,10 +1,13 @@
 <?php
 require_once __DIR__ . '/../models/Usuario.php';
+require_once __DIR__ . '/../models/Empresa.php';
 require_once __DIR__ . '/../models/TOTP.php';
 
 class AuthController {
 
     public function index() {
+        $tab = $_GET['tab'] ?? 'login';
+        $activeTab = in_array($tab, ['registro', 'representante'], true) ? 'representante' : 'login';
         require_once 'views/auth/login.php';
     }
 
@@ -25,14 +28,116 @@ class AuthController {
                 exit();
             }
 
-            // Si es un Representante intentando entrar por formulario en lugar de OAuth Google/Microsoft
-            if ((int)$usuario['id_rol'] === 3) {
-                header("Location: index.php?page=login&error=" . urlencode("Las cuentas de Representante deben iniciar sesión con Google o Microsoft."));
+            // Si es un Representante registrado exclusivamente vía OAuth intentando entrar por formulario
+            if ((int)$usuario['id_rol'] === 3 && ($usuario['oauth_provider'] ?? 'institucional') !== 'institucional') {
+                header("Location: index.php?page=login&error=" . urlencode("Las cuentas vinculadas con Google o Microsoft deben iniciar sesión mediante OAuth."));
                 exit();
             }
 
             $this->iniciarFlujoMfa($usuario);
         }
+    }
+
+    /**
+     * Registro unificado B2B: crea la cuenta del Representante (con contraseña Bcrypt),
+     * da de alta la Empresa activa con su Plan B2B, aprovisiona automáticamente al primer Jefe de TI
+     * enviando sus credenciales por SMTP, e inicia el flujo obligatorio de MFA TOTP.
+     */
+    public function registroUnificado() {
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            header("Location: index.php?page=login&tab=registro");
+            exit();
+        }
+
+        $nombre = htmlspecialchars(trim($_POST['nombre'] ?? ''));
+        $apellidos = htmlspecialchars(trim($_POST['apellidos'] ?? ''));
+        $correo = strtolower(filter_var(trim($_POST['correo'] ?? ''), FILTER_SANITIZE_EMAIL));
+        $contrasena = $_POST['contrasena'] ?? '';
+        $confirmar = $_POST['confirmar_contrasena'] ?? '';
+        $nombreEmpresa = htmlspecialchars(trim($_POST['nombre_empresa'] ?? ''));
+        $rfcNit = strtoupper(htmlspecialchars(trim($_POST['rfc_nit'] ?? '')));
+        $slugDominio = strtolower(preg_replace('/[^a-zA-Z0-9\-]/', '', trim($_POST['slug_dominio'] ?? '')));
+        $sector = htmlspecialchars(trim($_POST['sector'] ?? 'DataCenter & Cloud'));
+        $telefono = htmlspecialchars(trim($_POST['telefono'] ?? ''));
+        $plan = trim($_POST['plan_suscripcion'] ?? 'corporate');
+
+        $planesValidos = defined('B2B_PLANS') ? array_keys(B2B_PLANS) : ['starter', 'corporate', 'enterprise'];
+        if (!in_array($plan, $planesValidos, true)) {
+            $plan = 'corporate';
+        }
+
+        if ($nombre === '' || $apellidos === '' || !filter_var($correo, FILTER_VALIDATE_EMAIL)) {
+            header("Location: index.php?page=login&tab=registro&error=" . urlencode("Ingresa tu nombre, apellidos y un correo electrónico válido."));
+            exit();
+        }
+
+        if (strlen($contrasena) < 8) {
+            header("Location: index.php?page=login&tab=registro&error=" . urlencode("La contraseña debe tener al menos 8 caracteres."));
+            exit();
+        }
+
+        if ($contrasena !== $confirmar) {
+            header("Location: index.php?page=login&tab=registro&error=" . urlencode("Las contraseñas no coinciden."));
+            exit();
+        }
+
+        if ($nombreEmpresa === '' || $rfcNit === '' || $slugDominio === '' || $telefono === '') {
+            header("Location: index.php?page=login&tab=registro&error=" . urlencode("Completa todos los datos de tu empresa y subdominio institucional."));
+            exit();
+        }
+
+        $usuarioModel = new Usuario();
+        if ($usuarioModel->existeCorreo($correo)) {
+            header("Location: index.php?page=login&tab=registro&error=" . urlencode("El correo electrónico ya se encuentra registrado."));
+            exit();
+        }
+
+        $hash = password_hash($contrasena, PASSWORD_BCRYPT);
+        $guardado = $usuarioModel->guardar($nombre, $apellidos, $correo, $hash, 3, null, 'institucional');
+        $usuario = $guardado ? $usuarioModel->obtenerPorCorreo($correo) : null;
+
+        if (!$usuario) {
+            header("Location: index.php?page=login&tab=registro&error=" . urlencode("No fue posible registrar tu cuenta de representante."));
+            exit();
+        }
+
+        $empresaModel = new Empresa();
+        $registroEmpresa = $empresaModel->registrarEmpresa(
+            (int)$usuario['id_usuario'],
+            $nombreEmpresa,
+            $rfcNit,
+            $slugDominio,
+            $sector !== '' ? $sector : 'DataCenter & Cloud',
+            $telefono,
+            $plan,
+            $correo
+        );
+
+        if (!is_array($registroEmpresa) || empty($registroEmpresa['id_empresa'])) {
+            $usuarioModel->eliminar((int)$usuario['id_usuario']);
+            header("Location: index.php?page=login&tab=registro&error=" . urlencode("No se pudo registrar la empresa. Verifica que el subdominio institucional no esté en uso."));
+            exit();
+        }
+
+        if (!empty($registroEmpresa['jefe_ti_credenciales'])) {
+            $_SESSION['recien_creado_jefe_ti'] = $registroEmpresa['jefe_ti_credenciales'];
+            $_SESSION['recien_creado_empresa_meta'] = [
+                'nombre_empresa' => $registroEmpresa['nombre_empresa'] ?? $nombreEmpresa,
+                'dominio_institucional' => $registroEmpresa['dominio_institucional'] ?? ($slugDominio . '.' . INSTITUTIONAL_BASE_DOMAIN),
+                'plan' => $registroEmpresa['plan'] ?? $plan,
+                'correo_enviado_a' => $registroEmpresa['correo_enviado_a'] ?? $correo,
+            ];
+        }
+
+        $usuario = $usuarioModel->obtenerPorId((int)$usuario['id_usuario']) ?: $usuario;
+        $usuarioModel->registrarBitacora(
+            (int)$registroEmpresa['id_empresa'],
+            (int)$usuario['id_usuario'],
+            'REGISTRO_UNIFICADO',
+            "Registro unificado Representante + Empresa: $nombreEmpresa (Plan: $plan)"
+        );
+
+        $this->iniciarFlujoMfa($usuario);
     }
 
     /**
